@@ -13,16 +13,16 @@
     </script>
     <meta charset="utf-8">
     <meta name="description" content="JDV">
-    <meta name="image" content="https://jdvakil.github.io/media/Jay_pfp.jpeg">
+    <meta name="image" content="https://jdvakil.github.io/media/jay_1.jpeg">
     <meta name="keywords" content="Jay Darshan Vakil Meta AI Robotics">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="media/Jay_pfp.jpeg" />
+    <link rel="icon" type="image/x-icon" href="media/jay_1.jpeg" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Jay Darshan Vakil</title>
 
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://jdvakil.github.io/media/Jay_pfp.jpeg" />
+    <meta property="og:image" content="https://jdvakil.github.io/media/jay_1.jpeg" />
     <meta property="og:image:type" content="image/jpg">
     <meta property="og:url" content="https://jdvakil.github.io/index.html" />
     <meta property="og:title" content="Jay Darshan Vakil" />
@@ -129,9 +129,15 @@
                                 <h2 class="title is-3">About me</h2>
                                 <div class="columns is-vcentered">
 
-                                    <div class="column overlay-image has-text-centered is-vcentered">
-                                        <img src="media/Jay_pfp.jpeg"
-                                            style="border-radius: 50%; width: 75%; height:auto; padding-left: 0px;">
+                                    <div id="d" class="column overlay-image has-text-centered is-vcentered">
+                                        <script>
+
+                                            var images = ['jay_1.jpeg', 'jay_2.jpeg', 'jay_3.jpeg'];
+
+                                            $('<img style="border-radius: 50%; width: 75%; height:auto; padding-left: 0px;" class="fade-in" src="media/' + images[Math.floor(Math.random() * images.length)] + '">').appendTo('#d');
+                                        </script>
+                                        <!-- <img src="media/jay_1.jpeg"
+                                            style="border-radius: 50%; width: 75%; height:auto; padding-left: 0px;"> -->
                                     </div>
                                     <div class="column is-three-fifths is-vcentered" style="text-align: left;">
                                         <p>
