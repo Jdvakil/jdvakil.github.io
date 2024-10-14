@@ -188,7 +188,7 @@ h2 {
 
 .list-item p.date {
   display: inline-block;
-  width: 3em;
+  width: 5em;
   color: #a0a8b0;
 }
 
@@ -304,3 +304,15 @@ h3 a:hover {
   bottom: 0;
   line-height: 2.5em;
 }
+
+
+.grid-item {
+  float: left;
+  width: 50px;
+  height: 50px;
+  background: #e6e5e4;
+  border: 2px solid #b6b5b4;
+}
+
+.grid-item--width2 { width: 100px; }
+.grid-item--height2 { height: 100px; }
