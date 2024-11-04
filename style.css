@@ -290,6 +290,13 @@ h3 a:hover {
   color: #a0a8b0;
 }
 
+.publication li {
+  font-size: 75%;
+  line-height: 1.5em;
+  color: #a0a8b0;
+}
+
+
 .project-description {
   width: 80%;
   float: left;
