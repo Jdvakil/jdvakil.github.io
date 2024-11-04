@@ -307,7 +307,7 @@ h3 a:hover {
 
 #footer {
   color: #a0a8b0;
-  position: absolute;
+  position:relative;
   bottom: 0;
   line-height: 2.5em;
 }
