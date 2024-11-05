@@ -287,13 +287,13 @@ h3 a:hover {
 .publication p {
   font-size: 1em;
   line-height: 1.5em;
-  color: #a0a8b0;
+  color: #444141;
 }
 
 .publication li {
   font-size: 75%;
   line-height: 1.5em;
-  color: #a0a8b0;
+  color: #444141;
 }
 
 
@@ -306,7 +306,7 @@ h3 a:hover {
 /* Subtle footer at the bottom of the page. */
 
 #footer {
-  color: #a0a8b0;
+  color: #7e7575;
   position:relative;
   bottom: 0;
   line-height: 2.5em;
