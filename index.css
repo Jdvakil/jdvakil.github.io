@@ -155,10 +155,11 @@ a {
 }
 
 /* Bento Grid for Projects */
+/* Bento Grid for Projects */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  /* More compact columns */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  /* More compact columns, mobile friendly */
   gap: 30px;
 }
 
@@ -197,8 +198,59 @@ a {
   mask-composite: exclude;
   pointer-events: none;
 }
-h2{
-  font-family: Raleway;
+
+h2 {
+  font-family: 'Raleway', sans-serif;
+}
+
+.bento-card:hover {
+  box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.6), 0 0 40px var(--glow-blue);
+  z-index: 10;
+}
+
+.card-media-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bento-card:hover .card-media {
+  transform: scale(1.05);
+}
+
+.card-content {
+  padding: 24px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* New Badge System */
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
 }
 
 .badge.award {
@@ -260,12 +312,16 @@ h2{
 }
 
 .impact-logo {
-  height: 40px;
+  height: 48px;
+  /* Slightly taller to accommodate padding */
   width: auto;
-  max-width: 90%;
+  max-width: 100%;
   margin-bottom: 16px;
-  filter: brightness(0) invert(1);
-  opacity: 0.7;
+  /* Fix: Remove invert filter, add white backing */
+  filter: none;
+  background: white;
+  padding: 6px;
+  border-radius: 4px;
   object-fit: contain;
   transition: opacity 0.3s;
 }
@@ -285,8 +341,9 @@ h2{
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 60px;
-  padding: 60px;
+  gap: 40px;
+  padding: 40px;
+  /* Fix: Remove solid white block, go back to transparent/subtle */
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
   border-radius: var(--radius-l);
   align-items: center;
@@ -296,16 +353,17 @@ h2{
 .affil-logo {
   height: 60px;
   width: auto;
-  filter: brightness(0) invert(1);
-  opacity: 0.5;
-  transition: all 0.3s;
+  filter: none;
+  opacity: 1;
+  transition: transform 0.3s;
+  /* Fix: Add individual white background */
+  background: white;
+  padding: 8px 16px;
+  border-radius: 8px;
 }
 
 .affil-logo:hover {
-  opacity: 1;
-  transform: scale(1.1);
-  filter: none;
-  /* Show color on hover for pomp */
+  transform: scale(1.05);
 }
 
 /* Footer */
@@ -320,19 +378,67 @@ footer {
 /* Responsive */
 @media (max-width: 900px) {
   .project-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
+    /* Force full width stacking */
   }
 
   .hero-block {
     grid-template-columns: 1fr;
+    gap: 30px;
   }
 
   .profile-img {
-    height: 350px;
+    height: 300px;
+    /* Slightly smaller on mobile */
     order: -1;
   }
 
   h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    /* Reduce header size */
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    /* Tighter body text */
+  }
+
+  body {
+    padding: 30px 15px;
+    /* Tighter page padding */
+  }
+
+  .bento-container {
+    gap: 40px;
+  }
+
+  /* Tighter card internals for mobile */
+  .card-content {
+    padding: 20px;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+  }
+
+  /* Adjust Affiliations for mobile */
+  .affiliation-row {
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .affil-logo {
+    height: 40px;
+    /* Smaller logos */
+    padding: 6px 12px;
   }
 }
