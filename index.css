@@ -157,9 +157,9 @@ a {
 /* Bento Grid for Projects */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  /* 2 Column strict for pomp */
-  gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  /* More compact columns */
+  gap: 30px;
 }
 
 .bento-card {
@@ -223,7 +223,7 @@ a {
 }
 
 .card-content {
-  padding: 32px;
+  padding: 24px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
