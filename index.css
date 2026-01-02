@@ -31,6 +31,48 @@ body {
   -webkit-font-smoothing: antialiased;
   padding: 60px 20px;
   min-height: 100vh;
+  /* Engineering Grid Overlay */
+  background-image:
+    linear-gradient(rgba(41, 151, 255, 0.05) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(41, 151, 255, 0.05) 2px, transparent 2px);
+  background-size: 40px 40px;
+  position: relative;
+}
+
+body::after {
+  /* CRT Scanlines Overlay */
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.05) 50%),
+    linear-gradient(90deg,
+      rgba(255, 0, 0, 0.01),
+      rgba(0, 255, 0, 0.01),
+      rgba(0, 0, 255, 0.01));
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.3;
+}
+
+/* System Status Readouts (Cybernetic) */
+.system-status {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--accent);
+  opacity: 0.5;
+  text-align: right;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 100;
+  text-transform: uppercase;
 }
 
 /* Typography */
@@ -42,6 +84,33 @@ h1 {
   background: linear-gradient(180deg, #fff 0%, #a5a5a5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  position: relative;
+  /* Eternal Glitch Effect */
+  animation: glitch 3s cubic-bezier(.25, .46, .45, .94) both infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+    text-shadow: -2px 0 var(--accent), 2px 0 #ff00ff;
+  }
+
+  25% {
+    transform: translate(-2px, 2px);
+  }
+
+  50% {
+    transform: translate(-2px, -2px);
+    text-shadow: 2px 0 var(--accent), -2px 0 #ff00ff;
+  }
+
+  75% {
+    transform: translate(2px, 2px);
+  }
+
+  100% {
+    transform: translate(0);
+  }
 }
 
 h2 {
@@ -51,6 +120,38 @@ h2 {
   margin-bottom: 30px;
   color: var(--text-primary);
   display: inline-block;
+  position: relative;
+  font-family: 'Raleway', sans-serif;
+}
+
+/* Schematic Corner Brackets for Sections */
+section {
+  position: relative;
+  padding: 40px 0;
+}
+
+section::before,
+section::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(41, 151, 255, 0.3);
+  pointer-events: none;
+}
+
+section::before {
+  top: 0;
+  left: -10px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+section::after {
+  bottom: 0;
+  right: -10px;
+  border-left: 0;
+  border-top: 0;
 }
 
 h3 {
@@ -155,11 +256,9 @@ a {
 }
 
 /* Bento Grid for Projects */
-/* Bento Grid for Projects */
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  /* More compact columns, mobile friendly */
   gap: 30px;
 }
 
@@ -172,14 +271,12 @@ a {
   display: flex;
   flex-direction: column;
   transition: transform 0.1s ease-out;
-  /* Controlled by JS tilt */
   border: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   will-change: transform;
 }
 
 .bento-card::before {
-  /* Glow Gradient Follower */
   content: "";
   position: absolute;
   top: 0;
@@ -188,7 +285,6 @@ a {
   bottom: 0;
   border-radius: inherit;
   padding: 2px;
-  /* Border width */
   background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
       rgba(255, 255, 255, 0.15),
       transparent 40%);
@@ -199,8 +295,26 @@ a {
   pointer-events: none;
 }
 
-h2 {
-  font-family: 'Raleway', sans-serif;
+/* Bento Card Technical Label */
+.bento-card::after {
+  content: "REF_ID: 0x" attr(data-id) "\a STATUS: ACTIVE\a KERNEL: 0x9F4B";
+  white-space: pre;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.1em;
+  z-index: 5;
+  text-align: right;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.bento-card:hover::after {
+  opacity: 1;
+  color: var(--accent);
 }
 
 .bento-card:hover {
@@ -228,13 +342,21 @@ h2 {
 }
 
 .card-content {
-  padding: 24px;
+  padding: 32px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* New Badge System */
+/* Engineering Metadata (Monospace) */
+.badge,
+.card-links,
+footer,
+.impact-text {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  letter-spacing: -0.02em;
+}
+
 .badge-container {
   display: flex;
   flex-wrap: wrap;
@@ -243,27 +365,26 @@ h2 {
 }
 
 .badge {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text-secondary);
-}
-
-.badge.award {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
-  color: var(--accent-gold);
-  border: 1px solid rgba(251, 191, 36, 0.3);
-  box-shadow: 0 0 15px rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .badge.venue {
   color: var(--accent);
   background: rgba(41, 151, 255, 0.1);
   border: 1px solid rgba(41, 151, 255, 0.2);
+}
+
+.badge.award {
+  background: rgba(251, 191, 36, 0.1);
+  color: var(--accent-gold);
+  border: 1px solid rgba(251, 191, 36, 0.2);
 }
 
 .card-links {

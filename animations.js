@@ -1,31 +1,77 @@
-
 gsap.registerPlugin(ScrollTrigger);
 
-// Hero Reveal
-const tl = gsap.timeline();
-tl.from(".hero-block", {
-    y: 50,
-    opacity: 0,
-    duration: 1.2,
-    ease: "power3.out"
-});
+// 1. System Clock
+function updateClock() {
+    const clock = document.getElementById('sys-time');
+    if (!clock) return;
+    const now = new Date();
+    clock.innerText = now.toTimeString().split(' ')[0] + " [UTC]";
+}
+setInterval(updateClock, 1000);
+updateClock();
 
-// Staggered Card Reveals
-gsap.utils.toArray(".bento-card").forEach((card, i) => {
-    gsap.from(card, {
-        scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse"
-        },
-        y: 60,
+// 2. System Boot Sequence
+const bootLines = [
+    "UPLINK ESTABLISHED...",
+    "KERNEL_OS v12.0 LOADING...",
+    "HARDWARE CHECK: LATTICE_CHASSIS [OK]",
+    "SYSTEM_DRIVE: KINETIC_HUB [OPTIMIZED]",
+    "INITIALIZING_SENTINEL..."
+];
+
+const bootScreen = document.getElementById('boot-screen');
+let lineIdx = 0;
+
+function typeBootLines() {
+    if (lineIdx < bootLines.length) {
+        bootScreen.innerText = bootLines[lineIdx];
+        lineIdx++;
+        setTimeout(typeBootLines, 400);
+    } else {
+        // Boot Completion
+        gsap.to(bootScreen, {
+            opacity: 0,
+            duration: 1,
+            ease: "power2.inOut",
+            onComplete: () => {
+                bootScreen.style.display = 'none';
+                startMainAnimations();
+            }
+        });
+    }
+}
+
+// Start Boot
+window.addEventListener('load', typeBootLines);
+
+// 3. Main Page Animations
+function startMainAnimations() {
+    // Hero Reveal
+    const tl = gsap.timeline();
+    tl.from(".hero-block", {
+        y: 50,
         opacity: 0,
-        rotation: 2,
-        duration: 0.8,
-        delay: i * 0.1, // Cinematic Stagger
-        ease: "back.out(1.7)"
+        duration: 1.2,
+        ease: "power3.out"
     });
-});
+
+    // Staggered Card Reveals
+    gsap.utils.toArray(".bento-card").forEach((card, i) => {
+        gsap.from(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                toggleActions: "play none none reverse"
+            },
+            y: 60,
+            opacity: 0,
+            rotation: 2,
+            duration: 0.8,
+            delay: i * 0.1,
+            ease: "back.out(1.7)"
+        });
+    });
+}
 
 // Impact Ticker Reveal
 gsap.from(".impact-grid", {

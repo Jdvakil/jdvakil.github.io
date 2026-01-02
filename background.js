@@ -10,11 +10,11 @@ canvas.style.width = '100vw';
 canvas.style.height = '100vh';
 canvas.style.zIndex = '-1';
 canvas.style.pointerEvents = 'none';
-canvas.style.opacity = '1'; // Full intensity
-canvas.style.mixBlendMode = 'screen'; // Additive blend with page
+canvas.style.opacity = '1';
+canvas.style.mixBlendMode = 'screen';
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x000000, 0.02);
+scene.fog = new THREE.FogExp2(0x000000, 0.015);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({
@@ -26,94 +26,75 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// --- THE DIGITAL SINGULARITY ---
+// --- THE CYBERNETIC SENTINEL ---
 
-// 1. The Hyper-Lattice (Outer Structure)
-// Massive wireframe sphere surrounding the user
-const latticeGeo = new THREE.IcosahedronGeometry(18, 2);
-const latticeMat = new THREE.MeshBasicMaterial({
-    color: 0x2997ff,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.15,
-    blending: THREE.AdditiveBlending
-});
-const lattice = new THREE.Mesh(latticeGeo, latticeMat);
-scene.add(lattice);
+// 1. Warp Core Chassis (Mechanical Shell)
+const chassisGroup = new THREE.Group();
+scene.add(chassisGroup);
 
-// 2. The Inner Core (Processing Unit)
-// Dense, rapidly spinning core
-const coreGeo = new THREE.OctahedronGeometry(6, 4);
-const coreMat = new THREE.MeshBasicMaterial({
-    color: 0x00ffff,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.3,
-    blending: THREE.AdditiveBlending
-});
-const core = new THREE.Mesh(coreGeo, coreMat);
-scene.add(core);
-
-// 3. Data Beams (High Speed)
-// Animated dashed lines orbiting the core
-const beamGroup = new THREE.Group();
-scene.add(beamGroup);
-
-const beamCount = 40;
-const beamIs = [];
-
-for (let i = 0; i < beamCount; i++) {
-    const radius = 8 + Math.random() * 8; // Between Core and Lattice
-    const curve = new THREE.EllipseCurve(
-        0, 0,            // ax, aY
-        radius, radius,  // xRadius, yRadius
-        0, 2 * Math.PI,  // aStartAngle, aEndAngle
-        false,            // aClockwise
-        Math.random() * 360 // aRotation
-    );
-
-    const points = curve.getPoints(64);
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
-    // Dashed Material for "Data Packet" look
-    const material = new THREE.LineDashedMaterial({
-        color: 0xffffff,
-        linewidth: 1,
-        scale: 1,
-        dashSize: 3, // Short bright dash
-        gapSize: 20, // Long gap
+const boxes = [];
+for (let i = 0; i < 2; i++) {
+    const size = 12 + i * 10;
+    const geo = new THREE.BoxGeometry(size, size, size);
+    const mat = new THREE.MeshBasicMaterial({
+        color: 0x2997ff,
+        wireframe: true,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.1,
         blending: THREE.AdditiveBlending
     });
+    const box = new THREE.Mesh(geo, mat);
+    chassisGroup.add(box);
+    boxes.push(box);
+}
 
-    const beam = new THREE.Line(geometry, material);
-    beam.computeLineDistances(); // Required for dashes
+// 2. Processing Rings (Warp Hub)
+const ringGroup = new THREE.Group();
+scene.add(ringGroup);
 
-    // Random orientation
-    beam.rotation.x = Math.random() * Math.PI;
-    beam.rotation.y = Math.random() * Math.PI;
-
-    beamGroup.add(beam);
-
-    // Store for animation
-    beamIs.push({
-        mesh: beam,
-        speed: (Math.random() * 0.5) + 0.2, // Fast rotation
-        axis: new THREE.Vector3(Math.random(), Math.random(), Math.random()).normalize()
+const rings = [];
+const ringCount = 3;
+for (let i = 0; i < ringCount; i++) {
+    const geo = new THREE.TorusGeometry(8 + i * 3, 0.05, 8, 50);
+    const mat = new THREE.MeshBasicMaterial({
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.3,
+        blending: THREE.AdditiveBlending
+    });
+    const ring = new THREE.Mesh(geo, mat);
+    ring.rotation.x = Math.PI / 2;
+    ringGroup.add(ring);
+    rings.push({
+        mesh: ring,
+        pulseSpeed: 0.5 + i * 0.2,
+        rotSpeed: (Math.random() - 0.5) * 0.02
     });
 }
 
-// 4. Volumetric Dust (Atmosphere)
+// 3. The CPU Core (Energy Source)
+const cpuGeo = new THREE.BoxGeometry(5, 5, 5);
+const cpuMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.5,
+    blending: THREE.AdditiveBlending
+});
+const cpu = new THREE.Mesh(cpuGeo, cpuMat);
+scene.add(cpu);
+
+// 4. Circuit Flow (Electrons)
 const particlesGeometry = new THREE.BufferGeometry();
-const particleCount = 1500;
+const particleCount = 2500;
 const posArray = new Float32Array(particleCount * 3);
-const originalPos = new Float32Array(particleCount * 3); // Store original for spring back
+const originalPos = new Float32Array(particleCount * 3);
 
 for (let i = 0; i < particleCount; i++) {
-    const x = (Math.random() - 0.5) * 60;
-    const y = (Math.random() - 0.5) * 60;
-    const z = (Math.random() - 0.5) * 40;
+    const gridSize = 3;
+    const x = Math.round((Math.random() - 0.5) * 80 / gridSize) * gridSize;
+    const y = Math.round((Math.random() - 0.5) * 80 / gridSize) * gridSize;
+    const z = Math.round((Math.random() - 0.5) * 50 / gridSize) * gridSize;
 
     posArray[i * 3] = x;
     posArray[i * 3 + 1] = y;
@@ -126,23 +107,23 @@ for (let i = 0; i < particleCount; i++) {
 
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 const particleMaterial = new THREE.PointsMaterial({
-    size: 0.15,
+    size: 0.08,
     color: 0x2997ff,
     transparent: true,
     opacity: 0.6,
     blending: THREE.AdditiveBlending
 });
-const dust = new THREE.Points(particlesGeometry, particleMaterial);
-scene.add(dust);
+const electrons = new THREE.Points(particlesGeometry, particleMaterial);
+scene.add(electrons);
 
-camera.position.z = 24;
+camera.position.z = 28;
 
 // Interaction State
 let mouseX = 0;
 let mouseY = 0;
 let scrollY = 0;
-const raycaster = new THREE.Raycaster();
-const mouseVector = new THREE.Vector2();
+let lastScrollY = 0;
+let scrollVelocity = 0;
 
 window.addEventListener('mousemove', (e) => {
     mouseX = (e.clientX / window.innerWidth) * 2 - 1;
@@ -156,36 +137,78 @@ window.addEventListener('scroll', () => {
 // Color Gradients
 const palettes = [
     new THREE.Color(0x2997ff), // Cyan
+    new THREE.Color(0xff00ff), // Magenta (Robotics/Cyberpunk)
     new THREE.Color(0xffaa00), // Gold
-    new THREE.Color(0xe879f9), // Purple
-    new THREE.Color(0x10b981)  // Green
-]; // Target colors
+    new THREE.Color(0x00ff00)  // Lime
+];
 
 const clock = new THREE.Clock();
 
 function animate() {
     const time = clock.getElapsedTime();
 
-    // 1. ROTATE SUPER-STRUCTURES
-    lattice.rotation.y = time * 0.05;
-    lattice.rotation.x = Math.sin(time * 0.1) * 0.05;
+    // Calculate Kinetic Gravity
+    const deltaY = scrollY - lastScrollY;
+    lastScrollY = scrollY;
+    scrollVelocity += deltaY * 0.001; // Slower scroll sensitivity (was 0.003)
+    scrollVelocity *= 0.94; // Higher friction for mechanical feel
 
-    // Core spins faster
-    core.rotation.y = -time * 0.2;
-    core.rotation.z = time * 0.1;
+    const globalSpeed = 0.005 + Math.abs(scrollVelocity); // Slower base speed (was 0.01)
 
-    // Pulse on Scroll
-    const pulse = 1 + (Math.sin(time * 2) * 0.02) + (scrollY * 0.0001);
-    core.scale.set(pulse, pulse, pulse);
-
-    // 2. DATA BEAMS (High Velocity)
-    beamIs.forEach(b => {
-        b.mesh.rotateOnAxis(b.axis, b.speed * 0.05); // Orbit
-        // Animate dashes? LineDashedMaterial doesn't support offset anim easily.
-        // Instead we rotate the ring itself quickly.
+    // 1. ANIMATE CHASSIS
+    boxes.forEach((box, i) => {
+        const dir = i % 2 === 0 ? 1 : -1;
+        box.rotation.y += globalSpeed * dir;
+        box.rotation.z += globalSpeed * 0.5 * dir;
     });
 
-    // 3. COLOR SHIFT
+    // 2. ANIMATE RINGS (Warp Drive)
+    rings.forEach((r, i) => {
+        r.mesh.rotation.y += (r.rotSpeed * 0.5) + scrollVelocity; // Slower rotation (was r.rotSpeed)
+        r.mesh.rotation.x += (r.rotSpeed * 0.25);
+
+        // Pulsate ring opacity
+        const pulse = 0.2 + Math.sin(time * r.pulseSpeed) * 0.1;
+        r.mesh.material.opacity = pulse + (Math.abs(scrollVelocity) * 2);
+
+        // Expand rings on scroll
+        const scale = 1 + (Math.abs(scrollVelocity) * 5);
+        r.mesh.scale.set(scale, scale, scale);
+    });
+
+    cpu.rotation.x += globalSpeed * 2;
+    cpu.rotation.y += globalSpeed * 3;
+    const cpuPulse = 1 + Math.sin(time * 5) * 0.05 + Math.abs(scrollVelocity) * 2;
+    cpu.scale.set(cpuPulse, cpuPulse, cpuPulse);
+
+    // 3. CIRCUIT PULSE (ELECTRON PATHS)
+    const positions = electrons.geometry.attributes.position.array;
+    for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        const ox = originalPos[i3];
+        const oy = originalPos[i3 + 1];
+        const oz = originalPos[i3 + 2];
+
+        // Grid drift
+        const wave = Math.sin(time * 0.5 + ox * 0.2) * 0.5;
+        positions[i3] = ox + wave;
+        positions[i3 + 1] = oy + Math.cos(time * 0.5 + oy * 0.2) * 0.5;
+
+        // Mouse avoidance (magnetic interference)
+        const dx = (mouseX * 35) - positions[i3];
+        const dy = (mouseY * 25) - positions[i3 + 1];
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 12) {
+            positions[i3] -= dx * 0.08;
+            positions[i3 + 1] -= dy * 0.08;
+            positions[i3 + 2] += 0.5; // Pop out
+        } else {
+            positions[i3 + 2] += (oz - positions[i3 + 2]) * 0.05; // Snap back Z
+        }
+    }
+    electrons.geometry.attributes.position.needsUpdate = true;
+
+    // 4. COLOR LERP
     const maxScroll = Math.max(document.body.scrollHeight - window.innerHeight, 100);
     const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
     const stageFloat = progress * (palettes.length - 1);
@@ -195,64 +218,14 @@ function animate() {
 
     const col = new THREE.Color().lerpColors(palettes[stageIndex], palettes[nextStageIndex], alpha);
 
-    latticeMat.color.copy(col);
-    // Core is complementary or same? Let's make core brighter white mix
-    coreMat.color.copy(col).lerp(new THREE.Color(0xffffff), 0.3);
+    boxes.forEach(b => b.material.color.copy(col));
+    rings.forEach(r => r.mesh.material.color.copy(col));
+    cpuMat.color.copy(col).lerp(new THREE.Color(0xffffff), 0.5);
     particleMaterial.color.copy(col);
 
-
-    // 4. INTERACTIVE DEFORMATION
-    // "Reality Distortion": Mouse position pushes dust away powerfully
-    const positions = dust.geometry.attributes.position.array;
-
-    // Project mouse to World Z=0 approx
-    const vec = new THREE.Vector3(mouseX, mouseY, 0.5);
-    vec.unproject(camera);
-    const dir = vec.sub(camera.position).normalize();
-    const distance = -camera.position.z / dir.z;
-    const mousePos = camera.position.clone().add(dir.multiplyScalar(distance));
-
-    for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        const ox = originalPos[i3];
-        const oy = originalPos[i3 + 1];
-        const oz = originalPos[i3 + 2];
-
-        let px = positions[i3];
-        let py = positions[i3 + 1];
-        let pz = positions[i3 + 2];
-
-        // Distortion Force
-        const dx = mousePos.x - px;
-        const dy = mousePos.y - py;
-        const dz = mousePos.z - pz;
-        const distSq = dx * dx + dy * dy + dz * dz;
-
-        if (distSq < 25) { // Radius 5
-            const force = (25 - distSq) * 0.05;
-            // Push away
-            px -= dx * force;
-            py -= dy * force;
-            pz -= dz * force;
-        }
-
-        // Spring back to original
-        px += (ox - px) * 0.05;
-        py += (oy - py) * 0.05;
-        pz += (oz - pz) * 0.05;
-
-        positions[i3] = px;
-        positions[i3 + 1] = py;
-        positions[i3 + 2] = pz;
-    }
-    dust.geometry.attributes.position.needsUpdate = true;
-
-    // 5. CAMERA PARALLAX (Aggressive)
-    const targetX = mouseX * 2;
-    const targetY = mouseY * 2;
-
-    camera.position.x += (targetX - camera.position.x) * 0.1;
-    camera.position.y += (targetY - camera.position.y) * 0.1;
+    // 5. CAMERA KINETICS
+    camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+    camera.position.y += (mouseY * 4 - camera.position.y) * 0.05;
     camera.lookAt(0, 0, 0);
 
     renderer.render(scene, camera);
