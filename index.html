@@ -49,6 +49,9 @@
 </head>
 
 <body>
+    <div id="boot-screen">INITIALIZING_SYSTEM...</div>
+    <div id="spotlight"></div>
+    <div id="grain-overlay"></div>
 
     <div class="bento-container">
 
@@ -101,6 +104,11 @@
                         <i class="fa-solid fa-file-pdf"></i> CV
                     </a>
                 </div>
+
+                <div class="hud-container">
+                    <span class="hud-item"><span class="hud-dot"></span> [SYSTEM: ONLINE]</span>
+                    <span class="hud-item"><span class="hud-dot pulsing"></span> [UPLINK: ACTIVE]</span>
+                </div>
             </div>
 
             <div class="profile-container">
@@ -121,7 +129,7 @@
         </section>
 
         <!-- BLOCK 1.5: EDUCATION & EXPERIENCE -->
-        <section>
+        <section class="reveal">
             <h2>Education & Experience</h2>
             <div class="experience-grid">
                 <!-- MyoLab -->
@@ -179,7 +187,7 @@
         </section>
 
         <!-- BLOCK 2: PROJECT GRID (EXPANDED w/ AWARDS) -->
-        <section>
+        <section class="reveal">
             <h2>Research</h2>
             <div class="project-grid">
 
@@ -361,7 +369,8 @@
                             Yansong Chua, Volodymyr Kuzma, Vladyslav Humennyy, Ruslan Partsey, Jonathan Francis,
                             Devendra Singh Chaplot, Gunjan Chhablani, Alexander Clegg, Theophile Gervet, Vidhi Jain, Ram
                             Ramrakhya, Andrew Szot, Austin Wang, Tsung-Yen Yang, Aaron Edsinger, Charlie Kemp, Binit
-                            Shah, Zsolt Kira, Dhruv Batra, Roozbeh Mottaghi, Yonatan Bisk, Chris Paxton</p>
+                            Shah, Zsolt Kira, Dhruv Batra, Roozbeh Mottaghi, Yonatan Bisk, Chris Paxton
+                        </p>
                         <div class="card-links">
                             <span class="link-mute">View Project →</span>
                         </div>
@@ -385,7 +394,8 @@
                         <p>A unified framework for Robot Learning and Embodied AI research, offering diverse simulation
                             environments.</p>
                         <p class="card-authors">Vikash Kumar, Rutav Shah, Gaoyue Zhou, Vincent Moens, Vittorio Caggiano,
-                            <span class="me">Jay Vakil</span>, Abhishek Gupta, Aravind Rajeswaran</p>
+                            <span class="me">Jay Vakil</span>, Abhishek Gupta, Aravind Rajeswaran
+                        </p>
                         <div class="card-links">
                             <span class="link-mute">View Project →</span>
                         </div>
@@ -415,7 +425,7 @@
         </section>
 
         <!-- BLOCK 3: IMPACT & PRESS (ALL OUTLETS) -->
-        <section>
+        <section class="reveal">
             <h2>Impact & Press</h2>
             <div class="impact-grid">
 
@@ -500,49 +510,71 @@
         </section>
 
         <!-- BLOCK 4: TEACHING & SERVICE -->
-        <section>
+        <section class="reveal">
             <div class="dual-column">
                 <div class="column">
                     <h2>Teaching</h2>
-                    <ul class="service-list">
-                        <li>
-                            <strong>University of Colorado</strong>
-                            <span>Teaching Assistant (2024 — Present)</span>
-                            <small>CSCI 3202: Introduction to AI</small>
-                            <small>CSCI 2400: Computer Systems</small>
-                        </li>
-                    </ul>
+                    <div class="bento-card status-card" data-id="TEACH-01">
+                        <div class="card-content">
+                            <i class="fa-solid fa-chalkboard-user card-icon"></i>
+                            <ul class="service-list">
+                                <li>
+                                    <strong>University of Colorado</strong>
+                                    <span>Teaching Assistant (2024 — Present)</span>
+                                    <small>CSCI 3202: Introduction to AI</small>
+                                    <small>CSCI 2400: Computer Systems</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="column">
                     <h2>Service</h2>
-                    <ul class="service-list">
-                        <li><strong>Reviewer:</strong> RA-L, RSS '25, ICML '25, ICRA '25, ICRA '24, CoRL '24</li>
-                    </ul>
+                    <div class="bento-card status-card" data-id="SERV-99">
+                        <div class="card-content">
+                            <i class="fa-solid fa-microscope card-icon"></i>
+                            <ul class="service-list">
+                                <li>
+                                    <strong>Reviewer:</strong>
+                                    <p class="service-tags">
+                                        <span>RA-L</span> <span>RSS '25</span> <span>ICML '25</span>
+                                        <span>ICRA '25</span> <span>ICRA '24</span> <span>CoRL '24</span>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- BLOCK 5: AFFILIATIONS -->
-        <section>
+        <section class="reveal">
             <h2>Affiliations</h2>
-            <div class="affiliation-row">
-                <img src="media/boulder-fl-centered-2.png" class="affil-logo">
-                <img src="media/Meta_lockup_positive primary_RGB.svg" class="affil-logo">
-                <img src="media/uw.png" class="affil-logo">
-                <img src="media/Myolab_logo_def.png" class="affil-logo">
-                <img src="media/nsc.png" class="affil-logo">
+            <div class="bento-card" data-id="AFFIL-SYS">
+                <div class="card-content">
+                    <div class="affiliation-row">
+                        <img src="media/boulder-fl-centered-2.png" class="affil-logo">
+                        <img src="media/Meta_lockup_positive primary_RGB.svg" class="affil-logo">
+                        <img src="media/uw.png" class="affil-logo">
+                        <img src="media/Myolab_logo_def.png" class="affil-logo">
+                        <img src="media/nsc.png" class="affil-logo">
+                    </div>
+                </div>
             </div>
         </section>
 
         <footer>
-            © 2026 Jay Vakil.
+            <div class="footer-content">
+                <span>© 2026 Jay Vakil</span>
+                <span id="sys-time" class="monospace"></span>
+            </div>
         </footer>
 
     </div>
 
     <script src="background.js"></script>
     <script src="animations.js"></script>
-
 </body>
 
 </html>

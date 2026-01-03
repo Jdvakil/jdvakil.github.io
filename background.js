@@ -110,8 +110,9 @@ const particleMaterial = new THREE.PointsMaterial({
     size: 0.12, // Balanced size (in-between 0.06 and 0.3)
     color: 0x2997ff,
     transparent: true,
-    opacity: 0.5, // Subtler (was 0.7)
-    blending: THREE.AdditiveBlending
+    opacity: 0.4, // even subtler
+    blending: THREE.AdditiveBlending,
+    depthWrite: false // improved performance
 });
 const electrons = new THREE.Points(particlesGeometry, particleMaterial);
 scene.add(electrons);
@@ -225,10 +226,11 @@ function animate() {
 
     const col = new THREE.Color().lerpColors(palettes[stageIndex], palettes[nextStageIndex], alpha);
 
-    boxes.forEach(b => b.material.color.copy(col));
-    rings.forEach(r => r.mesh.material.color.copy(col));
+    // Smoother mesh color update
+    boxes.forEach(b => b.material.color.lerp(col, 0.05));
+    rings.forEach(r => r.mesh.material.color.lerp(col, 0.05));
     cpuMat.color.copy(col).lerp(new THREE.Color(0xffffff), 0.5);
-    particleMaterial.color.copy(col);
+    particleMaterial.color.lerp(col, 0.05);
 
     // 5. CAMERA KINETICS
     camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;

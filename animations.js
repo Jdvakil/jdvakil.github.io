@@ -12,11 +12,10 @@ updateClock();
 
 // 2. System Boot Sequence
 const bootLines = [
-    "UPLINK ESTABLISHED...",
-    "KERNEL_OS v12.0 LOADING...",
-    "HARDWARE CHECK: LATTICE_CHASSIS [OK]",
-    "SYSTEM_DRIVE: KINETIC_HUB [OPTIMIZED]",
-    "INITIALIZING_SENTINEL..."
+    "UPLINK ESTABLISHED",
+    "CORE_OS LOADING...",
+    "DRIVE_INIT [OK]",
+    "SENTINEL ONLINE"
 ];
 
 const bootScreen = document.getElementById('boot-screen');
@@ -26,7 +25,7 @@ function typeBootLines() {
     if (lineIdx < bootLines.length) {
         bootScreen.innerText = bootLines[lineIdx];
         lineIdx++;
-        setTimeout(typeBootLines, 400);
+        setTimeout(typeBootLines, 80); // Even snappier: 80ms
     } else {
         // Boot Completion
         gsap.to(bootScreen, {
@@ -35,14 +34,39 @@ function typeBootLines() {
             ease: "power2.inOut",
             onComplete: () => {
                 bootScreen.style.display = 'none';
+                document.documentElement.style.setProperty('--glow-opacity', '1');
                 startMainAnimations();
             }
         });
     }
 }
 
+// Safety Kill-Switch: Hide boot screen no matter what after 4s
+setTimeout(() => {
+    const bs = document.getElementById('boot-screen');
+    if (bs && bs.style.display !== 'none') {
+        if (typeof gsap !== 'undefined') {
+            gsap.to(bs, {
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    bs.style.display = 'none';
+                    if (typeof startMainAnimations === 'function') startMainAnimations();
+                }
+            });
+        } else {
+            bs.style.display = 'none';
+            if (typeof startMainAnimations === 'function') startMainAnimations();
+        }
+    }
+}, 4000);
+
 // Start Boot
-window.addEventListener('load', typeBootLines);
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(typeBootLines, 100);
+} else {
+    window.addEventListener('DOMContentLoaded', typeBootLines);
+}
 
 // 3. Main Page Animations
 function startMainAnimations() {
@@ -69,6 +93,21 @@ function startMainAnimations() {
             duration: 0.8,
             delay: i * 0.1,
             ease: "back.out(1.7)"
+        });
+    });
+
+    // Handle generic .reveal sections
+    gsap.utils.toArray(".reveal").forEach((section) => {
+        gsap.to(section, {
+            scrollTrigger: {
+                trigger: section,
+                start: "top 85%",
+                onEnter: () => section.classList.add('active') // Toggle active class for CSS transition
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power2.out"
         });
     });
 }
@@ -99,6 +138,14 @@ gsap.from(".affiliation-row", {
 
 // "Pompous" Tilt Effect for Cards on Hover
 // Simple JS tilt logic for high performance
+// Global Hype Interactions
+window.addEventListener('mousemove', (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    document.documentElement.style.setProperty('--mouse-x', `${x}px`);
+    document.documentElement.style.setProperty('--mouse-y', `${y}px`);
+});
+
 document.querySelectorAll('.bento-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
