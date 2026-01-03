@@ -68,7 +68,7 @@
                 <p class="bio-details">
                     Previously, I was a researcher at <a href="https://ai.facebook.com/">Facebook AI Research
                         (FAIR)</a>. I am fortunate to be advised by <a href="https://alessandro.ronc.one">Alessandro
-                        Roncone</a>, <a href="https://www.colorado.edu/ecee/nikolaus-correll">Nikolaus Correll</a>. 
+                        Roncone</a>, <a href="https://www.colorado.edu/ecee/nikolaus-correll">Nikolaus Correll</a>.
                 </p>
 
                 <p class="bio-contact">
@@ -100,18 +100,21 @@
                 </div>
             </div>
 
-            <img id="profile-img" src="media/jay_5.jpg" alt="Jay Vakil" class="profile-img">
-            <script>
-                const images = [
-                    'media/jay_1.jpeg',
-                    'media/jay_2.jpeg',
-                    'media/jay_3.jpg',
-                    'media/jay_4.jpeg',
-                    'media/jay_5.jpg'
-                ];
-                const randomImage = images[Math.floor(Math.random() * images.length)];
-                document.getElementById('profile-img').src = randomImage;
-            </script>
+            <div class="profile-container">
+                <img id="profile-img" src="media/jay_5.jpg" alt="Jay Vakil" class="profile-img">
+                <p class="refresh-hint">Refresh to see different me</p>
+                <script>
+                    const images = [
+                        'media/jay_1.jpeg',
+                        'media/jay_2.jpeg',
+                        'media/jay_3.jpg',
+                        'media/jay_4.jpeg',
+                        'media/jay_5.jpg'
+                    ];
+                    const randomImage = images[Math.floor(Math.random() * images.length)];
+                    document.getElementById('profile-img').src = randomImage;
+                </script>
+            </div>
         </section>
 
         <!-- BLOCK 1.5: EDUCATION & EXPERIENCE -->
