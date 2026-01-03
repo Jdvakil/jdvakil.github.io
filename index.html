@@ -101,7 +101,18 @@
                 </div>
             </div>
 
-            <img src="media/jay_5.jpg" alt="Jay Vakil" class="profile-img">
+            <img id="profile-img" src="media/jay_5.jpg" alt="Jay Vakil" class="profile-img">
+            <script>
+                const images = [
+                    'media/jay_1.jpeg',
+                    'media/jay_2.jpeg',
+                    'media/jay_3.jpg',
+                    'media/jay_4.jpeg',
+                    'media/jay_5.jpg'
+                ];
+                const randomImage = images[Math.floor(Math.random() * images.length)];
+                document.getElementById('profile-img').src = randomImage;
+            </script>
         </section>
 
         <!-- BLOCK 2: PROJECT GRID (EXPANDED w/ AWARDS) -->

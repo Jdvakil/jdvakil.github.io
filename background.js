@@ -136,11 +136,18 @@ window.addEventListener('scroll', () => {
 
 // Color Gradients
 const palettes = [
+    new THREE.Color(0x008080), // Teal (Primary choice)
     new THREE.Color(0x2997ff), // Cyan
     new THREE.Color(0xff00ff), // Magenta (Robotics/Cyberpunk)
     new THREE.Color(0xffaa00), // Gold
     new THREE.Color(0x00ff00)  // Lime
 ];
+
+// Randomize color order on refresh (Fisher-Yates shuffle)
+for (let i = palettes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [palettes[i], palettes[j]] = [palettes[j], palettes[i]];
+}
 
 const clock = new THREE.Clock();
 
@@ -150,10 +157,10 @@ function animate() {
     // Calculate Kinetic Gravity
     const deltaY = scrollY - lastScrollY;
     lastScrollY = scrollY;
-    scrollVelocity += deltaY * 0.001; // Slower scroll sensitivity (was 0.003)
+    scrollVelocity += deltaY * 0.0005; // Even lower scroll sensitivity (was 0.001)
     scrollVelocity *= 0.94; // Higher friction for mechanical feel
 
-    const globalSpeed = 0.002 + Math.abs(scrollVelocity) * 0.5; // Slower base and scroll speed (was 0.005 + scrollVelocity)
+    const globalSpeed = 0.002 + Math.abs(scrollVelocity) * 0.2; // Reduced scroll impact (was * 0.5)
 
     // 1. ANIMATE CHASSIS
     boxes.forEach((box, i) => {
@@ -164,7 +171,7 @@ function animate() {
 
     // 2. ANIMATE RINGS (Warp Drive)
     rings.forEach((r, i) => {
-        r.mesh.rotation.y += (r.rotSpeed * 0.25) + scrollVelocity * 0.5; // Even slower rotation (was * 0.5)
+        r.mesh.rotation.y += (r.rotSpeed * 0.25) + scrollVelocity * 0.2; // Subtler scroll rotation (was * 0.5)
         r.mesh.rotation.x += (r.rotSpeed * 0.25);
 
         // Pulsate ring opacity
