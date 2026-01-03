@@ -338,6 +338,28 @@ a {
   }
 }
 
+.so.card-links {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+}
+
+.card-authors {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.card-authors span.me {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+}
+
 .social-grid {
   display: flex;
   gap: 16px;
