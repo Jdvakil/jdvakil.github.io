@@ -77,35 +77,51 @@ body::after {
 
 /* Typography */
 h1 {
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 24px;
   background: linear-gradient(180deg, #fff 0%, #a5a5a5 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
-  /* Eternal Glitch Effect */
-  animation: glitch 3s cubic-bezier(.25, .46, .45, .94) both infinite;
+}
+
+/* Subtler Glitch - only every 10s or on hover */
+h1::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0;
+}
+
+h1:hover {
+  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
 }
 
 @keyframes glitch {
   0% {
     transform: translate(0);
-    text-shadow: -2px 0 var(--accent), 2px 0 #ff00ff;
+    text-shadow: -1px 0 var(--accent), 1px 0 #ff00ff;
   }
 
   25% {
-    transform: translate(-2px, 2px);
+    transform: translate(-1px, 1px);
   }
 
   50% {
-    transform: translate(-2px, -2px);
-    text-shadow: 2px 0 var(--accent), -2px 0 #ff00ff;
+    transform: translate(-1px, -1px);
+    text-shadow: 1px 0 var(--accent), -1px 0 #ff00ff;
   }
 
   75% {
-    transform: translate(2px, 2px);
+    transform: translate(1px, 1px);
   }
 
   100% {
@@ -202,25 +218,107 @@ a {
 
 .bio-card {
   padding-right: 20px;
+  animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.bio-card h1 {
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bio-card a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.2);
+  text-underline-offset: 4px;
+  transition: all 0.2s;
+}
+
+.bio-card a:hover {
+  text-decoration-color: var(--accent);
+  color: var(--accent);
+}
+
+.bio-narrative {
+  font-size: 1.35rem;
+  line-height: 1.5;
   margin-bottom: 24px;
+  color: #e2e2e7;
 }
 
-.bio-card p {
-  font-size: 1.25rem;
-  max-width: 650px;
+.bio-details {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
   margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.bio-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.contact-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contact-item i {
+  color: var(--accent);
+  width: 16px;
+}
+
+.at-symbol {
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+.highlight-link {
+  color: var(--accent) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(41, 151, 255, 0.3);
+}
+
+.highlight-link:hover {
+  background: rgba(41, 151, 255, 0.1);
+  border-bottom-color: var(--accent);
 }
 
 .profile-img {
   width: 100%;
-  height: 400px;
+  height: 480px;
   object-fit: cover;
   border-radius: var(--radius-l);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+  box-shadow:
+    0 40px 80px -20px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(41, 151, 255, 0.1);
+  animation: imageEnter 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes imageEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
 }
 
 .social-grid {
@@ -472,15 +570,15 @@ footer,
 }
 
 .affil-logo {
-  height: 60px;
+  height: 80px;
   width: auto;
   filter: none;
   opacity: 1;
-  transition: transform 0.3s;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   /* Fix: Add individual white background */
   background: white;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border-radius: 12px;
 }
 
 .affil-logo:hover {
@@ -558,8 +656,8 @@ footer {
   }
 
   .affil-logo {
-    height: 40px;
-    /* Smaller logos */
-    padding: 6px 12px;
+    height: 50px;
+    /* Slightly bigger on mobile too */
+    padding: 8px 16px;
   }
 }

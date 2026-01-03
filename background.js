@@ -107,10 +107,10 @@ for (let i = 0; i < particleCount; i++) {
 
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 const particleMaterial = new THREE.PointsMaterial({
-    size: 0.08,
+    size: 0.12, // Balanced size (in-between 0.06 and 0.3)
     color: 0x2997ff,
     transparent: true,
-    opacity: 0.6,
+    opacity: 0.5, // Subtler (was 0.7)
     blending: THREE.AdditiveBlending
 });
 const electrons = new THREE.Points(particlesGeometry, particleMaterial);
@@ -153,7 +153,7 @@ function animate() {
     scrollVelocity += deltaY * 0.001; // Slower scroll sensitivity (was 0.003)
     scrollVelocity *= 0.94; // Higher friction for mechanical feel
 
-    const globalSpeed = 0.005 + Math.abs(scrollVelocity); // Slower base speed (was 0.01)
+    const globalSpeed = 0.002 + Math.abs(scrollVelocity) * 0.5; // Slower base and scroll speed (was 0.005 + scrollVelocity)
 
     // 1. ANIMATE CHASSIS
     boxes.forEach((box, i) => {
@@ -164,7 +164,7 @@ function animate() {
 
     // 2. ANIMATE RINGS (Warp Drive)
     rings.forEach((r, i) => {
-        r.mesh.rotation.y += (r.rotSpeed * 0.5) + scrollVelocity; // Slower rotation (was r.rotSpeed)
+        r.mesh.rotation.y += (r.rotSpeed * 0.25) + scrollVelocity * 0.5; // Even slower rotation (was * 0.5)
         r.mesh.rotation.x += (r.rotSpeed * 0.25);
 
         // Pulsate ring opacity
@@ -201,7 +201,7 @@ function animate() {
         if (d < 12) {
             positions[i3] -= dx * 0.08;
             positions[i3 + 1] -= dy * 0.08;
-            positions[i3 + 2] += 0.5; // Pop out
+            positions[i3 + 2] += 1.1; // Balanced pop out (in-between 0.8 and 1.5)
         } else {
             positions[i3 + 2] += (oz - positions[i3 + 2]) * 0.05; // Snap back Z
         }
