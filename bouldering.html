@@ -1,84 +1,278 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="description" content="Jay bouldering ">
-    <meta name="keywords" content="Jay bouldering ">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PRESERVED ANALYTICS -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QV88VT9E0V"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-QV88VT9E0V');
+    </script>
 
-    <meta property="og:type" content="website" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Jay Vakil | Bouldering</title>
+
+    <link rel="icon" type="image/x-icon" href="media/bouldering_1.jpeg" />
+
+    <!-- PRESERVED META TAGS -->
+    <meta name="description" content="Jay Vakil - Bouldering and Climbing Journey">
+    <meta name="image" content="https://jdvakil.github.io/media/bouldering_1.jpeg">
+    <meta name="keywords" content="Jay Vakil, Bouldering, Climbing, Robotics, AI">
+
+    <meta property="og:title" content="Jay Vakil | Bouldering" />
+    <meta property="og:description" content="My bouldering and climbing journey." />
     <meta property="og:image" content="https://jdvakil.github.io/media/bouldering_1.jpeg" />
-    <meta property="og:image:type" content="image/jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:url" content="https://jdvakil.github.io/bouldering.html" />
-    <meta property="og:title" content="Jay bouldering " />
-    <meta property="og:description"
-        content="Researcher active in the areas of Robotics and Embodied Artificial Intelligence" />
+    <meta property="og:type" content="website" />
 
-    <!--TWITTER-->
+    <meta name="twitter:title" content="Jay Vakil | Bouldering" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Jay bouldering " />
-    <meta name="twitter:description"
-        content="Researcher active in the areas of Robotics and Embodied Artificial Intelligence" />
+    <meta name="twitter:image" content="https://jdvakil.github.io/media/bouldering_1.jpeg">
+    <meta name="twitter:description" content="My bouldering and climbing journey." />
 
-    <link rel="icon" type="image/x-icon" href="media/bouldering_1.jpeg" style="border-radius: 50%" />
-    <title>Jay Darshan Vakil</title>
-
-    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=Lato:100,300,400|Karma:400,300' rel='stylesheet'
-        type='text/css'>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css'>
-    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style type="text/css">
-        p {
-            text-align: left;
-            padding-top: 3%;
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        .collage-container {
+            opacity: 0;
+            display: none;
+        }
+
+        #bouldering-intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5000;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .intro-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+        }
+
+        .intro-text {
+            position: absolute;
+            z-index: 5001;
+            text-align: center;
+        }
+
+        .intro-text h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            margin-bottom: 0;
+            background: linear-gradient(180deg, #fff 0%, #a5a5a5 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.2em;
+        }
+
+        .bento-card {
+            border: none;
+            background: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: none;
+        }
+
+        .bento-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .bento-card:hover::before {
+            display: none;
+        }
+
+        .card-media-wrapper {
+            aspect-ratio: auto;
+            border-bottom: none;
+        }
+
+        .card-media {
+            border-radius: var(--radius-m);
+        }
+
+        .collage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            grid-auto-flow: dense;
+        }
+
+        .v-wide {
+            grid-column: span 2;
+        }
+
+        .v-tall {
+            grid-row: span 2;
+        }
+
+        @media (max-width: 768px) {
+            .v-wide {
+                grid-column: span 1;
+            }
+
+            .v-tall {
+                grid-row: span 1;
+            }
         }
     </style>
 </head>
-<section class="section is-centered" style="padding-bottom: 1%;">
-    <div class="container is-primary has-text-centered">
-        <div class="title is-1" style="font-family: Raleway, Roboto;">
-            Jay Darshan Vakil
-        </div>
-        <div class="subtitle is-4" style="font-family: Raleway, Roboto;">
-            Bouldering and Climbing journey
-        </div>
-        <div class="column has-text-centered">
-            <div class="publication-links">
-                <span class="link-block">
-                    <a href="https://jdvakil.github.io" class="external-link button is-normal is-rounded is-info"
-                        target="_blank">
-                        <span class="icon">
-                            <i class="fa fa-home" style="font-size:24px"></i>
-                        </span>
-                        <span>Home</span>
-                    </a>
-                </span>
-                <hr style="background-color: black;">
-            </div>
-        </div>
-        <div class="columns is-vcentered is-centered ">
-            <div class="column has-text-centered is-3">
-                <video src="media/IMG_2186_AdobeExpress (1) (1).mp4" playsinline autoplay loop muted></video>
-            </div>
-            <div class="column has-text-centered is-3">
-                <video src="media/v0.mp4" playsinline autoplay loop muted></video>
-            </div>
-        </div>
-        <div class="columns is-vcentered is-centered">
-            <div class="column has-text-centered is-3">
-                <video src="media/IMG_2168_AdobeExpress (1) (1) (1).mp4" playsinline autoplay loop muted></video>
-            </div>
-            <div class="column has-text-centered is-3">
-                <video src="media/IMG_2166_AdobeExpress (1) (1) (1).mp4" playsinline autoplay loop muted></video>
-            </div>
+
+<body>
+    <div id="boot-screen">INITIALIZING_SYSTEM...</div>
+    <div id="spotlight"></div>
+    <div id="grain-overlay"></div>
+
+    <!-- 3s Intro Image -->
+    <div id="bouldering-intro">
+        <img src="media/bouldering_1.jpeg" class="intro-img" alt="Bouldering Intro">
+        <div class="intro-text">
+            <h1 data-text="CLIMB">CLIMB</h1>
         </div>
     </div>
-</section>
+
+    <!-- Video Collage -->
+    <div class="bento-container collage-container">
+
+        <header style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center;">
+            <h1 style="font-size: 2.5rem; margin: 0; pointer-events: none;">Reels</h1>
+            <a href="index.html" class="social-btn">
+                <i class="fa-solid fa-house"></i>
+            </a>
+        </header>
+
+        <section>
+            <div class="collage-grid">
+                <!-- Video 1 (Wide) -->
+                <div class="bento-card v-wide">
+                    <div class="card-media-wrapper">
+                        <video muted autoplay loop playsinline class="card-media">
+                            <source src="media/IMG_2186_AdobeExpress (1) (1).mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="bento-card">
+                    <div class="card-media-wrapper">
+                        <video muted autoplay loop playsinline class="card-media">
+                            <source src="media/v0.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Video 3 (Tall) -->
+                <div class="bento-card v-tall">
+                    <div class="card-media-wrapper">
+                        <video muted autoplay loop playsinline class="card-media">
+                            <source src="media/IMG_2168_AdobeExpress (1) (1) (1).mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Video 4 -->
+                <div class="bento-card">
+                    <div class="card-media-wrapper">
+                        <video muted autoplay loop playsinline class="card-media">
+                            <source src="media/IMG_2166_AdobeExpress (1) (1) (1).mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Fillers for collage look -->
+                <div class="bento-card">
+                    <div class="card-media-wrapper">
+                        <video muted autoplay loop playsinline class="card-media">
+                            <source src="media/v0.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer style="margin-top: 40px;">
+            <div class="footer-content">
+                <span>© 2026 Jay Vakil</span>
+                <span id="sys-time" class="monospace"></span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="background.js"></script>
+    <script src="animations.js"></script>
+
+    <script>
+        function startBoulderingSequence() {
+            const intro = document.getElementById('bouldering-intro');
+            const collage = document.querySelector('.collage-container');
+
+            // Wait for boot screen to finish (it hides itself in animations.js)
+            const checkBoot = setInterval(() => {
+                const boot = document.getElementById('boot-screen');
+                if (boot && (boot.style.display === 'none' || window.getComputedStyle(boot).display === 'none')) {
+                    clearInterval(checkBoot);
+
+                    // Now wait 3s on the intro image
+                    setTimeout(() => {
+                        // Transition to collage
+                        const tl = gsap.timeline({
+                            onComplete: () => {
+                                intro.style.display = 'none';
+                            }
+                        });
+
+                        tl.to(intro, {
+                            opacity: 0,
+                            duration: 1.5,
+                            ease: "power2.inOut"
+                        });
+
+                        tl.set(collage, { display: 'block' });
+
+                        tl.to(collage, {
+                            opacity: 1,
+                            duration: 1,
+                            y: 0,
+                            ease: "power3.out"
+                        });
+
+                        // Reveal grid items
+                        gsap.from(".bento-card", {
+                            y: 30,
+                            opacity: 0,
+                            stagger: 0.1,
+                            duration: 0.8,
+                            ease: "power2.out"
+                        });
+                    }, 3000);
+                }
+            }, 100);
+        }
+
+        window.addEventListener('load', startBoulderingSequence);
+    </script>
+</body>
 
 </html>
