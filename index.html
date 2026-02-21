@@ -39,7 +39,7 @@
         content="Researcher active in the areas of Robotics and Embodied Artificial Intelligence" />
 
     <!-- ASSETS -->
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css?v=20260220b">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
@@ -105,7 +105,9 @@
             </div>
 
             <div class="profile-container">
-                <img id="profile-img" src="media/jay_6.jpg" alt="Jay Vakil" class="profile-img">
+                <div class="profile-3d-wrap">
+                    <img id="profile-img" src="media/jay_6.jpg" alt="Jay Vakil" class="profile-img">
+                </div>
                 <p class="refresh-hint">Refresh to see different me</p>
                 <script>
                     const images = [
@@ -555,11 +557,21 @@
             <div class="bento-card" data-id="AFFIL-SYS">
                 <div class="card-content">
                     <div class="affiliation-row">
-                        <img src="media/boulder-fl-centered-2.png" class="affil-logo">
-                        <img src="media/Meta_lockup_positive primary_RGB.svg" class="affil-logo">
-                        <img src="media/uw.png" class="affil-logo">
-                        <img src="media/Myolab_logo_def.png" class="affil-logo">
-                        <img src="media/nsc.png" class="affil-logo">
+                        <div class="affil-tile">
+                            <img src="media/boulder-fl-centered-2.png" class="affil-logo affil-cu" alt="University of Colorado Boulder">
+                        </div>
+                        <div class="affil-tile">
+                            <img src="media/Meta_lockup_positive primary_RGB.svg" class="affil-logo affil-meta" alt="Meta">
+                        </div>
+                        <div class="affil-tile">
+                            <img src="media/uw.png" class="affil-logo affil-uw" alt="University of Washington">
+                        </div>
+                        <div class="affil-tile">
+                            <img src="media/Myolab_logo_def.png" class="affil-logo affil-myo" alt="MyoLab">
+                        </div>
+                        <div class="affil-tile">
+                            <img src="media/nsc.png" class="affil-logo affil-nsc" alt="North Seattle College">
+                        </div>
                     </div>
                 </div>
             </div>

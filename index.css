@@ -258,14 +258,7 @@ a {
   transition: var(--transition);
 }
 
-.affiliation-row {
-  display: flex;
-  gap: 40px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 10px 0;
-}
+/* Removed redundant affiliation-row */
 
 .service-tags span:hover {
   background: var(--accent-soft);
@@ -317,6 +310,46 @@ a {
   flex-direction: column;
   gap: 12px;
   align-items: center;
+  perspective: 1400px;
+}
+
+.profile-3d-wrap {
+  width: 100%;
+  border-radius: var(--radius-l);
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease;
+  box-shadow:
+    0 40px 80px -20px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(41, 151, 255, 0.1);
+}
+
+.profile-3d-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -120% -35%;
+  background: linear-gradient(110deg,
+      transparent 42%,
+      rgba(255, 255, 255, 0.6) 50%,
+      transparent 58%);
+  transform: translateX(-70%) rotate(9deg);
+  opacity: 0;
+  transition: transform 0.85s ease, opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.profile-3d-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: calc(var(--radius-l) + 8px);
+  background: radial-gradient(circle at var(--mouse-local-x, 50%) var(--mouse-local-y, 50%), rgba(41, 151, 255, 0.35), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .profile-img {
@@ -325,10 +358,24 @@ a {
   object-fit: cover;
   border-radius: var(--radius-l);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 40px 80px -20px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(41, 151, 255, 0.1);
+  box-shadow: none;
   animation: imageEnter 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateZ(18px);
+}
+
+.profile-3d-wrap:hover {
+  box-shadow:
+    0 55px 90px -20px rgba(0, 0, 0, 0.88),
+    0 0 60px rgba(41, 151, 255, 0.22);
+}
+
+.profile-3d-wrap:hover::before {
+  transform: translateX(70%) rotate(9deg);
+  opacity: 1;
+}
+
+.profile-3d-wrap:hover::after {
+  opacity: 1;
 }
 
 .refresh-hint {
@@ -519,7 +566,6 @@ a {
 }
 
 .bento-card:hover {
-  transform: translateY(-8px) scale(1.02);
   background-color: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.3);
   box-shadow:
@@ -641,7 +687,6 @@ footer,
 
 .impact-card:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  transform: translateY(-5px);
   border-color: rgba(255, 255, 255, 0.3);
   box-shadow:
     inset 1px 1px 0px rgba(255, 255, 255, 0.4),
@@ -698,7 +743,6 @@ footer,
 .exp-card:hover {
   background-color: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.3);
-  transform: translateX(10px) scale(1.01);
   box-shadow:
     inset 1px 1px 0px rgba(255, 255, 255, 0.5),
     0 25px 50px rgba(0, 0, 0, 0.3),
@@ -797,32 +841,101 @@ footer,
 
 /* Affiliations */
 .affiliation-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 40px;
-  padding: 40px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 26px);
+  padding: clamp(20px, 2vw, 36px);
   /* Fix: Remove solid white block, go back to transparent/subtle */
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
   border-radius: var(--radius-l);
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  perspective: 1000px;
+}
+
+.affil-tile {
+  width: 100%;
+  min-height: clamp(82px, 7vw, 104px);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.88));
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.affil-tile::before {
+  content: "";
+  position: absolute;
+  inset: -130% -30%;
+  background: linear-gradient(110deg,
+      transparent 42%,
+      rgba(255, 255, 255, 0.72) 50%,
+      transparent 58%);
+  transform: translateX(-65%) rotate(8deg);
+  opacity: 0;
+  transition: transform 0.85s ease, opacity 0.4s ease;
+}
+
+.affil-tile:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow:
+    0 24px 45px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(41, 151, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.affil-tile:hover::before {
+  transform: translateX(65%) rotate(8deg);
+  opacity: 1;
 }
 
 .affil-logo {
-  height: 80px;
-  width: auto;
+  width: 78% !important;
+  height: 62% !important;
+  max-width: none !important;
+  object-fit: contain;
+  object-position: center;
+  display: block;
   filter: none;
   opacity: 1;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  /* Fix: Add individual white background */
-  background: white;
-  padding: 10px 20px;
-  border-radius: 12px;
+  transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.35s ease;
+  background: transparent;
+  padding: 0 !important;
+  border-radius: 0;
+  flex-shrink: 0;
 }
 
-.affil-logo:hover {
-  transform: scale(1.05);
+.affil-tile:hover .affil-logo {
+  transform: scale(1.08);
+  filter: saturate(1.1) contrast(1.05);
+}
+
+[data-id="AFFIL-SYS"] {
+  overflow: visible;
+}
+
+[data-id="AFFIL-SYS"]::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--mouse-local-x, 50%) var(--mouse-local-y, 50%), rgba(41, 151, 255, 0.22), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+[data-id="AFFIL-SYS"]:hover::after {
+  opacity: 1;
 }
 
 /* Footer */
@@ -891,18 +1004,35 @@ footer {
 
   /* Adjust Affiliations for mobile */
   .affiliation-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
     padding: 24px;
   }
 
+  .affil-tile {
+    min-height: clamp(78px, 20vw, 102px);
+    border-radius: 14px;
+  }
+
   .affil-logo {
-    height: 50px;
-    /* Slightly bigger on mobile too */
-    padding: 8px 16px;
+    width: 80% !important;
+    height: 62% !important;
   }
 
   .dual-column {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .affiliation-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .affil-tile {
+    min-height: 74px;
   }
 }
