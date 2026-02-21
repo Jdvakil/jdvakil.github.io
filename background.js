@@ -26,216 +26,252 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// --- THE CYBERNETIC SENTINEL ---
+// --- APPLE SIRI STYLE FLUID SHADER ---
 
-// 1. Warp Core Chassis (Mechanical Shell)
-const chassisGroup = new THREE.Group();
-scene.add(chassisGroup);
+// We don't need standard lights for a custom unlit shader
+const geometry = new THREE.PlaneGeometry(2, 2, 128, 128);
 
-const boxes = [];
-for (let i = 0; i < 2; i++) {
-    const size = 12 + i * 10;
-    const geo = new THREE.BoxGeometry(size, size, size);
-    const mat = new THREE.MeshBasicMaterial({
-        color: 0x2997ff,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.1,
-        blending: THREE.AdditiveBlending
-    });
-    const box = new THREE.Mesh(geo, mat);
-    chassisGroup.add(box);
-    boxes.push(box);
-}
+// Custom Uniforms to pass data to the shaders
+const uniforms = {
+    u_time: { value: 0.0 },
+    u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+    u_mouse: { value: new THREE.Vector2(0, 0) },
+    u_colorSaffron: { value: new THREE.Color("#FF9933") },
+    u_colorWhite: { value: new THREE.Color("#FFFFFF") },
+    u_colorGreen: { value: new THREE.Color("#138808") },
+    u_colorBlue: { value: new THREE.Color("#000080") },
+    u_scrollVelocity: { value: 0.0 }
+};
 
-// 2. Processing Rings (Warp Hub)
-const ringGroup = new THREE.Group();
-scene.add(ringGroup);
+// GLSL Vertex Shader
+const vertexShader = `
+    uniform float u_time;
+    uniform float u_scrollVelocity;
+    varying vec2 vUv;
+    varying vec3 vPosition;
+    
+    // Simplex Noise Function (Ashima Arts)
+    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+    vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+    vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+    vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+    float snoise(vec3 v) {
+      const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+      const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+      vec3 i  = floor(v + dot(v, C.yyy) );
+      vec3 x0 = v - i + dot(i, C.xxx) ;
+      vec3 g = step(x0.yzx, x0.xyz);
+      vec3 l = 1.0 - g;
+      vec3 i1 = min( g.xyz, l.zxy );
+      vec3 i2 = max( g.xyz, l.zxy );
+      vec3 x1 = x0 - i1 + C.xxx;
+      vec3 x2 = x0 - i2 + C.yyy;
+      vec3 x3 = x0 - D.yyy;
+      i = mod289(i);
+      vec4 p = permute( permute( permute(
+                 i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+               + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
+               + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+      float n_ = 0.142857142857;
+      vec3  ns = n_ * D.wyz - D.xzx;
+      vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+      vec4 x_ = floor(j * ns.z);
+      vec4 y_ = floor(j - 7.0 * x_ );
+      vec4 x = x_ *ns.x + ns.yyyy;
+      vec4 y = y_ *ns.x + ns.yyyy;
+      vec4 h = 1.0 - abs(x) - abs(y);
+      vec4 b0 = vec4( x.xy, y.xy );
+      vec4 b1 = vec4( x.zw, y.zw );
+      vec4 s0 = floor(b0)*2.0 + 1.0;
+      vec4 s1 = floor(b1)*2.0 + 1.0;
+      vec4 sh = -step(h, vec4(0.0));
+      vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+      vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+      vec3 p0 = vec3(a0.xy,h.x);
+      vec3 p1 = vec3(a0.zw,h.y);
+      vec3 p2 = vec3(a1.xy,h.z);
+      vec3 p3 = vec3(a1.zw,h.w);
+      vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+      p0 *= norm.x;
+      p1 *= norm.y;
+      p2 *= norm.z;
+      p3 *= norm.w;
+      vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+      m = m * m;
+      return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
+    }
 
-const rings = [];
-const ringCount = 3;
-for (let i = 0; i < ringCount; i++) {
-    const geo = new THREE.TorusGeometry(8 + i * 3, 0.05, 8, 50);
-    const mat = new THREE.MeshBasicMaterial({
-        color: 0x00ffff,
-        transparent: true,
-        opacity: 0.3,
-        blending: THREE.AdditiveBlending
-    });
-    const ring = new THREE.Mesh(geo, mat);
-    ring.rotation.x = Math.PI / 2;
-    ringGroup.add(ring);
-    rings.push({
-        mesh: ring,
-        pulseSpeed: 0.5 + i * 0.2,
-        rotSpeed: (Math.random() - 0.5) * 0.02
-    });
-}
+    void main() {
+        vUv = uv;
+        
+        // Fluid displacement using noise
+        float noiseFreq = 1.5;
+        float noiseAmp = 0.4;
+        vec3 noisePos = vec3(position.x * noiseFreq + u_time * 0.2, position.y * noiseFreq + u_time * 0.3, u_time * 0.1);
+        
+        // React to scrolling
+        noisePos.z += u_scrollVelocity * 2.0;
 
-// 3. The CPU Core (Energy Source)
-const cpuGeo = new THREE.BoxGeometry(5, 5, 5);
-const cpuMat = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    wireframe: true,
+        float noise = snoise(noisePos) * noiseAmp;
+        vec3 newPosition = position + normal * noise;
+        vPosition = newPosition;
+        
+        gl_Position = vec4(position, 1.0); // Fullscreen plane
+    }
+`;
+
+// GLSL Fragment Shader
+const fragmentShader = `
+    uniform float u_time;
+    uniform vec2 u_resolution;
+    uniform vec2 u_mouse;
+    uniform vec3 u_colorSaffron;
+    uniform vec3 u_colorWhite;
+    uniform vec3 u_colorGreen;
+    uniform vec3 u_colorBlue;
+    
+    varying vec2 vUv;
+    varying vec3 vPosition;
+    
+    // Copy the noise functions here to use in fragment coloring
+    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+    vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+    vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+    vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+    float snoise(vec3 v) {
+      const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+      const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+      vec3 i  = floor(v + dot(v, C.yyy) );
+      vec3 x0 = v - i + dot(i, C.xxx) ;
+      vec3 g = step(x0.yzx, x0.xyz);
+      vec3 l = 1.0 - g;
+      vec3 i1 = min( g.xyz, l.zxy );
+      vec3 i2 = max( g.xyz, l.zxy );
+      vec3 x1 = x0 - i1 + C.xxx;
+      vec3 x2 = x0 - i2 + C.yyy;
+      vec3 x3 = x0 - D.yyy;
+      i = mod289(i);
+      vec4 p = permute( permute( permute( i.z + vec4(0.0, i1.z, i2.z, 1.0 )) + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+      float n_ = 0.142857142857;
+      vec3  ns = n_ * D.wyz - D.xzx;
+      vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+      vec4 x_ = floor(j * ns.z);
+      vec4 y_ = floor(j - 7.0 * x_ );
+      vec4 x = x_ *ns.x + ns.yyyy;
+      vec4 y = y_ *ns.x + ns.yyyy;
+      vec4 h = 1.0 - abs(x) - abs(y);
+      vec4 b0 = vec4( x.xy, y.xy );
+      vec4 b1 = vec4( x.zw, y.zw );
+      vec4 s0 = floor(b0)*2.0 + 1.0;
+      vec4 s1 = floor(b1)*2.0 + 1.0;
+      vec4 sh = -step(h, vec4(0.0));
+      vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+      vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+      vec3 p0 = vec3(a0.xy,h.x);
+      vec3 p1 = vec3(a0.zw,h.y);
+      vec3 p2 = vec3(a1.xy,h.z);
+      vec3 p3 = vec3(a1.zw,h.w);
+      vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+      p0 *= norm.x;  p1 *= norm.y;  p2 *= norm.z;  p3 *= norm.w;
+      vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+      m = m * m;
+      return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
+    }
+
+    void main() {
+        // Normalize coordinates and account for aspect ratio to prevent stretching
+        vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+        uv.x *= u_resolution.x / u_resolution.y;
+        
+        // Base Noise Fields acting as fluid paths
+        float flowTime = u_time * 0.15;
+        
+        // Generate complex flowing patterns by nesting noise
+        float n1 = snoise(vec3(uv * 2.5, flowTime));
+        float n2 = snoise(vec3(uv * 1.5 - n1 * 0.5, flowTime * 1.2));
+        float n3 = snoise(vec3(uv * 3.0 + n2, flowTime * 0.8));
+        
+        // Mouse influence
+        float distToMouse = distance(uv, vec2(u_mouse.x * (u_resolution.x/u_resolution.y), u_mouse.y));
+        float mouseGlow = smoothstep(0.5, 0.0, distToMouse) * 0.5;
+
+        // Mix colors dynamically based on the flowing noise fields
+        // Math magic to blend the 4 colors into a cohesive aurora
+        
+        // Start black to maintain contrast
+        vec3 finalColor = vec3(0.02); 
+        
+        // Smoothly blend the flag colors into the fluid strands
+        float saffronBlend = smoothstep(-0.2, 0.8, n1);
+        float greenBlend = smoothstep(-0.4, 0.6, n2);
+        float whiteBlend = smoothstep(0.4, 1.0, n3) * 0.6; // White acts as a bright edge highlight
+        float blueBlend = smoothstep(0.0, 1.0, sin(n1 * n2 * 10.0)) * 0.3; // Deep navy undertones
+
+        // Additive blending for that intense "lit from within" glowing look
+        vec3 colorLayer1 = mix(finalColor, u_colorSaffron, saffronBlend * 0.4);
+        vec3 colorLayer2 = mix(colorLayer1, u_colorGreen, greenBlend * 0.4);
+        vec3 colorLayer3 = mix(colorLayer2, u_colorWhite, whiteBlend);
+        vec3 colorLayer4 = colorLayer3 + (u_colorBlue * blueBlend);
+
+        // Enhance with mouse interaction
+        finalColor = colorLayer4 + (u_colorWhite * mouseGlow * 0.2);
+        
+        // Vignette to keep edges darker
+        float vignette = smoothstep(1.5, 0.5, length(vUv - 0.5));
+        finalColor *= vignette;
+
+        gl_FragColor = vec4(finalColor, 1.0);
+    }
+`;
+
+// Create the Shader Material
+const material = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
     transparent: true,
-    opacity: 0.5,
-    blending: THREE.AdditiveBlending
+    depthWrite: false
 });
-const cpu = new THREE.Mesh(cpuGeo, cpuMat);
-scene.add(cpu);
 
-// 4. Circuit Flow (Electrons)
-const particlesGeometry = new THREE.BufferGeometry();
-const particleCount = 2500;
-const posArray = new Float32Array(particleCount * 3);
-const originalPos = new Float32Array(particleCount * 3);
+const plane = new THREE.Mesh(geometry, material);
+scene.add(plane);
 
-for (let i = 0; i < particleCount; i++) {
-    const gridSize = 3;
-    const x = Math.round((Math.random() - 0.5) * 80 / gridSize) * gridSize;
-    const y = Math.round((Math.random() - 0.5) * 80 / gridSize) * gridSize;
-    const z = Math.round((Math.random() - 0.5) * 50 / gridSize) * gridSize;
-
-    posArray[i * 3] = x;
-    posArray[i * 3 + 1] = y;
-    posArray[i * 3 + 2] = z;
-
-    originalPos[i * 3] = x;
-    originalPos[i * 3 + 1] = y;
-    originalPos[i * 3 + 2] = z;
-}
-
-particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-const particleMaterial = new THREE.PointsMaterial({
-    size: 0.12, // Balanced size (in-between 0.06 and 0.3)
-    color: 0x2997ff,
-    transparent: true,
-    opacity: 0.4, // even subtler
-    blending: THREE.AdditiveBlending,
-    depthWrite: false // improved performance
-});
-const electrons = new THREE.Points(particlesGeometry, particleMaterial);
-scene.add(electrons);
-
-camera.position.z = 28;
+// We draw a full screen plane, so standard camera positioning doesn't matter
+// The vertices are clamped to gl_Position = vec4(position, 1.0)
+camera.position.z = 1;
 
 // Interaction State
-let mouseX = 0;
-let mouseY = 0;
 let scrollY = 0;
 let lastScrollY = 0;
 let scrollVelocity = 0;
 
+// Update Mouse Uniform
 window.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    // Normalize to 0 -> 1 for shader
+    uniforms.u_mouse.value.x = e.clientX / window.innerWidth;
+    uniforms.u_mouse.value.y = 1.0 - (e.clientY / window.innerHeight); // Flip Y for WebGL
 });
 
 window.addEventListener('scroll', () => {
     scrollY = window.scrollY;
 });
 
-// Color Gradients
-const palettes = [
-    new THREE.Color(0x008080), // Teal (Primary choice)
-    new THREE.Color(0x2997ff), // Cyan
-    new THREE.Color(0xff00ff), // Magenta (Robotics/Cyberpunk)
-    new THREE.Color(0xffaa00), // Gold
-    new THREE.Color(0x00ff00)  // Lime
-];
-
-// Randomize color order on refresh (Fisher-Yates shuffle)
-for (let i = palettes.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [palettes[i], palettes[j]] = [palettes[j], palettes[i]];
-}
-
 const clock = new THREE.Clock();
 
 function animate() {
     const time = clock.getElapsedTime();
 
-    // Calculate Kinetic Gravity
+    // Update Shader Time
+    uniforms.u_time.value = time;
+
+    // Calculate Kinetic Gravity from scrolling
     const deltaY = scrollY - lastScrollY;
     lastScrollY = scrollY;
-    scrollVelocity += deltaY * 0.0005; // Even lower scroll sensitivity (was 0.001)
-    scrollVelocity *= 0.94; // Higher friction for mechanical feel
+    scrollVelocity += deltaY * 0.005;
+    scrollVelocity *= 0.90; // Dampen
 
-    const globalSpeed = 0.002 + Math.abs(scrollVelocity) * 0.2; // Reduced scroll impact (was * 0.5)
-
-    // 1. ANIMATE CHASSIS
-    boxes.forEach((box, i) => {
-        const dir = i % 2 === 0 ? 1 : -1;
-        box.rotation.y += globalSpeed * dir;
-        box.rotation.z += globalSpeed * 0.5 * dir;
-    });
-
-    // 2. ANIMATE RINGS (Warp Drive)
-    rings.forEach((r, i) => {
-        r.mesh.rotation.y += (r.rotSpeed * 0.25) + scrollVelocity * 0.2; // Subtler scroll rotation (was * 0.5)
-        r.mesh.rotation.x += (r.rotSpeed * 0.25);
-
-        // Pulsate ring opacity
-        const pulse = 0.2 + Math.sin(time * r.pulseSpeed) * 0.1;
-        r.mesh.material.opacity = pulse + (Math.abs(scrollVelocity) * 2);
-
-        // Expand rings on scroll
-        const scale = 1 + (Math.abs(scrollVelocity) * 5);
-        r.mesh.scale.set(scale, scale, scale);
-    });
-
-    cpu.rotation.x += globalSpeed * 2;
-    cpu.rotation.y += globalSpeed * 3;
-    const cpuPulse = 1 + Math.sin(time * 5) * 0.05 + Math.abs(scrollVelocity) * 2;
-    cpu.scale.set(cpuPulse, cpuPulse, cpuPulse);
-
-    // 3. CIRCUIT PULSE (ELECTRON PATHS)
-    const positions = electrons.geometry.attributes.position.array;
-    for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        const ox = originalPos[i3];
-        const oy = originalPos[i3 + 1];
-        const oz = originalPos[i3 + 2];
-
-        // Grid drift
-        const wave = Math.sin(time * 0.5 + ox * 0.2) * 0.5;
-        positions[i3] = ox + wave;
-        positions[i3 + 1] = oy + Math.cos(time * 0.5 + oy * 0.2) * 0.5;
-
-        // Mouse avoidance (magnetic interference)
-        const dx = (mouseX * 35) - positions[i3];
-        const dy = (mouseY * 25) - positions[i3 + 1];
-        const d = Math.sqrt(dx * dx + dy * dy);
-        if (d < 12) {
-            positions[i3] -= dx * 0.08;
-            positions[i3 + 1] -= dy * 0.08;
-            positions[i3 + 2] += 1.1; // Balanced pop out (in-between 0.8 and 1.5)
-        } else {
-            positions[i3 + 2] += (oz - positions[i3 + 2]) * 0.05; // Snap back Z
-        }
-    }
-    electrons.geometry.attributes.position.needsUpdate = true;
-
-    // 4. COLOR LERP
-    const maxScroll = Math.max(document.body.scrollHeight - window.innerHeight, 100);
-    const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
-    const stageFloat = progress * (palettes.length - 1);
-    const stageIndex = Math.floor(stageFloat);
-    const nextStageIndex = Math.min(stageIndex + 1, palettes.length - 1);
-    const alpha = stageFloat - stageIndex;
-
-    const col = new THREE.Color().lerpColors(palettes[stageIndex], palettes[nextStageIndex], alpha);
-
-    // Smoother mesh color update
-    boxes.forEach(b => b.material.color.lerp(col, 0.05));
-    rings.forEach(r => r.mesh.material.color.lerp(col, 0.05));
-    cpuMat.color.copy(col).lerp(new THREE.Color(0xffffff), 0.5);
-    particleMaterial.color.lerp(col, 0.05);
-
-    // 5. CAMERA KINETICS
-    camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
-    camera.position.y += (mouseY * 4 - camera.position.y) * 0.05;
-    camera.lookAt(0, 0, 0);
+    // Pass scroll velocity to shader to make the fluid surge
+    uniforms.u_scrollVelocity.value = scrollVelocity;
 
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
@@ -247,4 +283,6 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    // Update resolution uniform
+    uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
 });

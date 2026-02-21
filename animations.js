@@ -1,71 +1,53 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// 1. System Clock
-function updateClock() {
-    const clock = document.getElementById('sys-time');
-    if (!clock) return;
-    const now = new Date();
-    clock.innerText = now.toTimeString().split(' ')[0] + " [UTC]";
-}
-setInterval(updateClock, 1000);
-updateClock();
+// 1. Sleek Fade In Sequence
+function startMainAnimations() {
+    // Hero Reveal
+    const tl = gsap.timeline();
+    tl.from(".hero-block", {
+        y: 60,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power3.out"
+    });
 
-// 2. System Boot Sequence
-const bootLines = [
-    "UPLINK ESTABLISHED",
-    "CORE_OS LOADING...",
-    "DRIVE_INIT [OK]",
-    "SENTINEL ONLINE"
-];
-
-const bootScreen = document.getElementById('boot-screen');
-let lineIdx = 0;
-
-function typeBootLines() {
-    if (lineIdx < bootLines.length) {
-        bootScreen.innerText = bootLines[lineIdx];
-        lineIdx++;
-        setTimeout(typeBootLines, 80); // Even snappier: 80ms
-    } else {
-        // Boot Completion
-        gsap.to(bootScreen, {
+    // Staggered Card Reveals
+    gsap.utils.toArray(".bento-card").forEach((card, i) => {
+        gsap.from(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                toggleActions: "play none none reverse"
+            },
+            y: 40,
             opacity: 0,
-            duration: 1,
-            ease: "power2.inOut",
-            onComplete: () => {
-                bootScreen.style.display = 'none';
-                document.documentElement.style.setProperty('--glow-opacity', '1');
-                startMainAnimations();
-            }
+            duration: 1.2,
+            delay: i * 0.1,
+            ease: "power3.out"
         });
-    }
+    });
+
+    // Handle generic .reveal sections
+    gsap.utils.toArray(".reveal").forEach((section) => {
+        gsap.to(section, {
+            scrollTrigger: {
+                trigger: section,
+                start: "top 85%",
+                onEnter: () => section.classList.add('active')
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power2.out"
+        });
+    });
 }
 
-// Safety Kill-Switch: Hide boot screen no matter what after 4s
-setTimeout(() => {
-    const bs = document.getElementById('boot-screen');
-    if (bs && bs.style.display !== 'none') {
-        if (typeof gsap !== 'undefined') {
-            gsap.to(bs, {
-                opacity: 0,
-                duration: 0.5,
-                onComplete: () => {
-                    bs.style.display = 'none';
-                    if (typeof startMainAnimations === 'function') startMainAnimations();
-                }
-            });
-        } else {
-            bs.style.display = 'none';
-            if (typeof startMainAnimations === 'function') startMainAnimations();
-        }
-    }
-}, 4000);
-
-// Start Boot
+// Start Immediately
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    setTimeout(typeBootLines, 100);
+    setTimeout(startMainAnimations, 100);
 } else {
-    window.addEventListener('DOMContentLoaded', typeBootLines);
+    window.addEventListener('DOMContentLoaded', startMainAnimations);
 }
 
 // 3. Main Page Animations
