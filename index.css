@@ -127,7 +127,45 @@ html {
 }
 
 body {
-  background-color: var(--bg-primary);
+  /* ── Apple ambient background ────────────────────────────────
+     Three fixed radial-gradient "light sources" on pure black —
+     exactly the technique used on apple.com dark product pages
+     (developer portal, WWDC hub, Mac/iPad product pages).
+
+     1. Top-center: primary blue ambient — like a soft spotlight
+        above the page, giving the hero a subtle halo.
+     2. Bottom-right corner: faint purple whisper — adds depth,
+        prevents the bottom half from feeling totally dead-flat.
+     3. Mouse-following: a very dim blue spot tracked by JS via
+        --mouse-x / --mouse-y. Radius is small so it's only a
+        local highlight, not a sweeping glow.
+
+     None of these are animated. None have noise or grain.
+     This IS the Apple approach — the content does the visual
+     work; the background just holds space.
+  ─────────────────────────────────────────────────────────── */
+  background-color: #000;
+  background-image:
+    /* 1. Primary top-center spotlight */
+    radial-gradient(
+      ellipse 85% 50% at 50% -8%,
+      rgba(41, 151, 255, 0.11) 0%,
+      transparent 68%
+    ),
+    /* 2. Bottom-right accent */
+    radial-gradient(
+      ellipse 55% 38% at 90% 105%,
+      rgba(191, 90, 242, 0.07) 0%,
+      transparent 60%
+    ),
+    /* 3. Mouse-following local glow (CSS var updated by background.js) */
+    radial-gradient(
+      ellipse 38% 28% at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(41, 151, 255, 0.045) 0%,
+      transparent 55%
+    );
+  background-attachment: fixed;
+
   color: var(--text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display",
                "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -183,18 +221,7 @@ body {
    4. SCROLL PROGRESS INDICATOR
    ================================ */
 .scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: linear-gradient(90deg,
-    var(--system-blue) 0%,
-    var(--system-purple) 50%,
-    var(--system-teal) 100%);
-  z-index: 9999;
-  transition: width 0.1s linear;
-  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+  display: none; /* Apple doesn't use scroll progress bars */
 }
 
 /* ================================
