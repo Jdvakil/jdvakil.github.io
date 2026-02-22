@@ -13,33 +13,32 @@
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
 
-    <title>Jay Vakil</title>
+    <title>Jay Vakil — Robotics & AI Researcher</title>
 
     <link rel="icon" type="image/x-icon" href="media/icons8-robot-ios-17-outlined-32.png" />
 
-    <!-- PRESERVED META TAGS -->
-    <meta name="description" content="Jay Vakil">
+    <!-- SEO META TAGS -->
+    <meta name="description" content="Jay Vakil — CS PhD student at CU Boulder researching Robot Learning, Mobile Manipulation, and Embodied AI. Previously at Facebook AI Research (FAIR).">
     <meta name="image" content="https://jdvakil.github.io/media/jay_3.jpg">
-    <meta name="keywords" content="Jay Vakil">
-    <meta name="keywords" content="Jay Vakil robotics meta ai">
+    <meta name="keywords" content="Jay Vakil, Robotics, Embodied AI, Robot Learning, Mobile Manipulation, FAIR, CU Boulder">
+    <meta name="author" content="Jay Vakil">
 
-    <meta property="og:title" content="Jay Vakil" />
-    <meta property="og:description"
-        content="Researcher active in the areas of Robotics and Embodied Artificial Intelligence" />
+    <meta property="og:title" content="Jay Vakil — Robotics & AI Researcher" />
+    <meta property="og:description" content="CS PhD student at CU Boulder researching Robot Learning, Mobile Manipulation, and Embodied AI." />
     <meta property="og:image" content="https://jdvakil.github.io/media/jay_3.jpg" />
     <meta property="og:image:type" content="image/jpg">
     <meta property="og:url" content="https://jdvakil.github.io/index.html" />
     <meta property="og:type" content="website" />
 
-    <meta name="twitter:title" content="Jay Vakil" />
+    <meta name="twitter:title" content="Jay Vakil — Robotics & AI Researcher" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://jdvakil.github.io/media/jay_3.jpg">
-    <meta name="twitter:description"
-        content="Researcher active in the areas of Robotics and Embodied Artificial Intelligence" />
+    <meta name="twitter:description" content="CS PhD student at CU Boulder researching Robot Learning, Mobile Manipulation, and Embodied AI." />
 
     <!-- ASSETS -->
-    <link rel="stylesheet" href="index.css?v=20260220b">
+    <link rel="stylesheet" href="index.css?v=20260222a">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
@@ -50,65 +49,99 @@
 
 <body>
 
+    <!-- SKIP TO CONTENT — Accessibility first-focus link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- SCROLL PROGRESS INDICATOR -->
+    <div class="scroll-progress" role="progressbar" aria-label="Page scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+    <!-- FLOATING NAVIGATION BAR -->
+    <nav class="apple-nav" role="navigation" aria-label="Site navigation">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-brand" aria-label="Jay Vakil — Home">JV</a>
+            <div class="nav-links" role="list">
+                <a href="#about" class="nav-link" role="listitem" aria-label="About section">About</a>
+                <a href="#experience" class="nav-link" role="listitem" aria-label="Experience section">Experience</a>
+                <a href="#research" class="nav-link" role="listitem" aria-label="Research section">Research</a>
+                <a href="#press" class="nav-link" role="listitem" aria-label="Press section">Press</a>
+                <a href="#teaching" class="nav-link" role="listitem" aria-label="Teaching section">Teaching</a>
+            </div>
+            <a href="media/JayDV_CV.pdf" target="_blank" class="nav-cta" aria-label="Download CV PDF" rel="noopener noreferrer">
+                CV <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main id="main-content">
     <div class="bento-container">
 
         <!-- BLOCK 1: HERO (Bio + Social) -->
-        <section class="hero-block">
-            <div class="bio-card">
-                <h1 data-text="Jay Vakil">Jay Vakil</h1>
+        <section class="hero-block" id="hero" aria-labelledby="hero-name">
+            <div class="bio-card" id="about">
+                <div class="hero-eyebrow" aria-label="Researcher status">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span>Open to collaborations</span>
+                </div>
+                <h1 id="hero-name" data-text="Jay Vakil">Jay Vakil</h1>
                 <p class="bio-narrative">
                     I am a <strong>Computer Science PhD student</strong> at the <a
-                        href="https://www.colorado.edu/cs/">University of Colorado Boulder</a>, researching
+                        href="https://www.colorado.edu/cs/" aria-label="University of Colorado Boulder CS Department">University of Colorado Boulder</a>, researching
                     <strong>Robot Learning, Mobile Manipulation, and Embodied AI</strong>. My work focuses on scaling
                     robotic learning, contributing to foundational projects like <a
-                        href="https://robotics-transformer-x.github.io" class="highlight-link">RT-X</a> and <a
-                        href="https://robopen.github.io" class="highlight-link">RoboAgent</a>.
+                        href="https://robotics-transformer-x.github.io" class="highlight-link" target="_blank" rel="noopener noreferrer" aria-label="RT-X project website">RT-X</a> and <a
+                        href="https://robopen.github.io" class="highlight-link" target="_blank" rel="noopener noreferrer" aria-label="RoboAgent project website">RoboAgent</a>.
                 </p>
 
                 <p class="bio-details">
-                    Previously, I was a researcher at <a href="https://ai.facebook.com/">Facebook AI Research
-                        (FAIR)</a>. I am advised by <a href="https://alessandro.ronc.one">Alessandro
-                        Roncone</a>, <a href="https://www.colorado.edu/ecee/nikolaus-correll">Nikolaus Correll</a>.
+                    Previously, I was a researcher at <a href="https://ai.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook AI Research website">Facebook AI Research
+                        (FAIR)</a>. I am advised by <a href="https://alessandro.ronc.one" target="_blank" rel="noopener noreferrer">Alessandro
+                        Roncone</a>, <a href="https://www.colorado.edu/ecee/nikolaus-correll" target="_blank" rel="noopener noreferrer">Nikolaus Correll</a>.
                 </p>
 
-                <p class="bio-contact">
-                    <span class="contact-item">
-                        <i class="fa-solid fa-envelope"></i> jay.vakil <span class="at-symbol">[at]</span> colorado.edu
+                <p class="bio-contact" role="list" aria-label="Contact information">
+                    <span class="contact-item" role="listitem">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                        <span>jay.vakil <span class="at-symbol" aria-label="at">[at]</span> colorado.edu</span>
                     </span>
-                    <span class="contact-item">
-                        <i class="fa-solid fa-graduation-cap"></i> BS Electrical Engineering, University of Washington
+                    <span class="contact-item" role="listitem">
+                        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                        <span>BS Electrical Engineering, University of Washington</span>
                     </span>
-                    <span class="contact-item">
-                        <i class="fa-solid fa-mountain-sun"></i> <a href="bouldering.html"
-                            class="highlight-link">Boulderer</a>, Photographer, and Car Enthusiast
+                    <span class="contact-item" role="listitem">
+                        <i class="fa-solid fa-mountain-sun" aria-hidden="true"></i>
+                        <span><a href="bouldering.html" class="highlight-link" aria-label="Jay's bouldering page">Boulderer</a>, Photographer, and Car Enthusiast</span>
                     </span>
                 </p>
 
-                <div class="social-grid">
-                    <a href="https://scholar.google.com/citations?hl=en&user=CuCLJkUAAAAJ" target="_blank"
-                        class="social-btn">
-                        <i class="ai ai-google-scholar"></i> Scholar
+                <nav class="social-grid" aria-label="Social media and contact links">
+                    <a href="https://scholar.google.com/citations?hl=en&user=CuCLJkUAAAAJ" target="_blank" rel="noopener noreferrer"
+                        class="social-btn" aria-label="Google Scholar profile — view publications">
+                        <i class="ai ai-google-scholar" aria-hidden="true"></i> Scholar
                     </a>
-                    <a href="https://github.com/jdvakil" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-github"></i> GitHub
+                    <a href="https://github.com/jdvakil" target="_blank" rel="noopener noreferrer"
+                        class="social-btn" aria-label="GitHub profile — view code repositories">
+                        <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
                     </a>
-                    <a href="https://www.linkedin.com/in/jdvakil/" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-linkedin"></i> LinkedIn
+                    <a href="https://www.linkedin.com/in/jdvakil/" target="_blank" rel="noopener noreferrer"
+                        class="social-btn" aria-label="LinkedIn profile">
+                        <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
                     </a>
-                    <a href="https://twitter.com/jdvakil" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-twitter"></i> Twitter
+                    <a href="https://twitter.com/jdvakil" target="_blank" rel="noopener noreferrer"
+                        class="social-btn" aria-label="Twitter/X profile">
+                        <i class="fa-brands fa-twitter" aria-hidden="true"></i> Twitter
                     </a>
-                    <a href="media/JayDV_CV.pdf" target="_blank" class="social-btn">
-                        <i class="fa-solid fa-file-pdf"></i> CV
+                    <a href="media/JayDV_CV.pdf" target="_blank" rel="noopener noreferrer"
+                        class="social-btn" aria-label="Download curriculum vitae PDF">
+                        <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> CV
                     </a>
-                </div>
+                </nav>
             </div>
 
-            <div class="profile-container">
+            <div class="profile-container" role="img" aria-label="Profile photo of Jay Vakil">
                 <div class="profile-3d-wrap">
-                    <img id="profile-img" src="media/jay_6.jpg" alt="Jay Vakil" class="profile-img">
+                    <img id="profile-img" src="media/jay_6.jpg" alt="Jay Vakil, Robotics PhD Researcher at CU Boulder" class="profile-img">
                 </div>
-                <p class="refresh-hint">Refresh to see different me</p>
+                <p class="refresh-hint" aria-live="polite">Refresh to see a different photo</p>
                 <script>
                     const images = [
                         'media/jay_1.jpeg',
@@ -124,86 +157,89 @@
         </section>
 
         <!-- BLOCK 1.5: EDUCATION & EXPERIENCE -->
-        <section class="reveal">
-            <h2>Education & Experience</h2>
-            <div class="experience-grid">
+        <section class="reveal" id="experience" aria-labelledby="experience-heading">
+            <h2 id="experience-heading">Education &amp; Experience</h2>
+            <div class="experience-grid" role="list" aria-label="Education and work experience">
+
                 <!-- MyoLab -->
-                <div class="exp-card">
+                <article class="exp-card" role="listitem" aria-label="MyoLab.AI Research Scientist Intern">
                     <div class="exp-header">
-                        <img src="media/Myolab_logo_def.png" class="exp-logo">
+                        <img src="media/Myolab_logo_def.png" class="exp-logo" alt="MyoLab.AI logo" loading="lazy">
                         <div class="exp-meta">
                             <h3>MyoLab.AI</h3>
-                            <p>Research Scientist Intern • Feb 2025 — May 2025</p>
+                            <p><time datetime="2025-02">Feb 2025</time> — <time datetime="2025-05">May 2025</time> · Research Scientist Intern</p>
                         </div>
                     </div>
                     <p>Working on Multimodal agent LLM based planning, Diffusion-based human-motion synthesis, and
                         generative modeling on human-motion manifolds.</p>
-                </div>
+                </article>
 
                 <!-- PhD CU Boulder -->
-                <div class="exp-card">
+                <article class="exp-card" role="listitem" aria-label="University of Colorado Boulder PhD student">
                     <div class="exp-header">
-                        <img src="media/boulder-fl-centered-2.png" class="exp-logo">
+                        <img src="media/boulder-fl-centered-2.png" class="exp-logo" alt="University of Colorado Boulder logo" loading="lazy">
                         <div class="exp-meta">
                             <h3>University of Colorado Boulder</h3>
-                            <p>PhD in Computer Science • Aug 2024 — Present</p>
+                            <p><time datetime="2024-08">Aug 2024</time> — Present · PhD in Computer Science</p>
                         </div>
                     </div>
                     <p>Researching Robot Learning, Mobile Manipulation, and Embodied AI. Advised by Alessandro Roncone,
                         Nikolaus Correll, and Christoffer Heckman.</p>
-                </div>
+                </article>
 
                 <!-- FAIR -->
-                <div class="exp-card">
+                <article class="exp-card" role="listitem" aria-label="Facebook AI Research Robotics Research Engineer">
                     <div class="exp-header">
-                        <img src="media/Meta_lockup_positive primary_RGB.svg" class="exp-logo">
+                        <img src="media/Meta_lockup_positive primary_RGB.svg" class="exp-logo" alt="Meta / Facebook AI Research logo" loading="lazy">
                         <div class="exp-meta">
                             <h3>Facebook AI Research (FAIR)</h3>
-                            <p>Robotics Research Engineer • Apr 2022 — July 2024</p>
+                            <p><time datetime="2022-04">Apr 2022</time> — <time datetime="2024-07">Jul 2024</time> · Robotics Research Engineer</p>
                         </div>
                     </div>
                     <p>Designed a distributed robotic arm cluster for large-scale experimentation. Developed universal
                         agents for complex manipulation tasks (RoboAgent).</p>
-                </div>
+                </article>
 
                 <!-- UW -->
-                <div class="exp-card">
+                <article class="exp-card" role="listitem" aria-label="University of Washington undergraduate">
                     <div class="exp-header">
-                        <img src="media/uw.png" class="exp-logo">
+                        <img src="media/uw.png" class="exp-logo" alt="University of Washington logo" loading="lazy">
                         <div class="exp-meta">
                             <h3>University of Washington</h3>
-                            <p>BS in Electrical Engineering • Sept 2018 — Mar 2022</p>
+                            <p><time datetime="2018-09">Sep 2018</time> — <time datetime="2022-03">Mar 2022</time> · BS in Electrical Engineering</p>
                         </div>
                     </div>
                     <p>Minor in Mathematics and Computer Science. Dean's List recipient. Focus on signal processing,
                         robotics, and embedded systems.</p>
-                </div>
+                </article>
             </div>
         </section>
 
-        <!-- BLOCK 2: PROJECT GRID (EXPANDED w/ AWARDS) -->
-        <section class="reveal">
-            <h2>Research</h2>
-            <div class="project-grid">
+        <!-- BLOCK 2: PROJECT GRID -->
+        <section class="reveal" id="research" aria-labelledby="research-heading">
+            <h2 id="research-heading">Research</h2>
+            <div class="project-grid" role="list" aria-label="Research projects">
 
-                <!-- Card 1 -->
-                <a href="https://robotics-transformer-x.github.io" target="_blank" class="bento-card" data-id="RT-X">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
+                <!-- Card 1: RT-X -->
+                <a href="https://robotics-transformer-x.github.io" target="_blank" rel="noopener noreferrer"
+                    class="bento-card" data-id="RT-X" role="listitem"
+                    aria-label="Open X-Embodiment — ICRA 2024 Best Conference Paper. Click to view project.">
+                    <div class="card-media-wrapper" aria-hidden="true">
+                        <video muted autoplay loop playsinline class="card-media" aria-hidden="true">
                             <source src="media/teaser_compressed.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">ICRA 2024</span>
-                            <span class="badge award">★ Best Conference Paper</span>
-                            <span class="badge award">★ Best Student Paper Finalist</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: ICRA 2024">ICRA 2024</span>
+                            <span class="badge award" aria-label="Award: Best Conference Paper">★ Best Conference Paper</span>
+                            <span class="badge award" aria-label="Award: Best Student Paper Finalist">★ Best Student Paper Finalist</span>
                         </div>
                         <h3>Open X-Embodiment</h3>
                         <p>Scaling robotic learning via the RT-X model and a massive cross-platform dataset of 60+
                             robots. The 'ImageNet' moment for robotics.</p>
                         <p class="card-authors">Open-X X-Embodiment Collaboration</p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                             <span class="link-mute">arXiv</span>
                             <span class="link-mute">Code</span>
@@ -211,24 +247,26 @@
                     </div>
                 </a>
 
-                <!-- Card 2 -->
-                <a href="https://robopen.github.io" target="_blank" class="bento-card" data-id="R-AGENT">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
+                <!-- Card 2: RoboAgent -->
+                <a href="https://robopen.github.io" target="_blank" rel="noopener noreferrer"
+                    class="bento-card" data-id="R-AGENT" role="listitem"
+                    aria-label="RoboAgent — ICRA 2024, NeurIPS 2023 Outstanding Presentation. Click to view project.">
+                    <div class="card-media-wrapper" aria-hidden="true">
+                        <video muted autoplay loop playsinline class="card-media" aria-hidden="true">
                             <source src="media/big_banner.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">ICRA 2024</span>
-                            <span class="badge award">★ NeurIPS 2023 Outstanding Presentation</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: ICRA 2024">ICRA 2024</span>
+                            <span class="badge award" aria-label="Award: NeurIPS 2023 Outstanding Presentation">★ NeurIPS 2023 Outstanding Presentation</span>
                         </div>
                         <h3>RoboAgent</h3>
                         <p>Universal robot learning with semantic augmentations. Teaching robots broadly generalizable
                             skills through action chunking across 38+ tasks.</p>
                         <p class="card-authors">Homanga Bharadhwaj*, <span class="me">Jay Vakil</span>*, Mohit Sharma*,
                             Abhinav Gupta, Shubham Tulsiani, Vikash Kumar</p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                             <span class="link-mute">arXiv</span>
                             <span class="link-mute">Code</span>
@@ -236,58 +274,62 @@
                     </div>
                 </a>
 
-                <!-- Card 3 -->
-                <a href="https://ok-robot.github.io/" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
+                <!-- Card 3: OK-Robot -->
+                <a href="https://ok-robot.github.io/" target="_blank" rel="noopener noreferrer"
+                    class="bento-card" role="listitem"
+                    aria-label="OK-Robot — RSS 2024. Zero-shot mobile manipulation. Click to view project.">
+                    <div class="card-media-wrapper" aria-hidden="true">
+                        <video muted autoplay loop playsinline class="card-media" aria-hidden="true">
                             <source src="media/optimized_mosaic.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">RSS 2024</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: RSS 2024">RSS 2024</span>
                         </div>
                         <h3>OK-Robot</h3>
                         <p>A zero-shot system for open-vocabulary mobile manipulation. Integrating Vision-Language
                             Models with classical navigation primitives to handle messy environments.</p>
                         <p class="card-authors">Peiqi Liu*, Yaswanth Orru*, <span class="me">Jay Vakil</span>, Chris
                             Paxton, Nur Muhammad "Mahi" Shafiullah†, Lerrel Pinto†</p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                             <span class="link-mute">arXiv</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- New Card: Dynamics -->
-                <a href="#" class="bento-card">
-                    <div class="card-media-wrapper"
-                        style="background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-robot" style="font-size: 3rem; color: rgba(255,255,255,0.1);"></i>
+                <!-- Card: Dynamics-Compliant Trajectory Diffusion -->
+                <a href="#" class="bento-card" role="listitem"
+                    aria-label="Dynamics-Compliant Trajectory Diffusion — CoRL 2025. Coming soon.">
+                    <div class="card-media-wrapper card-placeholder" aria-hidden="true">
+                        <i class="fa-solid fa-robot" aria-hidden="true"></i>
                     </div>
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">CoRL 2025</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: CoRL 2025">CoRL 2025</span>
                         </div>
                         <h3>Dynamics-Compliant Trajectory Diffusion</h3>
                         <p>Payload-conditioned diffusion model for generating dynamic motions for robots handling
                             up to 3x nominal payloads.</p>
                         <p class="card-authors">Anuj Pasricha, Joewie J. Koh, <span class="me">Jay Vakil</span>,
                             Alessandro Roncone</p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- Card 4 -->
-                <a href="https://pvrs-sim2real.github.io/" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/pvrs_sim2real_teaser.png" class="card-media" style="object-position: top;">
+                <!-- Card 4: Sim-to-Real -->
+                <a href="https://pvrs-sim2real.github.io/" target="_blank" rel="noopener noreferrer"
+                    class="bento-card" role="listitem"
+                    aria-label="Sim-to-Real Visual Representations — ICRA 2024. Click to view project.">
+                    <div class="card-media-wrapper" aria-hidden="true">
+                        <img src="media/pvrs_sim2real_teaser.png" class="card-media" style="object-position: top;" alt="Sim-to-Real visual representation teaser figure" loading="lazy">
                     </div>
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">ICRA 2024</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: ICRA 2024">ICRA 2024</span>
                         </div>
                         <h3>Sim-to-Real Visual Representations</h3>
                         <p>A large-scale study of pre-trained visual representations in sim and real environments to
@@ -296,20 +338,22 @@
                                 Vakil</span>*, Arjun Majumdar*, Sergio Arnaud*, Claire Chen, Vincent-Pierre Berges,
                             Dhruv Batra, Aravind Rajeswaran, Mrinal Kalakrishnan, Franziska Meier, Oleksandr Maksymets
                         </p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- Card 5 -->
-                <a href="https://eai-vc.github.io/" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/VC1_teaser_7.png" class="card-media">
+                <!-- Card 5: Visual Cortex -->
+                <a href="https://eai-vc.github.io/" target="_blank" rel="noopener noreferrer"
+                    class="bento-card" role="listitem"
+                    aria-label="Visual Cortex for Embodied Intelligence — NeurIPS 2023. Click to view project.">
+                    <div class="card-media-wrapper" aria-hidden="true">
+                        <img src="media/VC1_teaser_7.png" class="card-media" alt="Visual Cortex VC-1 model teaser figure" loading="lazy">
                     </div>
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">NeurIPS 2023</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: NeurIPS 2023">NeurIPS 2023</span>
                         </div>
                         <h3>Visual Cortex for Embodied Intelligence</h3>
                         <p>Evaluating mid-level visual representations for robotic control tasks. Are we closer to an
@@ -318,72 +362,68 @@
                             Chen, Sneha Silwal, Aryan Jain, Vincent-Pierre Berges, Tingfan Wu, <span class="me">Jay
                                 Vakil</span>, Pieter Abbeel, Jitendra Malik, Dhruv Batra, Yixin Lin, Oleksandr
                             Maksymets, Aravind Rajeswaran, Franziska Meier</p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- Card 6 -->
-                <a href="https://roboslap.github.io" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/slap.png" class="card-media">
+                <!-- Card 6: SLAP -->
+                <a href="https://roboslap.github.io" target="_blank" rel="noopener noreferrer"
+                    class="bento-card" role="listitem"
+                    aria-label="Spatial-Language Attention Policies — CoRL 2023. Click to view project.">
+                    <div class="card-media-wrapper" aria-hidden="true">
+                        <img src="media/slap.png" class="card-media" alt="SLAP spatial-language attention policies teaser" loading="lazy">
                     </div>
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">CoRL 2023</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: CoRL 2023">CoRL 2023</span>
                         </div>
                         <h3>Spatial-Language Attention Policies</h3>
                         <p>Efficient robot learning using spatial-language attention mechanisms for manipulation tasks.
                         </p>
                         <p class="card-authors">Priyam Parashar, Vidhi Jain, Xiaohan Zhang, <span class="me">Jay
                                 Vakil</span>, Sam Powers, Chris Paxton</p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: HomeRobot -->
-                <a href="https://homerobot.github.io/" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/Screenshot 2024-08-26 at 11.54.58 AM.png" class="card-media">
+                <a href="https://homerobot.github.io/" target="_blank" rel="noopener noreferrer"
+                    class="bento-card" role="listitem"
+                    aria-label="HomeRobot Open Vocabulary Mobile Manipulation Challenge — arXiv. Click to view project.">
+                    <div class="card-media-wrapper" aria-hidden="true">
+                        <img src="media/Screenshot 2024-08-26 at 11.54.58 AM.png" class="card-media" alt="HomeRobot challenge overview figure" loading="lazy">
                     </div>
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">Arxiv</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: Arxiv preprint">Arxiv</span>
                         </div>
-                        <h3>Towards Open‑World Mobile Manipulation in Homes: Lessons from the Neurips 2023HomeRobot Open
-                            Vocabulary Mobile Manipulation Challenge</h3>
+                        <h3>Towards Open-World Mobile Manipulation in Homes</h3>
                         <p>Open-vocabulary mobile manipulation challenge. Benchmarking robot performance in novel home
-                            environments.</p>
+                            environments from the NeurIPS 2023 HomeRobot Challenge.</p>
                         <p class="card-authors">Sriram Yenamandra*, Arun Ramachandran*, Mukul Khanna*, Karmesh Yadav*,
                             <span class="me">Jay Vakil</span>*, Andrew Melnik, Michael Büttner, Leon Harz, Lyon Brown,
-                            Gora Chand Nandi, Arjun PS, Gaurav Kumar Yadav, Rahul Kala, Robert Haschke, Yang Luo, Jinxin
-                            Zhu, Yansen Han, Bingyi Lu, Xuan Gu, Qinyuan Liu, Yaping Zhao, Qiting Ye, Chenxiao Dou,
-                            Yansong Chua, Volodymyr Kuzma, Vladyslav Humennyy, Ruslan Partsey, Jonathan Francis,
-                            Devendra Singh Chaplot, Gunjan Chhablani, Alexander Clegg, Theophile Gervet, Vidhi Jain, Ram
-                            Ramrakhya, Andrew Szot, Austin Wang, Tsung-Yen Yang, Aaron Edsinger, Charlie Kemp, Binit
-                            Shah, Zsolt Kira, Dhruv Batra, Roozbeh Mottaghi, Yonatan Bisk, Chris Paxton
+                            and many more collaborators
                         </p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: RoboHive -->
-                <a href="https://sites.google.com/view/robohive/home" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/Screenshot 2023-10-13 at 11.56.40.png" class="card-media">
+                <a href="https://sites.google.com/view/robohive/home" target="_blank" rel="noopener noreferrer"
+                    class="bento-card" role="listitem"
+                    aria-label="RoboHive — NeurIPS 2023. Unified robot learning framework. Click to view project.">
+                    <div class="card-media-wrapper" aria-hidden="true">
+                        <img src="media/Screenshot 2023-10-13 at 11.56.40.png" class="card-media" alt="RoboHive simulation environments overview" loading="lazy">
                     </div>
-                    <!-- <div class="card-media-wrapper"
-                        style="background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-hive" style="font-size: 3rem; color: rgba(255,255,255,0.1);"></i>
-                    </div> -->
                     <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">NeurIPS 2023</span>
+                        <div class="badge-container" aria-label="Publication details">
+                            <span class="badge venue" aria-label="Venue: NeurIPS 2023">NeurIPS 2023</span>
                         </div>
                         <h3>RoboHive</h3>
                         <p>A unified framework for Robot Learning and Embodied AI research, offering diverse simulation
@@ -391,120 +431,118 @@
                         <p class="card-authors">Vikash Kumar, Rutav Shah, Gaoyue Zhou, Vincent Moens, Vittorio Caggiano,
                             <span class="me">Jay Vakil</span>, Abhishek Gupta, Aravind Rajeswaran
                         </p>
-                        <div class="card-links">
+                        <div class="card-links" aria-label="Project links">
                             <span class="link-mute">View Project →</span>
                         </div>
                     </div>
                 </a>
-
-                <!-- New Card: RoboSet -->
-                <!-- <a href="#" class="bento-card">
-                    <div class="card-media-wrapper"
-                        style="background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-database" style="font-size: 3rem; color: rgba(255,255,255,0.1);"></i>
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">NeurIPS 2023</span>
-                        </div>
-                        <h3>RoboSet</h3>
-                        <p>A scalable multi-task real-world robotic dataset designed for generalized offline learning
-                            outcomes.</p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                        </div>
-                    </div>
-                </a> -->
 
             </div>
         </section>
 
-        <!-- BLOCK 3: IMPACT & PRESS (ALL OUTLETS) -->
-        <section class="reveal">
-            <h2>Impact & Press</h2>
-            <div class="impact-grid">
+        <!-- BLOCK 3: IMPACT & PRESS -->
+        <section class="reveal" id="press" aria-labelledby="press-heading">
+            <h2 id="press-heading">Impact &amp; Press</h2>
+            <div class="impact-grid" role="list" aria-label="Press coverage and media mentions">
 
                 <a href="https://techcrunch.com/2023/08/08/human-toddlers-are-inspiring-new-approaches-to-robot-learning/"
-                    target="_blank" class="impact-card">
-                    <img src="media/techcrunch.png" class="impact-logo">
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="TechCrunch: Human toddlers inspiring new approaches to robot learning">
+                    <img src="media/techcrunch.png" class="impact-logo" alt="TechCrunch logo" loading="lazy">
                     <div class="impact-text">"Human toddlers inspiring new approaches to robot learning"</div>
                 </a>
 
                 <a href="https://www.foxnews.com/tech/stop-loading-the-dishwasher-this-robot-aims-to-do-all-the-cleanup-for-you"
-                    target="_blank" class="impact-card">
-                    <img src="media/foxnews.png" class="impact-logo">
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="Fox News: Stop loading the dishwasher, this robot aims to do all cleanup">
+                    <img src="media/foxnews.png" class="impact-logo" alt="Fox News logo" loading="lazy">
                     <div class="impact-text">"Stop loading the dishwasher: This robot aims to do all cleanup"</div>
                 </a>
 
-                <a href="https://spectrum.ieee.org/video-friday-toddler-robot" target="_blank" class="impact-card">
-                    <img src="media/IEEE-Spectrum-Logo.jpg" class="impact-logo">
+                <a href="https://spectrum.ieee.org/video-friday-toddler-robot" target="_blank" rel="noopener noreferrer"
+                    class="impact-card" role="listitem"
+                    aria-label="IEEE Spectrum: Featured in Video Friday — Toddler Robot">
+                    <img src="media/IEEE-Spectrum-Logo.jpg" class="impact-logo" alt="IEEE Spectrum logo" loading="lazy">
                     <div class="impact-text">Featured in IEEE Spectrum Video Friday</div>
                 </a>
 
                 <a href="https://venturebeat.com/ai/metas-ok-robot-performs-zero-shot-pick-and-drop-in-unseen-environments/"
-                    target="_blank" class="impact-card">
-                    <div class="impact-logo-text"
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="VentureBeat: Meta's OK-Robot performs zero-shot pick-and-drop">
+                    <div class="impact-logo-text" aria-hidden="true"
                         style="background:#fff; color:#000; font-weight:800; padding:4px 8px; border-radius:4px; margin-bottom:16px;">
                         VentureBeat</div>
                     <div class="impact-text">"Meta's OK-Robot performs zero-shot pick-and-drop"</div>
                 </a>
 
                 <a href="https://www.technologyreview.com/2024/02/01/1087445/this-robot-can-tidy-a-room-without-any-help/"
-                    target="_blank" class="impact-card">
-                    <img src="media/mittech.png" class="impact-logo">
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="MIT Technology Review: This robot can tidy a room without any help">
+                    <img src="media/mittech.png" class="impact-logo" alt="MIT Technology Review logo" loading="lazy">
                     <div class="impact-text">"This robot can tidy a room without any help"</div>
                 </a>
 
                 <a href="https://www.cmu.edu/news/stories/archives/2023/august/parenting-a-3-year-old-robot"
-                    target="_blank" class="impact-card">
-                    <img src="media/cmu-wordmark-horizontal-r.jpg" class="impact-logo">
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="CMU News: Parenting a 3-year-old robot">
+                    <img src="media/cmu-wordmark-horizontal-r.jpg" class="impact-logo" alt="Carnegie Mellon University logo" loading="lazy">
                     <div class="impact-text">"Parenting a 3-year-old robot"</div>
                 </a>
 
-                <a href="https://www.ri.cmu.edu/parenting-a-3-year-old-robot/" target="_blank" class="impact-card">
-                    <img src="media/cmu-ri-may2023-medium.png" class="impact-logo">
+                <a href="https://www.ri.cmu.edu/parenting-a-3-year-old-robot/" target="_blank" rel="noopener noreferrer"
+                    class="impact-card" role="listitem"
+                    aria-label="CMU Robotics Institute Feature on RoboAgent">
+                    <img src="media/cmu-ri-may2023-medium.png" class="impact-logo" alt="CMU Robotics Institute logo" loading="lazy">
                     <div class="impact-text">CMU Robotics Institute Feature</div>
                 </a>
 
-                <a href="https://hackaday.com/2023/08/20/roboagent-gets-its-mt-act-together/" target="_blank"
-                    class="impact-card">
-                    <img src="media/hackaday.png" class="impact-logo">
+                <a href="https://hackaday.com/2023/08/20/roboagent-gets-its-mt-act-together/" target="_blank" rel="noopener noreferrer"
+                    class="impact-card" role="listitem"
+                    aria-label="Hackaday: RoboAgent gets its act together">
+                    <img src="media/hackaday.png" class="impact-logo" alt="Hackaday logo" loading="lazy">
                     <div class="impact-text">"RoboAgent gets its act together"</div>
                 </a>
 
-                <a href="https://cacm.acm.org/news/275459-parenting-a-three-year-old-robot/fulltext" target="_blank"
-                    class="impact-card">
-                    <img src="media/acm.png" class="impact-logo">
+                <a href="https://cacm.acm.org/news/275459-parenting-a-three-year-old-robot/fulltext" target="_blank" rel="noopener noreferrer"
+                    class="impact-card" role="listitem"
+                    aria-label="ACM News Feature on RoboAgent">
+                    <img src="media/acm.png" class="impact-logo" alt="ACM Communications logo" loading="lazy">
                     <div class="impact-text">ACM News Feature</div>
                 </a>
 
                 <a href="https://ai.meta.com/blog/robots-learn-videos-human-activities-simulated-interactions/"
-                    target="_blank" class="impact-card">
-                    <img src="media/Meta_lockup_positive primary_RGB.svg" class="impact-logo">
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="Meta AI Blog: Robots that learn from videos of human activities">
+                    <img src="media/Meta_lockup_positive primary_RGB.svg" class="impact-logo" alt="Meta AI logo" loading="lazy">
                     <div class="impact-text">"Robots that learn from videos of human activities"</div>
                 </a>
 
                 <a href="https://ai.meta.com/research/publications/where-are-we-in-the-search-for-an-artificial-visual-cortex-for-embodied-intelligence/"
-                    target="_blank" class="impact-card">
-                    <img src="media/Meta_lockup_positive primary_RGB.svg" class="impact-logo">
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="Meta AI Research: Where are we in the search for an artificial visual cortex?">
+                    <img src="media/Meta_lockup_positive primary_RGB.svg" class="impact-logo" alt="Meta AI Research logo" loading="lazy">
                     <div class="impact-text">"Where are we in the search for an artificial visual cortex for embodied
                         intelligence?"</div>
                 </a>
 
                 <a href="https://www.rockingrobots.com/roboagent-modeled-after-human-infants-learning-techniques/"
-                    target="_blank" class="impact-card">
-                    <img src="media/rockingrobots.png" class="impact-logo">
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="Rocking Robots: RoboAgent modeled after human infants learning techniques">
+                    <img src="media/rockingrobots.png" class="impact-logo" alt="Rocking Robots logo" loading="lazy">
                     <div class="impact-text">"Modeled after human infants learning techniques"</div>
                 </a>
 
-                <a href="https://studyfinds.org/meta-ai-training-robots-babies/" target="_blank" class="impact-card">
-                    <img src="media/studyFind.png" class="impact-logo">
+                <a href="https://studyfinds.org/meta-ai-training-robots-babies/" target="_blank" rel="noopener noreferrer"
+                    class="impact-card" role="listitem"
+                    aria-label="Study Finds: Meta AI Training Robots Like Babies">
+                    <img src="media/studyFind.png" class="impact-logo" alt="Study Finds logo" loading="lazy">
                     <div class="impact-text">"Meta AI Training Robots Like Babies"</div>
                 </a>
 
                 <a href="https://www.techbriefs.com/component/content/article/49121-meet-roboagent-enabling-robots-to-acquire-manipulation-abilities"
-                    target="_blank" class="impact-card">
-                    <img src="media/techBriefs.png" class="impact-logo">
+                    target="_blank" rel="noopener noreferrer" class="impact-card" role="listitem"
+                    aria-label="Tech Briefs: Enabling robots to acquire manipulation abilities">
+                    <img src="media/techBriefs.png" class="impact-logo" alt="Tech Briefs logo" loading="lazy">
                     <div class="impact-text">"Enabling robots to acquire manipulation abilities"</div>
                 </a>
 
@@ -512,17 +550,18 @@
         </section>
 
         <!-- BLOCK 4: TEACHING & SERVICE -->
-        <section class="reveal">
+        <section class="reveal" id="teaching" aria-labelledby="teaching-service-heading">
+            <h2 id="teaching-service-heading" class="sr-only">Teaching and Service</h2>
             <div class="dual-column">
                 <div class="column">
-                    <h2>Teaching</h2>
-                    <div class="bento-card status-card" data-id="TEACH-01">
+                    <h2 aria-label="Teaching roles">Teaching</h2>
+                    <div class="bento-card status-card" data-id="TEACH-01" aria-label="Teaching Assistant at University of Colorado">
                         <div class="card-content">
-                            <i class="fa-solid fa-chalkboard-user card-icon"></i>
-                            <ul class="service-list">
+                            <i class="fa-solid fa-chalkboard-user card-icon" aria-hidden="true"></i>
+                            <ul class="service-list" aria-label="Teaching positions">
                                 <li>
                                     <strong>University of Colorado</strong>
-                                    <span>Teaching Assistant (2024 — Present)</span>
+                                    <span>Teaching Assistant · <time datetime="2024">2024</time> — Present</span>
                                     <small>CSCI 3202: Introduction to AI</small>
                                     <small>CSCI 2400: Computer Systems</small>
                                 </li>
@@ -531,17 +570,21 @@
                     </div>
                 </div>
                 <div class="column">
-                    <h2>Service</h2>
-                    <div class="bento-card status-card" data-id="SERV-99">
+                    <h2 aria-label="Academic service roles">Service</h2>
+                    <div class="bento-card status-card" data-id="SERV-99" aria-label="Academic reviewer roles">
                         <div class="card-content">
-                            <i class="fa-solid fa-microscope card-icon"></i>
-                            <ul class="service-list">
+                            <i class="fa-solid fa-microscope card-icon" aria-hidden="true"></i>
+                            <ul class="service-list" aria-label="Conference review roles">
                                 <li>
                                     <strong>Reviewer:</strong>
-                                    <p class="service-tags">
-                                        <span>ICLR '26</span>
-                                        <span>RA-L</span> <span>RSS '25</span> <span>ICML '25</span>
-                                        <span>ICRA '25</span> <span>ICRA '24</span> <span>CoRL '24</span>
+                                    <p class="service-tags" role="list" aria-label="Conference reviewer: ICLR 2026, RA-L, RSS 2025, ICML 2025, ICRA 2025, ICRA 2024, CoRL 2024">
+                                        <span role="listitem">ICLR '26</span>
+                                        <span role="listitem">RA-L</span>
+                                        <span role="listitem">RSS '25</span>
+                                        <span role="listitem">ICML '25</span>
+                                        <span role="listitem">ICRA '25</span>
+                                        <span role="listitem">ICRA '24</span>
+                                        <span role="listitem">CoRL '24</span>
                                     </p>
                                 </li>
                             </ul>
@@ -552,38 +595,46 @@
         </section>
 
         <!-- BLOCK 5: AFFILIATIONS -->
-        <section class="reveal">
-            <h2>Affiliations</h2>
-            <div class="bento-card" data-id="AFFIL-SYS">
+        <section class="reveal" aria-labelledby="affiliations-heading">
+            <h2 id="affiliations-heading">Affiliations</h2>
+            <div class="bento-card" data-id="AFFIL-SYS" aria-label="Institutional affiliations">
                 <div class="card-content">
-                    <div class="affiliation-row">
-                        <div class="affil-tile">
-                            <img src="media/boulder-fl-centered-2.png" class="affil-logo affil-cu" alt="University of Colorado Boulder">
-                        </div>
-                        <div class="affil-tile">
-                            <img src="media/Meta_lockup_positive primary_RGB.svg" class="affil-logo affil-meta" alt="Meta">
-                        </div>
-                        <div class="affil-tile">
-                            <img src="media/uw.png" class="affil-logo affil-uw" alt="University of Washington">
-                        </div>
-                        <div class="affil-tile">
-                            <img src="media/Myolab_logo_def.png" class="affil-logo affil-myo" alt="MyoLab">
-                        </div>
-                        <div class="affil-tile">
-                            <img src="media/nsc.png" class="affil-logo affil-nsc" alt="North Seattle College">
-                        </div>
+                    <div class="affiliation-row" role="list" aria-label="Affiliated institutions">
+                        <a href="https://www.colorado.edu/cs/" target="_blank" rel="noopener noreferrer"
+                            class="affil-tile" role="listitem" aria-label="University of Colorado Boulder">
+                            <img src="media/boulder-fl-centered-2.png" class="affil-logo affil-cu" alt="University of Colorado Boulder" loading="lazy">
+                        </a>
+                        <a href="https://ai.meta.com/" target="_blank" rel="noopener noreferrer"
+                            class="affil-tile" role="listitem" aria-label="Meta / Facebook AI Research">
+                            <img src="media/Meta_lockup_positive primary_RGB.svg" class="affil-logo affil-meta" alt="Meta AI Research" loading="lazy">
+                        </a>
+                        <a href="https://www.washington.edu/" target="_blank" rel="noopener noreferrer"
+                            class="affil-tile" role="listitem" aria-label="University of Washington">
+                            <img src="media/uw.png" class="affil-logo affil-uw" alt="University of Washington" loading="lazy">
+                        </a>
+                        <a href="https://myolab.ai/" target="_blank" rel="noopener noreferrer"
+                            class="affil-tile" role="listitem" aria-label="MyoLab.AI">
+                            <img src="media/Myolab_logo_def.png" class="affil-logo affil-myo" alt="MyoLab.AI" loading="lazy">
+                        </a>
+                        <a href="https://northseattle.edu/" target="_blank" rel="noopener noreferrer"
+                            class="affil-tile" role="listitem" aria-label="North Seattle College">
+                            <img src="media/nsc.png" class="affil-logo affil-nsc" alt="North Seattle College" loading="lazy">
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer>
+        <footer role="contentinfo">
             <div class="footer-content">
-                <span>© 2026 Jay Vakil</span>
+                <span>© <time datetime="2026">2026</time> Jay Vakil</span>
+                <span class="footer-divider" aria-hidden="true">·</span>
+                <span>Built with care</span>
             </div>
         </footer>
 
     </div>
+    </main>
 
     <script src="background.js"></script>
     <script src="animations.js"></script>
