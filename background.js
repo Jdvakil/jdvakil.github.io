@@ -1,288 +1,326 @@
+/* ================================
+   BACKGROUND — Domain-Warped Aurora
+   Apple macOS Tahoe / Vision Pro
+   inspired fluid nebula shader.
 
+   Technique: Fractional Brownian Motion
+   with iterative domain warping
+   (Inigo Quilez technique).
+
+   Color palette: deep midnight space —
+   cold indigo, electric teal, violet
+   haze. Subtle, never overpowering.
+   ================================ */
+
+// ── Canvas setup ──────────────────
 const canvas = document.createElement('canvas');
 canvas.id = 'bg-canvas';
 document.body.appendChild(canvas);
 
-canvas.style.position = 'fixed';
-canvas.style.top = '0';
-canvas.style.left = '0';
-canvas.style.width = '100vw';
-canvas.style.height = '100vh';
-canvas.style.zIndex = '-1';
-canvas.style.pointerEvents = 'none';
-canvas.style.opacity = '1';
-canvas.style.mixBlendMode = 'screen';
+Object.assign(canvas.style, {
+  position:      'fixed',
+  top:           '0',
+  left:          '0',
+  width:         '100vw',
+  height:        '100vh',
+  zIndex:        '-1',
+  pointerEvents: 'none',
+  opacity:       '1',
+  mixBlendMode:  'normal',   // Screen caused harsh blue cast — use normal
+});
 
-const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x000000, 0.015);
-
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+// ── Three.js renderer ─────────────
+const scene    = new THREE.Scene();
+const camera   = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 const renderer = new THREE.WebGLRenderer({
-    canvas,
-    antialias: true,
-    alpha: true
+  canvas,
+  antialias:  false,   // FXAA not needed for fullscreen shader
+  alpha:      true,
+  powerPreference: 'high-performance',
 });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Cap for perf
 
-// --- APPLE SIRI STYLE FLUID SHADER ---
-
-// We don't need standard lights for a custom unlit shader
-const geometry = new THREE.PlaneGeometry(2, 2, 128, 128);
-
-// Custom Uniforms to pass data to the shaders
+// ── Uniforms ──────────────────────
 const uniforms = {
-    u_time: { value: 0.0 },
-    u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-    u_mouse: { value: new THREE.Vector2(0, 0) },
-    u_colorSaffron: { value: new THREE.Color("#FF9933") },
-    u_colorWhite: { value: new THREE.Color("#FFFFFF") },
-    u_colorGreen: { value: new THREE.Color("#138808") },
-    u_colorBlue: { value: new THREE.Color("#000080") },
-    u_scrollVelocity: { value: 0.0 }
+  u_time:           { value: 0.0 },
+  u_resolution:     { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+  u_mouse:          { value: new THREE.Vector2(0.5, 0.5) },
+  u_mouseVelocity:  { value: new THREE.Vector2(0.0, 0.0) },
+  u_scrollVelocity: { value: 0.0 },
+  u_scrollY:        { value: 0.0 },
 };
 
-// GLSL Vertex Shader
-const vertexShader = `
-    uniform float u_time;
-    uniform float u_scrollVelocity;
-    varying vec2 vUv;
-    varying vec3 vPosition;
-    
-    // Simplex Noise Function (Ashima Arts)
-    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-    vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-    vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-    vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-    float snoise(vec3 v) {
-      const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
-      const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
-      vec3 i  = floor(v + dot(v, C.yyy) );
-      vec3 x0 = v - i + dot(i, C.xxx) ;
-      vec3 g = step(x0.yzx, x0.xyz);
-      vec3 l = 1.0 - g;
-      vec3 i1 = min( g.xyz, l.zxy );
-      vec3 i2 = max( g.xyz, l.zxy );
-      vec3 x1 = x0 - i1 + C.xxx;
-      vec3 x2 = x0 - i2 + C.yyy;
-      vec3 x3 = x0 - D.yyy;
-      i = mod289(i);
-      vec4 p = permute( permute( permute(
-                 i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
-               + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
-               + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-      float n_ = 0.142857142857;
-      vec3  ns = n_ * D.wyz - D.xzx;
-      vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-      vec4 x_ = floor(j * ns.z);
-      vec4 y_ = floor(j - 7.0 * x_ );
-      vec4 x = x_ *ns.x + ns.yyyy;
-      vec4 y = y_ *ns.x + ns.yyyy;
-      vec4 h = 1.0 - abs(x) - abs(y);
-      vec4 b0 = vec4( x.xy, y.xy );
-      vec4 b1 = vec4( x.zw, y.zw );
-      vec4 s0 = floor(b0)*2.0 + 1.0;
-      vec4 s1 = floor(b1)*2.0 + 1.0;
-      vec4 sh = -step(h, vec4(0.0));
-      vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-      vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-      vec3 p0 = vec3(a0.xy,h.x);
-      vec3 p1 = vec3(a0.zw,h.y);
-      vec3 p2 = vec3(a1.xy,h.z);
-      vec3 p3 = vec3(a1.zw,h.w);
-      vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-      p0 *= norm.x;
-      p1 *= norm.y;
-      p2 *= norm.z;
-      p3 *= norm.w;
-      vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-      m = m * m;
-      return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
-    }
+// ── Full-screen quad ──────────────
+const geometry = new THREE.PlaneGeometry(2, 2);
 
-    void main() {
-        vUv = uv;
-        
-        // Fluid displacement using noise
-        float noiseFreq = 1.5;
-        float noiseAmp = 0.4;
-        vec3 noisePos = vec3(position.x * noiseFreq + u_time * 0.2, position.y * noiseFreq + u_time * 0.3, u_time * 0.1);
-        
-        // React to scrolling
-        noisePos.z += u_scrollVelocity * 2.0;
-
-        float noise = snoise(noisePos) * noiseAmp;
-        vec3 newPosition = position + normal * noise;
-        vPosition = newPosition;
-        
-        gl_Position = vec4(position, 1.0); // Fullscreen plane
-    }
+// ────────────────────────────────────────────────────────────────
+// VERTEX SHADER — passthrough (effect lives entirely in fragment)
+// ────────────────────────────────────────────────────────────────
+const vertexShader = /* glsl */`
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = vec4(position, 1.0);
+  }
 `;
 
-// GLSL Fragment Shader
-const fragmentShader = `
-    uniform float u_time;
-    uniform vec2 u_resolution;
-    uniform vec2 u_mouse;
-    uniform vec3 u_colorSaffron;
-    uniform vec3 u_colorWhite;
-    uniform vec3 u_colorGreen;
-    uniform vec3 u_colorBlue;
-    
-    varying vec2 vUv;
-    varying vec3 vPosition;
-    
-    // Copy the noise functions here to use in fragment coloring
-    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-    vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-    vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-    vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-    float snoise(vec3 v) {
-      const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
-      const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
-      vec3 i  = floor(v + dot(v, C.yyy) );
-      vec3 x0 = v - i + dot(i, C.xxx) ;
-      vec3 g = step(x0.yzx, x0.xyz);
-      vec3 l = 1.0 - g;
-      vec3 i1 = min( g.xyz, l.zxy );
-      vec3 i2 = max( g.xyz, l.zxy );
-      vec3 x1 = x0 - i1 + C.xxx;
-      vec3 x2 = x0 - i2 + C.yyy;
-      vec3 x3 = x0 - D.yyy;
-      i = mod289(i);
-      vec4 p = permute( permute( permute( i.z + vec4(0.0, i1.z, i2.z, 1.0 )) + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-      float n_ = 0.142857142857;
-      vec3  ns = n_ * D.wyz - D.xzx;
-      vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-      vec4 x_ = floor(j * ns.z);
-      vec4 y_ = floor(j - 7.0 * x_ );
-      vec4 x = x_ *ns.x + ns.yyyy;
-      vec4 y = y_ *ns.x + ns.yyyy;
-      vec4 h = 1.0 - abs(x) - abs(y);
-      vec4 b0 = vec4( x.xy, y.xy );
-      vec4 b1 = vec4( x.zw, y.zw );
-      vec4 s0 = floor(b0)*2.0 + 1.0;
-      vec4 s1 = floor(b1)*2.0 + 1.0;
-      vec4 sh = -step(h, vec4(0.0));
-      vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-      vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-      vec3 p0 = vec3(a0.xy,h.x);
-      vec3 p1 = vec3(a0.zw,h.y);
-      vec3 p2 = vec3(a1.xy,h.z);
-      vec3 p3 = vec3(a1.zw,h.w);
-      vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-      p0 *= norm.x;  p1 *= norm.y;  p2 *= norm.z;  p3 *= norm.w;
-      vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-      m = m * m;
-      return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
-    }
+// ────────────────────────────────────────────────────────────────
+// FRAGMENT SHADER
+// Domain-warped FBM aurora
+//
+// Technique breakdown:
+//   1. Hash → pseudo-random values from 2D positions
+//   2. noise() → smooth value noise (bilinear)
+//   3. fbm()   → 6-octave fractal brownian motion
+//   4. warp()  → iterate: q=fbm(p), r=fbm(p+q), color=fbm(p+r)
+//      This creates the organic swirling fluid look.
+//   5. Color palette → cosine palette (Inigo Quilez)
+//      deep midnight + cold electric aurora
+// ────────────────────────────────────────────────────────────────
+const fragmentShader = /* glsl */`
+precision highp float;
 
-    void main() {
-        // Normalize coordinates and account for aspect ratio to prevent stretching
-        vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-        uv.x *= u_resolution.x / u_resolution.y;
-        
-        // Base Noise Fields acting as fluid paths
-        float flowTime = u_time * 0.15;
-        
-        // Generate complex flowing patterns by nesting noise
-        float n1 = snoise(vec3(uv * 2.5, flowTime));
-        float n2 = snoise(vec3(uv * 1.5 - n1 * 0.5, flowTime * 1.2));
-        float n3 = snoise(vec3(uv * 3.0 + n2, flowTime * 0.8));
-        
-        // Mouse influence
-        float distToMouse = distance(uv, vec2(u_mouse.x * (u_resolution.x/u_resolution.y), u_mouse.y));
-        float mouseGlow = smoothstep(0.5, 0.0, distToMouse) * 0.5;
+uniform float     u_time;
+uniform vec2      u_resolution;
+uniform vec2      u_mouse;
+uniform vec2      u_mouseVelocity;
+uniform float     u_scrollVelocity;
+uniform float     u_scrollY;
 
-        // Mix colors dynamically based on the flowing noise fields
-        // Math magic to blend the 4 colors into a cohesive aurora
-        
-        // Start black to maintain contrast
-        vec3 finalColor = vec3(0.02); 
-        
-        // Smoothly blend the flag colors into the fluid strands
-        float saffronBlend = smoothstep(-0.2, 0.8, n1);
-        float greenBlend = smoothstep(-0.4, 0.6, n2);
-        float whiteBlend = smoothstep(0.4, 1.0, n3) * 0.6; // White acts as a bright edge highlight
-        float blueBlend = smoothstep(0.0, 1.0, sin(n1 * n2 * 10.0)) * 0.3; // Deep navy undertones
+varying vec2 vUv;
 
-        // Additive blending for that intense "lit from within" glowing look
-        vec3 colorLayer1 = mix(finalColor, u_colorSaffron, saffronBlend * 0.4);
-        vec3 colorLayer2 = mix(colorLayer1, u_colorGreen, greenBlend * 0.4);
-        vec3 colorLayer3 = mix(colorLayer2, u_colorWhite, whiteBlend);
-        vec3 colorLayer4 = colorLayer3 + (u_colorBlue * blueBlend);
+// ── Hash (fast, GPU-friendly) ──────────────────────────────────
+float hash(vec2 p) {
+  p = fract(p * vec2(234.34, 435.345));
+  p += dot(p, p + 34.23);
+  return fract(p.x * p.y);
+}
 
-        // Enhance with mouse interaction
-        finalColor = colorLayer4 + (u_colorWhite * mouseGlow * 0.2);
-        
-        // Vignette to keep edges darker
-        float vignette = smoothstep(1.5, 0.5, length(vUv - 0.5));
-        finalColor *= vignette;
+// ── Smooth value noise (2D) ────────────────────────────────────
+float noise(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
 
-        gl_FragColor = vec4(finalColor, 1.0);
-    }
+  // Quintic smoothstep (C2 continuity — no derivative discontinuity)
+  vec2 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+
+  float a = hash(i);
+  float b = hash(i + vec2(1.0, 0.0));
+  float c = hash(i + vec2(0.0, 1.0));
+  float d = hash(i + vec2(1.0, 1.0));
+
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+
+// ── Fractional Brownian Motion (6 octaves) ─────────────────────
+// Layered noise with decreasing amplitude and increasing frequency.
+// Produces the characteristic "fractal cloud" look.
+float fbm(vec2 p) {
+  float value    = 0.0;
+  float amplitude = 0.5;
+  float frequency = 1.0;
+  mat2  rot = mat2(cos(0.5), -sin(0.5), sin(0.5), cos(0.5));
+
+  for (int i = 0; i < 6; i++) {
+    value     += amplitude * noise(p * frequency);
+    p          = rot * p;           // Rotate domain each octave — breaks axis alignment
+    frequency *= 2.1;
+    amplitude *= 0.48;
+  }
+  return value;
+}
+
+// ── Cosine Palette (Inigo Quilez) ──────────────────────────────
+// palette(t) = a + b * cos(2π * (c * t + d))
+// Returns smooth, cyclically varying color from a float 0..1
+vec3 palette(float t) {
+  // Midnight aurora palette:
+  //   a = base color (deep dark blue-grey)
+  //   b = amplitude (how much it swings)
+  //   c = frequency per channel
+  //   d = phase offset per channel
+  vec3 a = vec3(0.04, 0.04, 0.08);     // Very dark neutral base
+  vec3 b = vec3(0.06, 0.06, 0.12);     // Low amplitude — stays dark
+  vec3 c = vec3(1.0,  1.0,  0.85);
+  vec3 d = vec3(0.0,  0.15, 0.45);     // Phase: blue shifts to teal
+  return a + b * cos(6.28318 * (c * t + d));
+}
+
+// ── Electric accent flare ──────────────────────────────────────
+// Adds a narrow bright streak — like an aurora ribbon
+float ribbon(vec2 p, float offset) {
+  float n = fbm(p * 1.2 + vec2(offset, u_time * 0.04));
+  return smoothstep(0.62, 0.72, n);
+}
+
+// ── Mouse influence field ──────────────────────────────────────
+float mouseField(vec2 uv, vec2 mouse) {
+  float d = distance(uv, mouse);
+  return smoothstep(0.45, 0.0, d) * 0.65;
+}
+
+// ══════════════════════════════════════════════════════════════
+void main() {
+  // Normalized UV, corrected for aspect ratio
+  vec2 uv = vUv;
+  float aspect = u_resolution.x / u_resolution.y;
+
+  // Slow drift + scroll warp
+  float slowTime    = u_time * 0.055;
+  float scrollWarp  = u_scrollY * 0.00018 + u_scrollVelocity * 0.4;
+
+  // Primary domain coordinates
+  vec2 p = vec2(uv.x * aspect, uv.y) * 2.5;
+  p += vec2(slowTime * 0.25, slowTime * 0.15);  // Slow drift
+  p.y -= scrollWarp;                             // Scroll distortion
+
+  // Mouse-driven swirl
+  vec2 mouseUV = vec2(u_mouse.x * aspect, u_mouse.y);
+  vec2 toMouse  = (mouseUV - vec2(uv.x * aspect, uv.y)) * 0.6;
+  p += toMouse * mouseField(vec2(uv.x * aspect, uv.y), mouseUV) * 0.35;
+
+  // ── Domain Warp (3-pass) ──────────────────────────────────────
+  // Pass 1: q = distort the domain with fbm
+  vec2 q = vec2(
+    fbm(p + vec2(0.0, 0.0)),
+    fbm(p + vec2(5.2, 1.3))
+  );
+
+  // Pass 2: r = distort again using q
+  vec2 r = vec2(
+    fbm(p + 4.0 * q + vec2(1.7,  9.2) + slowTime * 0.35),
+    fbm(p + 4.0 * q + vec2(8.3,  2.8) + slowTime * 0.29)
+  );
+
+  // Pass 3: final warp value drives color
+  float f = fbm(p + 4.2 * r + slowTime * 0.12);
+
+  // ── Color mapping ─────────────────────────────────────────────
+  vec3 col = palette(f + u_time * 0.02);
+
+  // Add aurora ribbons — narrow bright streaks
+  float r1 = ribbon(uv + vec2(u_time * 0.018, 0.0), 1.4);
+  float r2 = ribbon(uv + vec2(-u_time * 0.012, 0.3), 3.7);
+  float r3 = ribbon(uv * 1.3 + vec2(u_time * 0.009, 0.6), 7.1);
+
+  // Ribbon colors (cold aurora hues — electric teal / indigo / violet)
+  vec3 teal    = vec3(0.02, 0.14, 0.22);   // Deep electric teal
+  vec3 indigo  = vec3(0.04, 0.04, 0.18);   // Cold indigo
+  vec3 violet  = vec3(0.08, 0.03, 0.16);   // Soft violet
+
+  col += r1 * teal   * 1.6;
+  col += r2 * indigo * 1.2;
+  col += r3 * violet * 0.9;
+
+  // Mouse proximity brightens the aurora locally
+  float mf = mouseField(vec2(uv.x * aspect, uv.y), mouseUV);
+  col += mf * vec3(0.03, 0.06, 0.10) * (0.5 + 0.5 * sin(u_time * 1.5));
+
+  // ── Vignette ─────────────────────────────────────────────────
+  // Double radial vignette for depth
+  vec2 vigUV  = uv - 0.5;
+  float vig   = 1.0 - dot(vigUV, vigUV) * 2.8;
+  vig = pow(max(vig, 0.0), 1.4);
+  col *= vig;
+
+  // ── Bottom fade ───────────────────────────────────────────────
+  // Aurora more prominent at top, fades toward bottom
+  float topFade = smoothstep(0.0, 0.55, uv.y);
+  col *= mix(0.5, 1.0, topFade);
+
+  // ── Clamp & gamma ─────────────────────────────────────────────
+  col = clamp(col, 0.0, 1.0);
+  col = pow(col, vec3(0.9));    // Slight gamma lift — pops the blacks
+
+  // Output: fully opaque (canvas is below content)
+  gl_FragColor = vec4(col, 1.0);
+}
 `;
 
-// Create the Shader Material
+// ── Build material & mesh ─────────
 const material = new THREE.ShaderMaterial({
-    uniforms: uniforms,
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-    transparent: true,
-    depthWrite: false
+  uniforms,
+  vertexShader,
+  fragmentShader,
+  transparent: false,
+  depthWrite:  false,
+  depthTest:   false,
 });
 
 const plane = new THREE.Mesh(geometry, material);
 scene.add(plane);
-
-// We draw a full screen plane, so standard camera positioning doesn't matter
-// The vertices are clamped to gl_Position = vec4(position, 1.0)
 camera.position.z = 1;
 
-// Interaction State
-let scrollY = 0;
-let lastScrollY = 0;
+// ── Interaction state ─────────────
+let scrollY        = 0;
+let lastScrollY    = 0;
 let scrollVelocity = 0;
 
-// Update Mouse Uniform
+let mouseX = 0.5, mouseY = 0.5;
+let lastMouseX = 0.5, lastMouseY = 0.5;
+
+// Smooth mouse tracking (lerp toward real position)
+let smoothMouseX = 0.5, smoothMouseY = 0.5;
+
 window.addEventListener('mousemove', (e) => {
-    // Normalize to 0 -> 1 for shader
-    uniforms.u_mouse.value.x = e.clientX / window.innerWidth;
-    uniforms.u_mouse.value.y = 1.0 - (e.clientY / window.innerHeight); // Flip Y for WebGL
-});
+  mouseX = e.clientX / window.innerWidth;
+  mouseY = 1.0 - (e.clientY / window.innerHeight);
+}, { passive: true });
 
 window.addEventListener('scroll', () => {
-    scrollY = window.scrollY;
-});
+  scrollY = window.scrollY;
+}, { passive: true });
 
+// ── Render loop ───────────────────
 const clock = new THREE.Clock();
+let frameId;
 
 function animate() {
-    const time = clock.getElapsedTime();
+  frameId = requestAnimationFrame(animate);
+  const time = clock.getElapsedTime();
 
-    // Update Shader Time
-    uniforms.u_time.value = time;
+  // Smooth mouse interpolation (slow lerp = trailing "oil" feel)
+  const lerpSpeed = 0.04;
+  smoothMouseX += (mouseX - smoothMouseX) * lerpSpeed;
+  smoothMouseY += (mouseY - smoothMouseY) * lerpSpeed;
 
-    // Calculate Kinetic Gravity from scrolling
-    const deltaY = scrollY - lastScrollY;
-    lastScrollY = scrollY;
-    scrollVelocity += deltaY * 0.005;
-    scrollVelocity *= 0.90; // Dampen
+  // Mouse velocity
+  const mvx = (smoothMouseX - lastMouseX) * 60;
+  const mvy = (smoothMouseY - lastMouseY) * 60;
+  lastMouseX = smoothMouseX;
+  lastMouseY = smoothMouseY;
 
-    // Pass scroll velocity to shader to make the fluid surge
-    uniforms.u_scrollVelocity.value = scrollVelocity;
+  // Scroll velocity with exponential decay
+  const deltaY    = scrollY - lastScrollY;
+  lastScrollY     = scrollY;
+  scrollVelocity += deltaY * 0.006;
+  scrollVelocity *= 0.88; // Damping
 
-    renderer.render(scene, camera);
-    requestAnimationFrame(animate);
+  // Update uniforms
+  uniforms.u_time.value               = time;
+  uniforms.u_mouse.value.set(smoothMouseX, smoothMouseY);
+  uniforms.u_mouseVelocity.value.set(mvx, mvy);
+  uniforms.u_scrollVelocity.value     = scrollVelocity;
+  uniforms.u_scrollY.value            = scrollY;
+
+  renderer.render(scene, camera);
 }
 
 animate();
 
+// ── Resize handler ────────────────
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    // Update resolution uniform
-    uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
-});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
+}, { passive: true });
+
+// ── Reduce motion: pause if needed ──
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  cancelAnimationFrame(frameId);
+  // Render one static frame
+  uniforms.u_time.value = 8.5;   // Mid-animation snapshot
+  renderer.render(scene, camera);
+}
