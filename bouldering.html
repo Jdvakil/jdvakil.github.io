@@ -36,7 +36,7 @@
     <meta name="twitter:description" content="My bouldering and climbing journey." />
 
     <!-- ASSETS -->
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css?v=20260224b">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
@@ -46,44 +46,62 @@
 
     <style>
         .collage-container {
-            opacity: 0;
-            display: none;
-        }
-
-        #bouldering-intro {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5000;
-            background: #000;
+            opacity: 1;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            min-height: calc(100vh - 170px);
         }
 
-        .intro-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.7);
+        .collage-container section {
+            flex: 1 1 auto;
         }
 
-        .intro-text {
+        .bouldering-page footer {
+            margin-top: auto;
+            padding-top: var(--sp-8);
+        }
+
+        .bouldering-page .bento-container {
+            max-width: min(1500px, calc(100vw - 48px));
+            position: relative;
+            z-index: 2;
+        }
+
+        .bouldering-bg3d {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bouldering-bg3d-inner {
             position: absolute;
-            z-index: 5001;
-            text-align: center;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.48)),
+                url('media/bouldering_1.jpeg') center 62% / cover no-repeat;
+            transform: translate3d(0, 0, 0) scale(1);
+            will-change: transform;
+            filter: saturate(1.08) contrast(1.03);
         }
 
-        .intro-text h1 {
-            font-size: clamp(3rem, 10vw, 6rem);
-            margin-bottom: 0;
-            background: linear-gradient(180deg, #fff 0%, #a5a5a5 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 0.2em;
+        html[data-theme='light'] .bouldering-bg3d-inner {
+            filter: saturate(0.94) contrast(1.0) brightness(0.96);
+        }
+
+        .bouldering-header {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--sp-4);
+        }
+
+        .bouldering-title {
+            font-size: clamp(2rem, 4.2vw, 2.5rem);
+            margin: 0;
+            pointer-events: none;
         }
 
         .bento-card {
@@ -92,11 +110,19 @@
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
             box-shadow: none;
+            cursor: zoom-in;
+            transition: transform 0.28s ease, box-shadow 0.28s ease;
+        }
+
+        .bouldering-page .bento-card::before,
+        .bouldering-page .bento-card::after {
+            display: none !important;
+            content: none !important;
         }
 
         .bento-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px) scale(1.035);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.58);
         }
 
         .bento-card:hover::before {
@@ -104,59 +130,125 @@
         }
 
         .card-media-wrapper {
-            aspect-ratio: auto;
+            aspect-ratio: 4 / 5;
             border-bottom: none;
+            overflow: hidden;
         }
 
         .card-media {
             border-radius: var(--radius-m);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .reel-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 10050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(16px, 4vw, 36px);
+            background: rgba(2, 6, 18, 0.82);
+            backdrop-filter: blur(10px) saturate(135%);
+            -webkit-backdrop-filter: blur(10px) saturate(135%);
+        }
+
+        .reel-lightbox.open {
+            display: flex;
+        }
+
+        .reel-lightbox video {
+            width: min(92vw, 1120px);
+            max-height: 86vh;
+            border-radius: var(--radius-l);
+            object-fit: contain;
+            background: #000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .reel-lightbox-close {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.26);
+            background: rgba(18, 22, 34, 0.65);
+            color: #fff;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        @media (hover: none) {
+            .bento-card:hover {
+                transform: none;
+                box-shadow: none;
+            }
         }
 
         .collage-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            grid-auto-flow: dense;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--sp-4);
+            align-items: stretch;
+        }
+
+        .collage-grid .bento-card {
+            grid-column: auto;
         }
 
         .v-wide {
-            grid-column: span 2;
+            grid-column: auto;
+        }
+
+        .v-wide .card-media-wrapper {
+            aspect-ratio: 4 / 5;
         }
 
         .v-tall {
-            grid-row: span 2;
+            grid-column: auto;
         }
 
         @media (max-width: 768px) {
-            .v-wide {
-                grid-column: span 1;
-            }
-
-            .v-tall {
-                grid-row: span 1;
+            .bouldering-page .bento-container {
+                max-width: calc(100vw - 24px);
             }
         }
     </style>
 </head>
 
-<body>
-    <div id="boot-screen">INITIALIZING_SYSTEM...</div>
-    <div id="spotlight"></div>
-    <div id="grain-overlay"></div>
+<body class="bouldering-page">
+    <div id="scroll-progress">
+        <div id="scroll-progress-fill"></div>
+    </div>
 
-    <!-- 3s Intro Image -->
-    <div id="bouldering-intro">
-        <img src="media/bouldering_1.jpeg" class="intro-img" alt="Bouldering Intro">
-        <div class="intro-text">
-            <h1 data-text="CLIMB">CLIMB</h1>
+    <nav class="apple-nav" role="navigation" aria-label="Bouldering page navigation">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand" aria-label="Jay Vakil — Home">JV</a>
+            <div class="nav-links" role="list">
+                <a href="#reels" class="nav-link active" role="listitem" aria-label="Reels section">Reels</a>
+                <a href="index.html" class="nav-link" role="listitem" aria-label="Back to main page">Home</a>
+            </div>
+            <button class="theme-toggle" type="button" aria-label="Toggle light mode" aria-pressed="false">
+                <span class="theme-toggle-icon" aria-hidden="true">☀︎</span>
+                <span class="theme-toggle-label">Light</span>
+            </button>
         </div>
+    </nav>
+
+    <div class="bouldering-bg3d" aria-hidden="true">
+        <div class="bouldering-bg3d-inner"></div>
     </div>
 
     <!-- Video Collage -->
-    <div class="bento-container collage-container">
+    <div class="bento-container collage-container" id="reels">
 
-        <header style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="font-size: 2.5rem; margin: 0; pointer-events: none;">Reels</h1>
+        <header class="bouldering-header">
+            <h1 class="bouldering-title">Reels</h1>
             <a href="index.html" class="social-btn">
                 <i class="fa-solid fa-house"></i>
             </a>
@@ -211,7 +303,7 @@
             </div>
         </section>
 
-        <footer style="margin-top: 40px;">
+        <footer>
             <div class="footer-content">
                 <span>© 2026 Jay Vakil</span>
                 <span id="sys-time" class="monospace"></span>
@@ -220,58 +312,86 @@
 
     </div>
 
-    <script src="background.js"></script>
-    <script src="animations.js"></script>
+    <script src="animations.js?v=20260224a"></script>
 
     <script>
-        function startBoulderingSequence() {
-            const intro = document.getElementById('bouldering-intro');
-            const collage = document.querySelector('.collage-container');
+        (function () {
+            const bgInner = document.querySelector('.bouldering-bg3d-inner');
+            if (!bgInner) return;
 
-            // Wait for boot screen to finish (it hides itself in animations.js)
-            const checkBoot = setInterval(() => {
-                const boot = document.getElementById('boot-screen');
-                if (boot && (boot.style.display === 'none' || window.getComputedStyle(boot).display === 'none')) {
-                    clearInterval(checkBoot);
+            let targetX = 0;
+            let targetY = 0;
+            let currentX = 0;
+            let currentY = 0;
 
-                    // Now wait 3s on the intro image
-                    setTimeout(() => {
-                        // Transition to collage
-                        const tl = gsap.timeline({
-                            onComplete: () => {
-                                intro.style.display = 'none';
-                            }
-                        });
+            window.addEventListener('mousemove', function (e) {
+                targetX = (e.clientX / window.innerWidth - 0.5) * 6;
+                targetY = (e.clientY / window.innerHeight - 0.5) * 4;
+            }, { passive: true });
 
-                        tl.to(intro, {
-                            opacity: 0,
-                            duration: 1.5,
-                            ease: "power2.inOut"
-                        });
+            function animateBackground() {
+                currentX += (targetX - currentX) * 0.045;
+                currentY += (targetY - currentY) * 0.045;
+                bgInner.style.transform = 'translate3d(' + currentX.toFixed(2) + 'px,' + currentY.toFixed(2) + 'px,0) scale(1)';
+                requestAnimationFrame(animateBackground);
+            }
 
-                        tl.set(collage, { display: 'block' });
+            animateBackground();
+        })();
 
-                        tl.to(collage, {
-                            opacity: 1,
-                            duration: 1,
-                            y: 0,
-                            ease: "power3.out"
-                        });
+        (function () {
+            const cards = document.querySelectorAll('.collage-grid .bento-card');
+            if (!cards.length) return;
 
-                        // Reveal grid items
-                        gsap.from(".bento-card", {
-                            y: 30,
-                            opacity: 0,
-                            stagger: 0.1,
-                            duration: 0.8,
-                            ease: "power2.out"
-                        });
-                    }, 3000);
+            const lightbox = document.createElement('div');
+            lightbox.className = 'reel-lightbox';
+            lightbox.innerHTML = '<button class="reel-lightbox-close" aria-label="Close expanded reel">×</button><video controls playsinline></video>';
+            document.body.appendChild(lightbox);
+
+            const closeBtn = lightbox.querySelector('.reel-lightbox-close');
+            const player = lightbox.querySelector('video');
+
+            function closeLightbox() {
+                lightbox.classList.remove('open');
+                player.pause();
+                player.removeAttribute('src');
+                player.load();
+                document.body.style.overflow = '';
+            }
+
+            cards.forEach((card) => {
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+
+                const source = card.querySelector('video source');
+                if (!source) return;
+
+                function openLightbox() {
+                    player.src = source.getAttribute('src') || '';
+                    player.muted = false;
+                    player.loop = true;
+                    player.play().catch(() => {});
+                    lightbox.classList.add('open');
+                    document.body.style.overflow = 'hidden';
                 }
-            }, 100);
-        }
 
-        window.addEventListener('load', startBoulderingSequence);
+                card.addEventListener('click', openLightbox);
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openLightbox();
+                    }
+                });
+            });
+
+            closeBtn.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) closeLightbox();
+            });
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+            });
+        })();
     </script>
 </body>
 
