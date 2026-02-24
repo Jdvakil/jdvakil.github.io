@@ -8,7 +8,7 @@ skyFallback.style.width = '100vw';
 skyFallback.style.height = '100vh';
 skyFallback.style.zIndex = '0';
 skyFallback.style.pointerEvents = 'none';
-skyFallback.style.opacity = '0.8';
+skyFallback.style.opacity = '0.68';
 skyFallback.style.backgroundColor = '#02030b';
 
 const nebulaA = 'radial-gradient(60vw 45vh at 18% 24%, rgba(68, 40, 160, 0.20), rgba(0,0,0,0) 60%)';
@@ -16,7 +16,7 @@ const nebulaB = 'radial-gradient(56vw 42vh at 82% 30%, rgba(18, 92, 168, 0.18), 
 const nebulaC = 'radial-gradient(44vw 38vh at 54% 78%, rgba(20, 108, 154, 0.14), rgba(0,0,0,0) 64%)';
 
 const fallbackStars = [];
-for (let i = 0; i < 140; i++) {
+for (let i = 0; i < 150; i++) {
     const x = Math.random() * 100;
     const y = Math.random() * 100;
     const s = 0.7 + Math.random() * 1.8;
@@ -44,7 +44,7 @@ camera.position.z = 380;
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.35));
 renderer.setClearColor(0x000000, 0);
 
 // ── HELPER: seeded pseudo-random (no import needed) ───────────
@@ -59,7 +59,7 @@ function seededRand(seed) {
 // ═══════════════════════════════════════════════════════════════
 // LAYER 1 — Background haze stars (many, small, dimmer)
 // ═══════════════════════════════════════════════════════════════
-const HAZE_COUNT = 3200;
+const HAZE_COUNT = 2800;
 const hazePos   = new Float32Array(HAZE_COUNT * 3);
 const hazeSizes = new Float32Array(HAZE_COUNT);
 const r1 = seededRand(42);
@@ -76,7 +76,7 @@ hazeGeo.setAttribute('size',     new THREE.BufferAttribute(hazeSizes, 1));
 // ═══════════════════════════════════════════════════════════════
 // LAYER 2 — Mid stars (medium, slight colour variation)
 // ═══════════════════════════════════════════════════════════════
-const MID_COUNT = 900;
+const MID_COUNT = 820;
 const midPos    = new Float32Array(MID_COUNT * 3);
 const midSizes  = new Float32Array(MID_COUNT);
 const midColors = new Float32Array(MID_COUNT * 3);
@@ -119,11 +119,12 @@ const midGeo = new THREE.BufferGeometry();
 midGeo.setAttribute('position', new THREE.BufferAttribute(midPos, 3));
 midGeo.setAttribute('size',     new THREE.BufferAttribute(midSizes, 1));
 midGeo.setAttribute('color',    new THREE.BufferAttribute(midColors, 3));
+midGeo.getAttribute('position').setUsage(THREE.DynamicDrawUsage);
 
 // ═══════════════════════════════════════════════════════════════
 // LAYER 3 — Hero / prominent stars (few, large, glow)
 // ═══════════════════════════════════════════════════════════════
-const HERO_COUNT = 55;
+const HERO_COUNT = 58;
 const heroPos    = new Float32Array(HERO_COUNT * 3);
 const heroSizes  = new Float32Array(HERO_COUNT);
 const heroColors = new Float32Array(HERO_COUNT * 3);
@@ -165,6 +166,7 @@ const heroGeo = new THREE.BufferGeometry();
 heroGeo.setAttribute('position', new THREE.BufferAttribute(heroPos, 3));
 heroGeo.setAttribute('size',     new THREE.BufferAttribute(heroSizes, 1));
 heroGeo.setAttribute('color',    new THREE.BufferAttribute(heroColors, 3));
+heroGeo.getAttribute('position').setUsage(THREE.DynamicDrawUsage);
 
 // ═══════════════════════════════════════════════════════════════
 // SHARED SHADER CHUNKS
@@ -293,7 +295,7 @@ const bandMat = new THREE.ShaderMaterial({
             // Colour: slight purple-blue tint
             vec3 col = mix(vec3(0.12, 0.06, 0.22), vec3(0.05, 0.10, 0.30), n);
 
-            float alpha = density * 0.18;
+            float alpha = density * 0.24;
             gl_FragColor = vec4(col, alpha);
         }
     `,
@@ -328,7 +330,7 @@ const nebulaMat = new THREE.ShaderMaterial({
 
             vec3 colA = vec3(0.18, 0.06, 0.38) * a1;
             vec3 colB = vec3(0.03, 0.16, 0.28) * a2;
-            float alpha = clamp((a1 + a2) * 0.11, 0.0, 0.2);
+            float alpha = clamp((a1 + a2) * 0.145, 0.0, 0.24);
             gl_FragColor = vec4(colA + colB, alpha);
         }
     `,
@@ -351,30 +353,34 @@ window.addEventListener('mousemove', (e) => {
 
 const clock = new THREE.Clock();
 const allMats = [hazeMat, midMat, heroMat, bandMat, nebulaMat];
+let lastOrbitUpdate = 0;
 
 function animate() {
     const t = clock.getElapsedTime();
     allMats.forEach(m => m.uniforms.u_time.value = t);
 
-    const midPosArray = midGeo.attributes.position.array;
-    for (let i = 0; i < MID_COUNT; i++) {
-        const theta = midOrbitAngle[i] + t * midOrbitSpeed[i];
-        const radius = midOrbitRadius[i];
-        midPosArray[i * 3] = Math.cos(theta) * radius;
-        midPosArray[i * 3 + 1] = midOrbitY[i] + Math.sin(t * 0.78 + midOrbitPhase[i]) * midOrbitBob[i];
-        midPosArray[i * 3 + 2] = Math.sin(theta) * radius;
-    }
-    midGeo.attributes.position.needsUpdate = true;
+    if (t - lastOrbitUpdate >= (1 / 30)) {
+        const midPosArray = midGeo.attributes.position.array;
+        for (let i = 0; i < MID_COUNT; i++) {
+            const theta = midOrbitAngle[i] + t * midOrbitSpeed[i];
+            const radius = midOrbitRadius[i];
+            midPosArray[i * 3] = Math.cos(theta) * radius;
+            midPosArray[i * 3 + 1] = midOrbitY[i] + Math.sin(t * 0.78 + midOrbitPhase[i]) * midOrbitBob[i];
+            midPosArray[i * 3 + 2] = Math.sin(theta) * radius;
+        }
+        midGeo.attributes.position.needsUpdate = true;
 
-    const heroPosArray = heroGeo.attributes.position.array;
-    for (let i = 0; i < HERO_COUNT; i++) {
-        const theta = heroOrbitAngle[i] + t * heroOrbitSpeed[i];
-        const radius = heroOrbitRadius[i];
-        heroPosArray[i * 3] = Math.cos(theta) * radius;
-        heroPosArray[i * 3 + 1] = heroOrbitY[i] + Math.sin(t * 0.92 + heroOrbitPhase[i]) * heroOrbitBob[i];
-        heroPosArray[i * 3 + 2] = Math.sin(theta) * radius;
+        const heroPosArray = heroGeo.attributes.position.array;
+        for (let i = 0; i < HERO_COUNT; i++) {
+            const theta = heroOrbitAngle[i] + t * heroOrbitSpeed[i];
+            const radius = heroOrbitRadius[i];
+            heroPosArray[i * 3] = Math.cos(theta) * radius;
+            heroPosArray[i * 3 + 1] = heroOrbitY[i] + Math.sin(t * 0.92 + heroOrbitPhase[i]) * heroOrbitBob[i];
+            heroPosArray[i * 3 + 2] = Math.sin(theta) * radius;
+        }
+        heroGeo.attributes.position.needsUpdate = true;
+        lastOrbitUpdate = t;
     }
-    heroGeo.attributes.position.needsUpdate = true;
 
     // Very slow rotation on each layer at slightly different rates for depth parallax
     hazePoints.rotation.y = t * 0.0012;
@@ -386,8 +392,6 @@ function animate() {
     band.rotation.z = 0.42 + t * 0.004;
     nebula.rotation.y = t * 0.006;
     nebula.rotation.x = Math.sin(t * 0.09) * 0.05;
-    skyFallback.style.transform = `translate3d(${Math.sin(t * 0.08) * 10}px, ${Math.cos(t * 0.06) * 7}px, 0)`;
-
     // Smooth mouse parallax
     camera.position.x += (targetX  - camera.position.x) * 0.025;
     camera.position.y += (-targetY - camera.position.y) * 0.025;
@@ -402,4 +406,5 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.35));
 });

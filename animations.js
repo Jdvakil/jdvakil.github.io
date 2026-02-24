@@ -2,15 +2,35 @@ gsap.registerPlugin(ScrollTrigger);
 
 // --- 1. EXPLOSIVE REVEAL SEQUENCES ("CRACKED" PHYSICS) ---
 function startMainAnimations() {
-    // Hero Explode In
-    const tl = gsap.timeline();
-    tl.from(".hero-block", {
-        y: 100,
-        scale: 0.9,
-        opacity: 0,
-        duration: 1.5,
-        ease: "elastic.out(1, 0.5)" // Bouncy, liquid physics
-    });
+    // Hero Intro — subtle text + image reveal on first page load
+    const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+    intro
+        .from(".bio-card", {
+            y: 34,
+            opacity: 0,
+            duration: 0.82
+        })
+        .from(".bio-card > *", {
+            y: 12,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.045,
+            ease: "power2.out"
+        }, "-=0.45")
+        .from(".profile-3d-wrap", {
+            y: 26,
+            opacity: 0,
+            scale: 0.975,
+            rotateY: -5,
+            duration: 0.9
+        }, "-=0.55")
+        .from(".social-grid .social-btn", {
+            y: 10,
+            opacity: 0,
+            duration: 0.42,
+            stagger: 0.05,
+            ease: "power2.out"
+        }, "-=0.42");
 
     // Staggered Bento Cards (Violent pop-in with rotation)
     gsap.utils.toArray(".bento-card").forEach((card, i) => {
