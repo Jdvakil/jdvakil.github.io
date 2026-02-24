@@ -39,7 +39,7 @@
         content="Researcher active in the areas of Robotics and Embodied Artificial Intelligence" />
 
     <!-- ASSETS -->
-    <link rel="stylesheet" href="index.css?v=20260220b">
+    <link rel="stylesheet" href="index.css?v=20260223">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
@@ -50,10 +50,34 @@
 
 <body>
 
+    <!-- SCROLL PROGRESS BAR -->
+    <div id="scroll-progress">
+        <div id="scroll-progress-fill"></div>
+    </div>
+
+    <!-- FLOATING NAVIGATION BAR -->
+    <nav class="apple-nav" role="navigation" aria-label="Site navigation">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-brand" aria-label="Jay Vakil — Home">JV</a>
+            <div class="nav-links" role="list">
+                <a href="#about" class="nav-link" role="listitem" aria-label="About section">About</a>
+                <a href="#experience" class="nav-link" role="listitem" aria-label="Experience section">Experience</a>
+                <a href="#research" class="nav-link" role="listitem" aria-label="Research section">Research</a>
+                <a href="#press" class="nav-link" role="listitem" aria-label="Press section">Press</a>
+                <a href="#teaching" class="nav-link" role="listitem" aria-label="Teaching section">Teaching</a>
+                <a href="media/JayDV_CV.pdf" target="_blank" class="nav-cta" role="listitem" aria-label="CV">
+                    CV <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="hero" aria-hidden="true"></div>
+
     <div class="bento-container">
 
         <!-- BLOCK 1: HERO (Bio + Social) -->
-        <section class="hero-block">
+        <section class="hero-block" id="about">
             <div class="bio-card">
                 <h1 data-text="Jay Vakil">Jay Vakil</h1>
                 <p class="bio-narrative">
@@ -115,6 +139,8 @@
                         'media/jay_3.jpg',
                         'media/jay_4.jpeg',
                         'media/jay_5.jpg',
+                        'media/jay_6.jpeg',
+                        'media/jay_6.jpeg',
                         'media/jay_6.jpeg'
                     ];
                     const randomImage = images[Math.floor(Math.random() * images.length)];
@@ -124,7 +150,7 @@
         </section>
 
         <!-- BLOCK 1.5: EDUCATION & EXPERIENCE -->
-        <section class="reveal">
+        <section class="reveal" id="experience">
             <h2>Education & Experience</h2>
             <div class="experience-grid">
                 <!-- MyoLab -->
@@ -182,7 +208,7 @@
         </section>
 
         <!-- BLOCK 2: PROJECT GRID (EXPANDED w/ AWARDS) -->
-        <section class="reveal">
+        <section class="reveal" id="research">
             <h2>Research</h2>
             <div class="project-grid">
 
@@ -420,7 +446,7 @@
         </section>
 
         <!-- BLOCK 3: IMPACT & PRESS (ALL OUTLETS) -->
-        <section class="reveal">
+        <section class="reveal" id="press">
             <h2>Impact & Press</h2>
             <div class="impact-grid">
 
@@ -512,7 +538,7 @@
         </section>
 
         <!-- BLOCK 4: TEACHING & SERVICE -->
-        <section class="reveal">
+        <section class="reveal" id="teaching">
             <div class="dual-column">
                 <div class="column">
                     <h2>Teaching</h2>
@@ -552,7 +578,7 @@
         </section>
 
         <!-- BLOCK 5: AFFILIATIONS -->
-        <section class="reveal">
+        <section class="reveal" id="affiliations">
             <h2>Affiliations</h2>
             <div class="bento-card" data-id="AFFIL-SYS">
                 <div class="card-content">
@@ -585,7 +611,7 @@
 
     </div>
 
-    <script src="background.js"></script>
+    <script src="background.js?v=20260223f"></script>
     <script src="animations.js"></script>
 </body>
 
