@@ -1,7 +1,25 @@
-gsap.registerPlugin(ScrollTrigger);
+const HAS_GSAP = typeof window !== 'undefined' && typeof window.gsap !== 'undefined';
+const HAS_SCROLLTRIGGER = typeof window !== 'undefined' && typeof window.ScrollTrigger !== 'undefined';
+
+if (HAS_GSAP && HAS_SCROLLTRIGGER) {
+    gsap.registerPlugin(ScrollTrigger);
+}
+
+function ensureHeroVisible() {
+    document.querySelectorAll('.bio-card, .bio-card > *, .profile-3d-wrap, .social-grid .social-btn').forEach((el) => {
+        el.style.opacity = '1';
+        el.style.visibility = 'visible';
+        el.style.transform = 'none';
+    });
+}
 
 // --- 1. EXPLOSIVE REVEAL SEQUENCES ("CRACKED" PHYSICS) ---
 function startMainAnimations() {
+    if (!HAS_GSAP) {
+        ensureHeroVisible();
+        return;
+    }
+
     // Hero Intro — subtle text + image reveal on first page load
     const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
     intro
@@ -36,67 +54,69 @@ function startMainAnimations() {
         gsap.set(".social-grid .social-btn", { clearProps: "opacity,transform,visibility" });
     });
 
-    // Staggered Bento Cards (Violent pop-in with rotation)
-    gsap.utils.toArray(".bento-card").forEach((card, i) => {
-        gsap.from(card, {
+    if (HAS_SCROLLTRIGGER) {
+        // Staggered Bento Cards (Violent pop-in with rotation)
+        gsap.utils.toArray(".bento-card").forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 90%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 80,
+                scale: 0.85,
+                rotationX: 15,
+                rotationY: Array(1, -1)[Math.floor(Math.random() * 2)] * 10, // Random left/right tilt
+                opacity: 0,
+                duration: 1.2,
+                delay: (i % 3) * 0.15, // Stagger in rows
+                ease: "back.out(2.5)" // Extreme overshoot "cracked" feel
+            });
+        });
+
+        // Handle generic .reveal sections
+        gsap.utils.toArray(".reveal").forEach((section) => {
+            gsap.to(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 85%",
+                    onEnter: () => section.classList.add('active')
+                },
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1.2,
+                ease: "expo.out"
+            });
+        });
+
+        // Impact Ticker Reveal
+        gsap.from(".impact-grid", {
             scrollTrigger: {
-                trigger: card,
-                start: "top 90%",
-                toggleActions: "play none none reverse"
+                trigger: ".impact-grid",
+                start: "top 85%"
             },
-            y: 80,
-            scale: 0.85,
-            rotationX: 15,
-            rotationY: Array(1, -1)[Math.floor(Math.random() * 2)] * 10, // Random left/right tilt
+            scale: 0.8,
+            y: 50,
             opacity: 0,
-            duration: 1.2,
-            delay: (i % 3) * 0.15, // Stagger in rows
-            ease: "back.out(2.5)" // Extreme overshoot "cracked" feel
+            duration: 1.5,
+            ease: "elastic.out(1, 0.6)"
         });
-    });
 
-    // Handle generic .reveal sections
-    gsap.utils.toArray(".reveal").forEach((section) => {
-        gsap.to(section, {
+        // Affiliations Staggered Drop
+        gsap.from(".affil-tile", {
             scrollTrigger: {
-                trigger: section,
-                start: "top 85%",
-                onEnter: () => section.classList.add('active')
+                trigger: ".affiliation-row",
+                start: "top 85%"
             },
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 1.2,
-            ease: "expo.out"
+            y: -40,
+            scale: 0.7,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.1,
+            ease: "back.out(3)"
         });
-    });
-
-    // Impact Ticker Reveal
-    gsap.from(".impact-grid", {
-        scrollTrigger: {
-            trigger: ".impact-grid",
-            start: "top 85%"
-        },
-        scale: 0.8,
-        y: 50,
-        opacity: 0,
-        duration: 1.5,
-        ease: "elastic.out(1, 0.6)"
-    });
-
-    // Affiliations Staggered Drop
-    gsap.from(".affil-tile", {
-        scrollTrigger: {
-            trigger: ".affiliation-row",
-            start: "top 85%"
-        },
-        y: -40,
-        scale: 0.7,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.1,
-        ease: "back.out(3)"
-    });
+    }
 
     gsap.to(".affil-tile", {
         y: -8,
@@ -116,8 +136,12 @@ function startMainAnimations() {
 // Start immediately when DOM is ready
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
     setTimeout(startMainAnimations, 100);
+    setTimeout(ensureHeroVisible, 2200);
 } else {
-    window.addEventListener('DOMContentLoaded', startMainAnimations);
+    window.addEventListener('DOMContentLoaded', function () {
+        startMainAnimations();
+        setTimeout(ensureHeroVisible, 2200);
+    });
 }
 
 // --- 2. 3D "LIQUID TILT" HOVER PHYSICS ---
@@ -128,6 +152,7 @@ window.addEventListener('mousemove', (e) => {
 });
 
 // Attach advanced 3D tilt tracking to all cards
+if (HAS_GSAP) {
 document.querySelectorAll('.bento-card, .exp-card, .impact-card, .affil-tile').forEach(card => {
 
     card.addEventListener('mousemove', (e) => {
@@ -170,7 +195,9 @@ document.querySelectorAll('.bento-card, .exp-card, .impact-card, .affil-tile').f
         });
     });
 });
+}
 
+if (HAS_GSAP) {
 document.querySelectorAll('.social-btn').forEach(btn => {
     btn.addEventListener('mousemove', (e) => {
         const rect = btn.getBoundingClientRect();
@@ -196,11 +223,12 @@ document.querySelectorAll('.social-btn').forEach(btn => {
         });
     });
 });
+}
 
 const profileWrap = document.querySelector('.profile-3d-wrap');
 const profileImage = document.querySelector('.profile-3d-wrap .profile-img');
 
-if (profileWrap && profileImage) {
+if (HAS_GSAP && profileWrap && profileImage) {
     profileWrap.addEventListener('mousemove', (e) => {
         const rect = profileWrap.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -276,6 +304,7 @@ if (profileWrap && profileImage) {
 // H2 HEADING — INJECT SHIMMER SPANS + SCROLL TRIGGER
 // ============================================================
 (function () {
+    if (!HAS_SCROLLTRIGGER) return;
     document.querySelectorAll('h2').forEach(function (h2) {
         const span = document.createElement('span');
         span.className = 'h2-shimmer';
@@ -299,6 +328,7 @@ if (profileWrap && profileImage) {
 // GLASS ORBS — HERO SECTION DECORATION
 // ============================================================
 (function () {
+    if (!HAS_GSAP) return;
     const hero = document.querySelector('.hero-block');
     if (!hero) return;
 
@@ -357,6 +387,7 @@ if (profileWrap && profileImage) {
 // BENTO / EXP CARDS — GLASS FLASH ON SCROLL ENTRY
 // ============================================================
 (function () {
+    if (!HAS_GSAP || !HAS_SCROLLTRIGGER) return;
     gsap.utils.toArray('.exp-card').forEach(function (card) {
         ScrollTrigger.create({
             trigger: card,
@@ -425,10 +456,6 @@ if (profileWrap && profileImage) {
             if (top <= threshold) active = sec.id;
         });
         links.forEach(function (link) {
-            if (link.classList.contains('nav-cta')) {
-                link.classList.remove('active');
-                return;
-            }
             var href = link.getAttribute('href') || '';
             var target = href.startsWith('#') ? href.slice(1) : '';
             var isActive = target === active;

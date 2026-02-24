@@ -356,44 +356,6 @@ body {
   outline-offset: 2px;
 }
 
-/* CV pill button */
-.nav-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-2);
-  font-size: var(--type-subhead);
-  font-weight: 600;
-  color: var(--text-primary);
-  text-decoration: none;
-  padding: var(--sp-2) var(--sp-4);
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.08);
-  transition: var(--transition-fast);
-  flex-shrink: 0;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.nav-cta:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.35);
-  color: #fff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.nav-cta:focus-visible {
-  outline: 2px solid var(--system-blue);
-  outline-offset: 2px;
-}
-
-.nav-cta i {
-  font-size: 0.7em;
-  opacity: 0.8;
-}
-
 .theme-toggle {
   display: inline-flex;
   align-items: center;
@@ -1310,6 +1272,14 @@ html:not([data-theme]) .social-btn:hover {
   padding: var(--sp-6);
 }
 
+@media (min-width: 901px) {
+  .status-card[data-id='TEACH-01'] .service-list {
+    max-height: 170px;
+    overflow-y: auto;
+    padding-right: var(--sp-2);
+  }
+}
+
 .card-icon {
   font-size: 1.4rem;
   color: var(--accent);
@@ -1340,7 +1310,6 @@ html:not([data-theme]) .social-btn:hover {
 
 .service-list li:last-child {
   border-bottom: none;
-  padding-bottom: 0;
 }
 
 .service-list strong {
@@ -1552,7 +1521,6 @@ footer {
 .social-btn:focus,
 .affil-tile:focus,
 .nav-link:focus,
-.nav-cta:focus,
 .nav-brand:focus {
   outline: 2px solid var(--system-blue);
   outline-offset: 3px;
@@ -1602,6 +1570,10 @@ footer {
   .profile-img { height: 280px; order: -1; }
   .project-grid { grid-template-columns: 1fr; }
   .dual-column { grid-template-columns: 1fr; gap: var(--sp-6); }
+  .status-card[data-id='TEACH-01'] .service-list {
+    overflow-y: visible;
+    padding-right: 0;
+  }
   .affiliation-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--sp-5);
@@ -1730,7 +1702,6 @@ html[data-theme='light'] .apple-nav.scrolled .nav-inner {
 
 html[data-theme='light'] .nav-brand,
 html[data-theme='light'] .nav-link,
-html[data-theme='light'] .nav-cta,
 html[data-theme='light'] .theme-toggle {
   color: var(--text-primary);
 }
