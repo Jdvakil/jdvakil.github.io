@@ -32,6 +32,10 @@ function startMainAnimations() {
             ease: "power2.out"
         }, "-=0.42");
 
+    intro.eventCallback("onComplete", function () {
+        gsap.set(".social-grid .social-btn", { clearProps: "opacity,transform,visibility" });
+    });
+
     // Staggered Bento Cards (Violent pop-in with rotation)
     gsap.utils.toArray(".bento-card").forEach((card, i) => {
         gsap.from(card, {
@@ -370,6 +374,37 @@ if (profileWrap && profileImage) {
 // NAVBAR — scroll class + active link tracking
 // ============================================================
 (function () {
+    var root = document.documentElement;
+    var themeToggle = document.querySelector('.theme-toggle');
+    var themeIcon = themeToggle ? themeToggle.querySelector('.theme-toggle-icon') : null;
+    var themeLabel = themeToggle ? themeToggle.querySelector('.theme-toggle-label') : null;
+    var storageKey = 'jdv-theme';
+
+    function applyTheme(theme, persist) {
+        root.setAttribute('data-theme', theme);
+        if (themeToggle) {
+            var isLight = theme === 'light';
+            themeToggle.setAttribute('aria-pressed', String(isLight));
+            themeToggle.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+            if (themeIcon) themeIcon.textContent = isLight ? '☾' : '☀︎';
+            if (themeLabel) themeLabel.textContent = isLight ? 'Dark' : 'Light';
+        }
+        if (persist) {
+            try { localStorage.setItem(storageKey, theme); } catch (e) {}
+        }
+    }
+
+    var savedTheme = null;
+    try { savedTheme = localStorage.getItem(storageKey); } catch (e) {}
+    applyTheme(savedTheme === 'light' ? 'light' : 'dark', false);
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+            var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+            applyTheme(current === 'light' ? 'dark' : 'light', true);
+        });
+    }
+
     var nav = document.querySelector('.apple-nav');
     if (!nav) return;
 
