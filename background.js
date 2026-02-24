@@ -11,9 +11,9 @@ skyFallback.style.pointerEvents = 'none';
 skyFallback.style.opacity = '0.68';
 skyFallback.style.backgroundColor = '#02030b';
 
-const nebulaA = 'radial-gradient(60vw 45vh at 18% 24%, rgba(68, 40, 160, 0.20), rgba(0,0,0,0) 60%)';
-const nebulaB = 'radial-gradient(56vw 42vh at 82% 30%, rgba(18, 92, 168, 0.18), rgba(0,0,0,0) 62%)';
-const nebulaC = 'radial-gradient(44vw 38vh at 54% 78%, rgba(20, 108, 154, 0.14), rgba(0,0,0,0) 64%)';
+const nebulaA = 'radial-gradient(600vw 45vh at 18% 24%, rgba(68, 40, 160, 0.20), rgba(0,0,0,0) 60%)';
+const nebulaB = 'radial-gradient(560vw 42vh at 82% 30%, rgba(18, 92, 168, 0.18), rgba(0,0,0,0) 62%)';
+const nebulaC = 'radial-gradient(440vw 38vh at 54% 78%, rgba(20, 108, 154, 0.14), rgba(0,0,0,0) 64%)';
 
 const fallbackStars = [];
 for (let i = 0; i < 150; i++) {
@@ -62,16 +62,19 @@ function seededRand(seed) {
 const HAZE_COUNT = 2800;
 const hazePos   = new Float32Array(HAZE_COUNT * 3);
 const hazeSizes = new Float32Array(HAZE_COUNT);
+const hazeTwinkle = new Float32Array(HAZE_COUNT);
 const r1 = seededRand(42);
 for (let i = 0; i < HAZE_COUNT; i++) {
     hazePos[i * 3]     = (r1() - 0.5) * 3200;
     hazePos[i * 3 + 1] = (r1() - 0.5) * 3200;
     hazePos[i * 3 + 2] = (r1() - 0.5) * 1800;
     hazeSizes[i] = r1() * 2.8 + 1.8;
+    hazeTwinkle[i] = r1();
 }
 const hazeGeo = new THREE.BufferGeometry();
 hazeGeo.setAttribute('position', new THREE.BufferAttribute(hazePos, 3));
 hazeGeo.setAttribute('size',     new THREE.BufferAttribute(hazeSizes, 1));
+hazeGeo.setAttribute('twinkle',  new THREE.BufferAttribute(hazeTwinkle, 1));
 
 // ═══════════════════════════════════════════════════════════════
 // LAYER 2 — Mid stars (medium, slight colour variation)
@@ -86,6 +89,7 @@ const midOrbitSpeed  = new Float32Array(MID_COUNT);
 const midOrbitY      = new Float32Array(MID_COUNT);
 const midOrbitBob    = new Float32Array(MID_COUNT);
 const midOrbitPhase  = new Float32Array(MID_COUNT);
+const midTwinkle     = new Float32Array(MID_COUNT);
 const r2 = seededRand(137);
 const MID_ARMS = 4;
 for (let i = 0; i < MID_COUNT; i++) {
@@ -107,6 +111,7 @@ for (let i = 0; i < MID_COUNT; i++) {
     midOrbitY[i]      = yBase;
     midOrbitBob[i]    = 2.0 + r2() * 8.0;
     midOrbitPhase[i]  = r2() * Math.PI * 2;
+    midTwinkle[i]     = r2();
 
     midSizes[i] = r2() * 3.8 + 2.8;
     // Warm-to-cool tint: blue giants vs warm yellows
@@ -119,6 +124,7 @@ const midGeo = new THREE.BufferGeometry();
 midGeo.setAttribute('position', new THREE.BufferAttribute(midPos, 3));
 midGeo.setAttribute('size',     new THREE.BufferAttribute(midSizes, 1));
 midGeo.setAttribute('color',    new THREE.BufferAttribute(midColors, 3));
+midGeo.setAttribute('twinkle',  new THREE.BufferAttribute(midTwinkle, 1));
 midGeo.getAttribute('position').setUsage(THREE.DynamicDrawUsage);
 
 // ═══════════════════════════════════════════════════════════════
@@ -134,6 +140,7 @@ const heroOrbitSpeed  = new Float32Array(HERO_COUNT);
 const heroOrbitY      = new Float32Array(HERO_COUNT);
 const heroOrbitBob    = new Float32Array(HERO_COUNT);
 const heroOrbitPhase  = new Float32Array(HERO_COUNT);
+const heroTwinkle     = new Float32Array(HERO_COUNT);
 const r3 = seededRand(9871);
 const HERO_ARMS = 4;
 for (let i = 0; i < HERO_COUNT; i++) {
@@ -155,6 +162,7 @@ for (let i = 0; i < HERO_COUNT; i++) {
     heroOrbitY[i]      = yBase;
     heroOrbitBob[i]    = 6.0 + r3() * 12.0;
     heroOrbitPhase[i]  = r3() * Math.PI * 2;
+    heroTwinkle[i]     = r3();
 
     heroSizes[i] = r3() * 5.2 + 5.2;
     const t = r3();
@@ -166,6 +174,7 @@ const heroGeo = new THREE.BufferGeometry();
 heroGeo.setAttribute('position', new THREE.BufferAttribute(heroPos, 3));
 heroGeo.setAttribute('size',     new THREE.BufferAttribute(heroSizes, 1));
 heroGeo.setAttribute('color',    new THREE.BufferAttribute(heroColors, 3));
+heroGeo.setAttribute('twinkle',  new THREE.BufferAttribute(heroTwinkle, 1));
 heroGeo.getAttribute('position').setUsage(THREE.DynamicDrawUsage);
 
 // ═══════════════════════════════════════════════════════════════
@@ -173,16 +182,34 @@ heroGeo.getAttribute('position').setUsage(THREE.DynamicDrawUsage);
 // ═══════════════════════════════════════════════════════════════
 const VERT_BASE = `
     attribute float size;
+    attribute float twinkle;
     uniform float u_time;
     varying float vAlpha;
     varying vec3 vColor;
     attribute vec3 color;
     void main() {
-        float twinkle = 0.55 + 0.45 * sin(u_time * 1.1 + position.x * 0.019 + position.y * 0.013 + position.z * 0.017);
-        vAlpha = twinkle;
+        float twinkleBase = 0.10 + 0.90 * (0.5 + 0.5 * sin(
+            u_time * (1.5 + fract(twinkle * 3.7) * 3.2)
+            + twinkle * 6.2831853
+            + position.x * 0.010
+            + position.y * 0.007
+            + position.z * 0.009
+        ));
+        float sparkleWave = 0.5 + 0.5 * sin(
+            u_time * (4.8 + fract(twinkle * 5.9) * 3.1)
+            + twinkle * 12.5663706
+        );
+        float sparkle = 0.64 + 0.76 * pow(sparkleWave, 4.2);
+        float burstWave = 0.5 + 0.5 * sin(
+            u_time * (7.6 + fract(twinkle * 9.7) * 2.8)
+            + twinkle * 31.4159265
+        );
+        float burst = 1.0 + 0.46 * pow(burstWave, 14.0);
+        float sizePulse = 0.84 + 0.40 * pow(sparkleWave, 2.7);
+        vAlpha = clamp(twinkleBase * sparkle * burst, 0.05, 1.38);
         vColor = (color.r + color.g + color.b < 0.1) ? vec3(1.0, 0.97, 0.92) : color;
         vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (1700.0 / max(abs(mvPos.z), 10.0));
+        gl_PointSize = size * sizePulse * (1700.0 / max(abs(mvPos.z), 10.0));
         gl_Position = projectionMatrix * mvPos;
     }
 `;
@@ -194,7 +221,7 @@ const FRAG_SOFT = `
         vec2 c = gl_PointCoord - 0.5;
         float d = length(c);
         if (d > 0.5) discard;
-        float a = clamp((1.0 - smoothstep(0.05, 0.5, d)) * vAlpha * 1.4, 0.0, 1.0);
+        float a = clamp((1.0 - smoothstep(0.04, 0.5, d)) * vAlpha * 1.75, 0.0, 1.0);
         gl_FragColor = vec4(vColor, a);
     }
 `;
@@ -216,7 +243,8 @@ const FRAG_HERO = `
         // Vertical spike
         spike += (1.0 - smoothstep(0.0, 0.08, abs(c.x))) * (1.0 - smoothstep(0.0, 0.5, abs(c.y))) * 0.5;
 
-        float a = clamp((core * 1.0 + spike * 0.75) * vAlpha * 1.2, 0.0, 1.0);
+        float flare = 0.9 + pow(vAlpha, 2.3) * 1.0;
+        float a = clamp((core * 1.0 + spike * 1.12) * vAlpha * flare, 0.0, 1.0);
         gl_FragColor = vec4(vColor + vec3(0.08), a);
     }
 `;

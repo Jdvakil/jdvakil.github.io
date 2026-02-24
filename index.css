@@ -764,12 +764,17 @@ html[data-theme='dark'] .social-btn:hover,
 html:not([data-theme]) .social-btn:hover {
   background:
     linear-gradient(140deg,
-      rgba(255, 153, 51, 0.26) 0%,
-      rgba(255, 255, 255, 0.14) 48%,
-      rgba(19, 136, 8, 0.24) 100%),
+      rgba(255, 153, 51, 0.38) 0%,
+      rgba(255, 255, 255, 0.20) 49%,
+      rgba(19, 136, 8, 0.34) 100%),
     rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.40);
   color: #ffffff;
+  box-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.46),
+    0 0 24px rgba(255, 153, 51, 0.16),
+    0 0 24px rgba(19, 136, 8, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
 }
 
 .social-btn::before {
@@ -789,16 +794,16 @@ html:not([data-theme]) .social-btn:hover {
 .social-btn:hover {
   background:
     linear-gradient(140deg,
-      rgba(255, 153, 51, 0.22) 0%,
-      rgba(255, 255, 255, 0.12) 48%,
-      rgba(19, 136, 8, 0.20) 100%),
+      rgba(255, 153, 51, 0.34) 0%,
+      rgba(255, 255, 255, 0.19) 49%,
+      rgba(19, 136, 8, 0.30) 100%),
     rgba(255, 255, 255, 0.14);
   color: #fff;
   transform: translateY(-3px) scale(1.02);
   box-shadow:
     0 16px 32px rgba(0, 0, 0, 0.45),
-    0 0 24px rgba(255, 153, 51, 0.10),
-    0 0 24px rgba(19, 136, 8, 0.10),
+    0 0 24px rgba(255, 153, 51, 0.16),
+    0 0 24px rgba(19, 136, 8, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.72);
   border-color: rgba(255, 255, 255, 0.40);
 }
@@ -1759,13 +1764,14 @@ html[data-theme='light'] .social-btn i {
 
 html[data-theme='light'] .social-btn:hover {
   background: linear-gradient(140deg,
-    rgba(255, 153, 51, 0.28) 0%,
-    rgba(255, 255, 255, 0.82) 47%,
-    rgba(19, 136, 8, 0.24) 100%);
+    rgba(255, 153, 51, 0.40) 0%,
+    rgba(255, 255, 255, 0.84) 48%,
+    rgba(19, 136, 8, 0.34) 100%);
   border-color: rgba(79, 70, 229, 0.32);
   color: #141a34;
   box-shadow: 0 14px 30px rgba(76, 92, 152, 0.16),
-              0 0 14px rgba(132, 164, 255, 0.18),
+              0 0 18px rgba(255, 153, 51, 0.14),
+              0 0 18px rgba(19, 136, 8, 0.13),
               inset 0 1px 0 rgba(255, 255, 255, 0.96);
   opacity: 1 !important;
 }
@@ -1860,8 +1866,34 @@ html[data-theme='light'] .affil-tile {
   .social-grid { gap: var(--sp-3); }
   .social-btn {
     min-width: 122px;
+    width: 122px;
+    flex: 0 0 122px;
     padding: var(--sp-2) var(--sp-4);
     font-size: var(--type-footnote);
+  }
+}
+
+/* Extra small mobile (≤ 480px) */
+@media (max-width: 480px) {
+  body {
+    padding: var(--sp-10) var(--sp-3);
+    padding-top: calc(var(--sp-10) + 60px);
+  }
+  .apple-nav {
+    min-width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+  }
+  .bio-card {
+    padding: var(--sp-6);
+    padding-right: var(--sp-4);
+  }
+  .social-grid {
+    gap: var(--sp-2);
+  }
+  .social-btn {
+    min-width: calc(50% - var(--sp-2));
+    width: calc(50% - var(--sp-2));
+    flex: 0 0 calc(50% - var(--sp-2));
   }
 }
 
