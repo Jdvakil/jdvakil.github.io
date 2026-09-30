@@ -1,0 +1,203 @@
+<!--
+  Franka Research 3 + Franka Hand tabletop scene for the in-browser MuJoCo demo.
+
+  Arm: mujoco_menagerie/franka_fr3 (Apache-2.0). Hand: mujoco_menagerie/franka_emika_panda
+  (Apache-2.0), mounted on the FR3 flange the same way panda.xml mounts it on the Panda.
+  Only collision geometry lives here; the visual meshes are rendered by three.js from
+  fr3.glb, which is generated from the same Menagerie OBJ files. Every body carries its
+  original inertial so the dynamics match the Menagerie models.
+-->
+<mujoco model="fr3_tabletop">
+  <compiler angle="radian" meshdir="meshes" autolimits="true"/>
+
+  <option integrator="implicitfast" timestep="0.002" cone="elliptic" impratio="10"/>
+
+  <default>
+    <default class="fr3">
+      <!-- Overwritten in joints 5, 6, and 7. -->
+      <joint damping="0.21" armature="0.195" frictionloss="1.137"/>
+      <position inheritrange="1"/>
+      <default class="collision">
+        <geom type="mesh" group="3" mass="0" density="0"/>
+      </default>
+      <site size="0.005" rgba="1 0.35 0.1 1" group="4"/>
+    </default>
+    <default class="hand">
+      <default class="finger">
+        <joint axis="0 1 0" type="slide" range="0 0.04" armature="0.1" damping="1"/>
+      </default>
+      <default class="hand_collision">
+        <geom type="mesh" group="3"/>
+        <default class="pad_1">
+          <geom type="box" size="0.0085 0.004 0.0085" pos="0 0.0055 0.0445"/>
+        </default>
+        <default class="pad_2">
+          <geom type="box" size="0.003 0.002 0.003" pos="0.0055 0.002 0.05"/>
+        </default>
+        <default class="pad_3">
+          <geom type="box" size="0.003 0.002 0.003" pos="-0.0055 0.002 0.05"/>
+        </default>
+        <default class="pad_4">
+          <geom type="box" size="0.003 0.002 0.0035" pos="0.0055 0.002 0.0395"/>
+        </default>
+        <default class="pad_5">
+          <geom type="box" size="0.003 0.002 0.0035" pos="-0.0055 0.002 0.0395"/>
+        </default>
+      </default>
+    </default>
+    <default class="block">
+      <geom type="box" size="0.025 0.025 0.025" mass="0.08" condim="4" friction="1 0.02 0.001"
+        solref="0.004 1" group="1"/>
+    </default>
+  </default>
+
+  <asset>
+    <mesh name="link0_coll" file="link0.stl"/>
+    <mesh name="link1_coll" file="link1.stl"/>
+    <mesh name="link2_coll" file="link2.stl"/>
+    <mesh name="link3_coll" file="link3.stl"/>
+    <mesh name="link4_coll" file="link4.stl"/>
+    <mesh name="link5_coll" file="link5.stl"/>
+    <mesh name="link6_coll" file="link6.stl"/>
+    <mesh name="link7_coll" file="link7.stl"/>
+    <mesh name="hand_coll" file="hand.stl"/>
+    <mesh name="finger_coll" file="finger.stl"/>
+  </asset>
+
+  <worldbody>
+    <geom name="table" type="plane" size="0 0 0.05" group="1"/>
+
+    <body name="base" childclass="fr3">
+      <body name="fr3_link0">
+        <geom name="fr3_link0_collision" mesh="link0_coll" class="collision"/>
+        <body name="fr3_link1" pos="0 0 0.333" gravcomp="1">
+          <inertial pos="4.128e-07 -0.0181251 -0.0386036" quat="0.998098 -0.0605364 0.00380499 0.0110109" mass="2.92747"
+            diaginertia="0.0239286 0.0227246 0.00610634"/>
+          <joint name="fr3_joint1" axis="0 0 1" range="-2.7437 2.7437" actuatorfrcrange="-87 87"/>
+          <geom name="fr3_link1_collision" class="collision" mesh="link1_coll"/>
+          <body name="fr3_link2" quat="1 -1 0 0" gravcomp="1">
+            <inertial pos="0.00318289 -0.0743222 0.00881461" quat="0.502599 0.584437 -0.465998 0.434366" mass="2.93554"
+              diaginertia="0.0629567 0.0411924 0.0246371"/>
+            <joint name="fr3_joint2" axis="0 0 1" range="-1.7837 1.7837" actuatorfrcrange="-87 87"/>
+            <geom name="fr3_link2_collision" class="collision" mesh="link2_coll"/>
+            <body name="fr3_link3" pos="0 -0.316 0" quat="1 1 0 0" gravcomp="1">
+              <inertial pos="0.0407016 -0.00482006 -0.0289731" quat="0.921025 -0.244161 0.155272 0.260745" mass="2.2449"
+                diaginertia="0.0267409 0.0189869 0.0171587"/>
+              <joint name="fr3_joint3" axis="0 0 1" range="-2.9007 2.9007" actuatorfrcrange="-87 87"/>
+              <geom name="fr3_link3_collision" class="collision" mesh="link3_coll"/>
+              <body name="fr3_link4" pos="0.0825 0 0" quat="1 1 0 0" gravcomp="1">
+                <inertial pos="-0.0459101 0.0630493 -0.00851879" quat="0.438018 0.803311 0.00937812 0.403414"
+                  mass="2.6156" diaginertia="0.05139 0.0372717 0.0160047"/>
+                <joint name="fr3_joint4" axis="0 0 1" range="-3.0421 -0.1518" actuatorfrcrange="-87 87"/>
+                <geom name="fr3_link4_collision" class="collision" mesh="link4_coll"/>
+                <body name="fr3_link5" pos="-0.0825 0.384 0" quat="1 -1 0 0" gravcomp="1">
+                  <inertial pos="-0.00160396 0.0292536 -0.0972966" quat="0.919031 0.125604 0.0751531 -0.366003"
+                    mass="2.32712" diaginertia="0.0579335 0.0449144 0.0130634"/>
+                  <joint name="fr3_joint5" axis="0 0 1" range="-2.8065 2.8065" actuatorfrcrange="-12 12"
+                    armature="0.074" frictionloss="0.763"/>
+                  <geom name="fr3_link5_collision" class="collision" mesh="link5_coll"/>
+                  <body name="fr3_link6" quat="1 1 0 0" gravcomp="1">
+                    <inertial pos="0.0597131 -0.0410295 -0.0101693" quat="0.621301 0.552665 0.510011 0.220081"
+                      mass="1.81704" diaginertia="0.0175039 0.0161123 0.00193529"/>
+                    <joint name="fr3_joint6" axis="0 0 1" range="0.5445 4.5169" actuatorfrcrange="-12 12"
+                      armature="0.074" frictionloss="0.44"/>
+                    <geom name="fr3_link6_collision" class="collision" mesh="link6_coll"/>
+                    <body name="fr3_link7" pos="0.088 0 0" quat="1 1 0 0" gravcomp="1">
+                      <inertial pos="0.00452258 0.00862619 -0.0161633" quat="0.727579 0.0978688 -0.24906 0.63168"
+                        mass="0.627143" diaginertia="0.000223836 0.000223642 5.64132e-07"/>
+                      <joint name="fr3_joint7" axis="0 0 1" range="-3.0159 3.0159" actuatorfrcrange="-12 12"
+                        armature="0.074" frictionloss="0.248"/>
+                      <geom name="fr3_link7_collision" class="collision" mesh="link7_coll"/>
+                      <site name="attachment_site" pos="0 0 0.107"/>
+
+                      <body name="hand" pos="0 0 0.107" quat="0.9238795 0 0 -0.3826834" childclass="hand" gravcomp="1">
+                        <inertial mass="0.73" pos="-0.01 0 0.03" diaginertia="0.001 0.0025 0.0017"/>
+                        <geom name="hand_collision" mesh="hand_coll" class="hand_collision"/>
+                        <site name="tcp" pos="0 0 0.1034" size="0.005" group="4"/>
+                        <body name="left_finger" pos="0 0 0.0584" gravcomp="1">
+                          <inertial mass="0.015" pos="0 0 0" diaginertia="2.375e-6 2.375e-6 7.5e-7"/>
+                          <joint name="finger_joint1" class="finger"/>
+                          <geom mesh="finger_coll" class="hand_collision"/>
+                          <geom class="pad_1"/>
+                          <geom class="pad_2"/>
+                          <geom class="pad_3"/>
+                          <geom class="pad_4"/>
+                          <geom class="pad_5"/>
+                        </body>
+                        <body name="right_finger" pos="0 0 0.0584" quat="0 0 0 1" gravcomp="1">
+                          <inertial mass="0.015" pos="0 0 0" diaginertia="2.375e-6 2.375e-6 7.5e-7"/>
+                          <joint name="finger_joint2" class="finger"/>
+                          <geom mesh="finger_coll" class="hand_collision"/>
+                          <geom class="pad_1"/>
+                          <geom class="pad_2"/>
+                          <geom class="pad_3"/>
+                          <geom class="pad_4"/>
+                          <geom class="pad_5"/>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+
+    <body name="block_0" pos="0.48 -0.22 0.025">
+      <freejoint/>
+      <geom name="block_0" class="block"/>
+    </body>
+    <body name="block_1" pos="0.58 0.02 0.025" euler="0 0 0.35">
+      <freejoint/>
+      <geom name="block_1" class="block"/>
+    </body>
+    <body name="block_2" pos="0.40 0.21 0.025" euler="0 0 -0.5">
+      <freejoint/>
+      <geom name="block_2" class="block"/>
+    </body>
+    <body name="block_3" pos="0.36 -0.04 0.025" euler="0 0 0.9">
+      <freejoint/>
+      <geom name="block_3" class="block"/>
+    </body>
+  </worldbody>
+
+  <tendon>
+    <fixed name="split">
+      <joint joint="finger_joint1" coef="0.5"/>
+      <joint joint="finger_joint2" coef="0.5"/>
+    </fixed>
+  </tendon>
+
+  <equality>
+    <joint joint1="finger_joint1" joint2="finger_joint2" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+  </equality>
+
+  <actuator>
+    <position class="fr3" name="fr3_joint1" joint="fr3_joint1" kp="4500" kv="450"/>
+    <position class="fr3" name="fr3_joint2" joint="fr3_joint2" kp="4500" kv="450"/>
+    <position class="fr3" name="fr3_joint3" joint="fr3_joint3" kp="3500" kv="350"/>
+    <position class="fr3" name="fr3_joint4" joint="fr3_joint4" kp="3500" kv="350"/>
+    <position class="fr3" name="fr3_joint5" joint="fr3_joint5" kp="2000" kv="200"/>
+    <position class="fr3" name="fr3_joint6" joint="fr3_joint6" kp="2000" kv="200"/>
+    <position class="fr3" name="fr3_joint7" joint="fr3_joint7" kp="2000" kv="200"/>
+    <!-- Franka Hand: ctrl 0 (closed) .. 255 (open), as in the Menagerie Panda. -->
+    <general name="gripper" tendon="split" forcerange="-100 100" ctrlrange="0 255"
+      dyntype="none" biastype="affine" gainprm="0.01568627451 0 0" biasprm="0 -100 -10"/>
+  </actuator>
+
+  <contact>
+    <exclude body1="fr3_link0" body2="fr3_link1"/>
+  </contact>
+
+  <keyframe>
+    <key name="home"
+      qpos="0 -0.35 0 -2.3 0 1.95 0.7854 0.04 0.04
+            0.48 -0.22 0.025 1 0 0 0
+            0.58 0.02 0.025 0.98481 0 0 0.17365
+            0.40 0.21 0.025 0.96891 0 0 -0.24740
+            0.36 -0.04 0.025 0.90045 0 0 0.43497"
+      ctrl="0 -0.35 0 -2.3 0 1.95 0.7854 255"/>
+  </keyframe>
+</mujoco>

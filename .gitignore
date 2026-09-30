@@ -1,0 +1,4 @@
+# Local clutter that should never be published
+__pycache__/
+*.pyc
+.DS_Store

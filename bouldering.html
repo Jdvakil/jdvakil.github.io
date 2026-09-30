@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <!-- PRESERVED ANALYTICS -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QV88VT9E0V"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -11,386 +11,231 @@
         gtag('config', 'G-QV88VT9E0V');
     </script>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Bouldering — Jay Vakil</title>
+    <meta name="description" content="Jay Vakil — bouldering reels.">
+    <meta name="theme-color" content="#0a0a0b">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
-    <title>Jay Vakil | Bouldering</title>
-
-    <link rel="icon" type="image/x-icon" href="media/bouldering_1.jpeg" />
-
-    <!-- PRESERVED META TAGS -->
-    <meta name="description" content="Jay Vakil - Bouldering and Climbing Journey">
-    <meta name="image" content="https://jdvakil.github.io/media/bouldering_1.jpeg">
-    <meta name="keywords" content="Jay Vakil, Bouldering, Climbing, Robotics, AI">
-
-    <meta property="og:title" content="Jay Vakil | Bouldering" />
-    <meta property="og:description" content="My bouldering and climbing journey." />
-    <meta property="og:image" content="https://jdvakil.github.io/media/bouldering_1.jpeg" />
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:url" content="https://jdvakil.github.io/bouldering.html" />
-    <meta property="og:type" content="website" />
-
-    <meta name="twitter:title" content="Jay Vakil | Bouldering" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:title" content="Bouldering — Jay Vakil">
+    <meta property="og:description" content="Bouldering reels.">
+    <meta property="og:image" content="https://jdvakil.github.io/media/bouldering_1.jpeg">
+    <meta property="og:url" content="https://jdvakil.github.io/bouldering.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://jdvakil.github.io/media/bouldering_1.jpeg">
-    <meta name="twitter:description" content="My bouldering and climbing journey." />
 
-    <!-- ASSETS -->
-    <link rel="stylesheet" href="index.css?v=20260224b">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <script>
+        (function () {
+            var d = document.documentElement, t = null;
+            d.classList.add('js');
+            try { t = localStorage.getItem('jdv-theme'); } catch (e) { }
+            if (t === 'light' || t === 'dark') d.setAttribute('data-theme', t);
+            d.setAttribute('data-theme-resolved', t || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+        })();
+    </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap">
+    <link rel="stylesheet" href="assets/css/site.css?v=2">
     <style>
-        .collage-container {
-            opacity: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: calc(100vh - 170px);
-        }
-
-        .collage-container section {
-            flex: 1 1 auto;
-        }
-
-        .bouldering-page footer {
-            margin-top: auto;
-            padding-top: var(--sp-8);
-        }
-
-        .bouldering-page .bento-container {
-            max-width: min(1500px, calc(100vw - 48px));
+        .climb-hero {
             position: relative;
-            z-index: 2;
+            min-height: clamp(360px, 58vh, 560px);
+            display: flex;
+            align-items: flex-end;
+            overflow: clip;
+            isolation: isolate;
         }
 
-        .bouldering-bg3d {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .bouldering-bg3d-inner {
+        .climb-hero::before {
+            content: '';
             position: absolute;
             inset: 0;
-            background:
-                linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.48)),
-                url('media/bouldering_1.jpeg') center 62% / cover no-repeat;
-            transform: translate3d(0, 0, 0) scale(1);
-            will-change: transform;
-            filter: saturate(1.08) contrast(1.03);
+            z-index: -2;
+            background: url('media/web/bouldering-bg.webp') center 60% / cover no-repeat;
+            filter: saturate(0.9);
         }
 
-        html[data-theme='light'] .bouldering-bg3d-inner {
-            filter: saturate(0.94) contrast(1.0) brightness(0.96);
+        .climb-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgb(10 10 11 / 0.55) 0%, rgb(10 10 11 / 0.15) 28%, rgb(10 10 11 / 0.2) 55%, var(--bg) 100%);
         }
 
-        .bouldering-header {
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: var(--sp-4);
+        /* Keep the nav legible while it sits on the photo. */
+        .nav--photo:not(.is-scrolled) .brand,
+        .nav--photo:not(.is-scrolled) .nav-link { color: rgb(255 255 255 / 0.92); }
+        .nav--photo:not(.is-scrolled) .nav-link:hover { background: rgb(255 255 255 / 0.12); }
+        .nav--photo:not(.is-scrolled) .icon-btn { color: #fff; border-color: rgb(255 255 255 / 0.35); }
+
+        .climb-hero .container { padding-block: 120px 40px; }
+        .climb-hero .label { color: rgb(255 255 255 / 0.75); }
+        .climb-hero h1 { font-size: clamp(44px, 7vw, 88px); line-height: 0.95; letter-spacing: -0.045em; margin-top: 14px; color: #fff; }
+        :root[data-theme-resolved='light'] .climb-hero h1 { color: var(--fg); }
+        :root[data-theme-resolved='light'] .climb-hero .label { color: var(--fg-2); }
+
+        .reels {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            padding-block: 32px 96px;
         }
 
-        .bouldering-title {
-            font-size: clamp(2rem, 4.2vw, 2.5rem);
-            margin: 0;
-            pointer-events: none;
-        }
-
-        .bento-card {
-            border: none;
-            background: none;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            box-shadow: none;
-            cursor: zoom-in;
-            transition: transform 0.28s ease, box-shadow 0.28s ease;
-        }
-
-        .bouldering-page .bento-card::before,
-        .bouldering-page .bento-card::after {
-            display: none !important;
-            content: none !important;
-        }
-
-        .bento-card:hover {
-            transform: translateY(-2px) scale(1.035);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.58);
-        }
-
-        .bento-card:hover::before {
-            display: none;
-        }
-
-        .card-media-wrapper {
-            aspect-ratio: 4 / 5;
-            border-bottom: none;
+        .reel {
+            position: relative;
+            aspect-ratio: 9 / 16;
+            border-radius: 14px;
             overflow: hidden;
+            border: 1px solid var(--line);
+            background: var(--media-bg);
+            padding: 0;
+            cursor: zoom-in;
         }
 
-        .card-media {
-            border-radius: var(--radius-m);
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .reel video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+        .reel:hover video { transform: scale(1.03); }
+        .reel-index { position: absolute; left: 12px; bottom: 12px; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; color: rgb(255 255 255 / 0.85); text-shadow: 0 1px 8px rgb(0 0 0 / 0.5); }
 
-        .reel-lightbox {
+        .lightbox {
             position: fixed;
             inset: 0;
-            z-index: 10050;
+            z-index: 100;
             display: none;
-            align-items: center;
-            justify-content: center;
-            padding: clamp(16px, 4vw, 36px);
-            background: rgba(2, 6, 18, 0.82);
-            backdrop-filter: blur(10px) saturate(135%);
-            -webkit-backdrop-filter: blur(10px) saturate(135%);
+            place-items: center;
+            padding: clamp(16px, 4vw, 40px);
+            background: rgb(5 5 6 / 0.88);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
         }
 
-        .reel-lightbox.open {
-            display: flex;
-        }
+        .lightbox.is-open { display: grid; }
+        .lightbox video { max-width: min(92vw, 520px); max-height: 88vh; border-radius: 14px; background: #000; }
+        .lightbox .icon-btn { position: fixed; top: 16px; right: 16px; color: #fff; border-color: rgb(255 255 255 / 0.3); }
 
-        .reel-lightbox video {
-            width: min(92vw, 1120px);
-            max-height: 86vh;
-            border-radius: var(--radius-l);
-            object-fit: contain;
-            background: #000;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-        }
-
-        .reel-lightbox-close {
-            position: fixed;
-            top: 18px;
-            right: 18px;
-            width: 40px;
-            height: 40px;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.26);
-            background: rgba(18, 22, 34, 0.65);
-            color: #fff;
-            font-size: 22px;
-            line-height: 1;
-            cursor: pointer;
-        }
-
-        @media (hover: none) {
-            .bento-card:hover {
-                transform: none;
-                box-shadow: none;
-            }
-        }
-
-        .collage-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--sp-4);
-            align-items: stretch;
-        }
-
-        .collage-grid .bento-card {
-            grid-column: auto;
-        }
-
-        .v-wide {
-            grid-column: auto;
-        }
-
-        .v-wide .card-media-wrapper {
-            aspect-ratio: 4 / 5;
-        }
-
-        .v-tall {
-            grid-column: auto;
-        }
-
-        @media (max-width: 768px) {
-            .bouldering-page .bento-container {
-                max-width: calc(100vw - 24px);
-            }
+        @media (max-width: 900px) {
+            .reels { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
         }
     </style>
 </head>
 
-<body class="bouldering-page">
-    <div id="scroll-progress">
-        <div id="scroll-progress-fill"></div>
-    </div>
+<body>
+    <a class="skip" href="#main">Skip to content</a>
 
-    <nav class="apple-nav" role="navigation" aria-label="Bouldering page navigation">
-        <div class="nav-inner">
-            <a href="index.html" class="nav-brand" aria-label="Jay Vakil — Home">JV</a>
-            <div class="nav-links" role="list">
-                <a href="#reels" class="nav-link active" role="listitem" aria-label="Reels section">Reels</a>
-                <a href="index.html" class="nav-link" role="listitem" aria-label="Back to main page">Home</a>
-            </div>
-            <button class="theme-toggle" type="button" aria-label="Toggle light mode" aria-pressed="false">
-                <span class="theme-toggle-icon" aria-hidden="true">☀︎</span>
-                <span class="theme-toggle-label">Light</span>
-            </button>
-        </div>
-    </nav>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5" cy="18.5" r="2.2" />
+            <path d="M6.3 16.7 10.9 9.9" />
+            <circle cx="12.2" cy="8.1" r="2.2" />
+            <path d="M14.4 8.6 18.6 10.3" />
+            <path d="M18.6 8.3v4.2M18.6 8.3h2.6M18.6 12.5h2.6" />
+        </symbol>
+        <symbol id="i-sun" viewBox="0 0 16 16"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" /></symbol>
+        <symbol id="i-moon" viewBox="0 0 16 16"><path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286" /></symbol>
+        <symbol id="i-close" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" /></symbol>
+    </svg>
 
-    <div class="bouldering-bg3d" aria-hidden="true">
-        <div class="bouldering-bg3d-inner"></div>
-    </div>
-
-    <!-- Video Collage -->
-    <div class="bento-container collage-container" id="reels">
-
-        <header class="bouldering-header">
-            <h1 class="bouldering-title">Reels</h1>
-            <a href="index.html" class="social-btn">
-                <i class="fa-solid fa-house"></i>
+    <header class="nav nav--photo" data-nav>
+        <div class="container nav-inner">
+            <a class="brand" href="index.html" aria-label="Jay Vakil, home">
+                <svg aria-hidden="true"><use href="#i-mark" /></svg>
+                <span>Jay Vakil</span>
             </a>
-        </header>
+            <nav class="nav-links nav-links-inline" aria-label="Primary">
+                <a class="nav-link" href="index.html#research">Research</a>
+                <a class="nav-link" href="index.html">Home</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn theme-toggle" type="button" aria-label="Switch to light theme">
+                    <svg class="icon i-moon" aria-hidden="true"><use href="#i-moon" /></svg>
+                    <svg class="icon i-sun" aria-hidden="true"><use href="#i-sun" /></svg>
+                </button>
+            </div>
+        </div>
+    </header>
 
-        <section>
-            <div class="collage-grid">
-                <!-- Video 1 (Wide) -->
-                <div class="bento-card v-wide">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
-                            <source src="media/IMG_2186_AdobeExpress (1) (1).mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Video 2 -->
-                <div class="bento-card">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
-                            <source src="media/v0.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Video 3 (Tall) -->
-                <div class="bento-card v-tall">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
-                            <source src="media/IMG_2168_AdobeExpress (1) (1) (1).mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Video 4 -->
-                <div class="bento-card">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
-                            <source src="media/IMG_2166_AdobeExpress (1) (1) (1).mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Fillers for collage look -->
-                <div class="bento-card">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
-                            <source src="media/v0.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
+    <main id="main">
+        <section class="climb-hero">
+            <div class="container">
+                <span class="label">Off the clock</span>
+                <h1>Bouldering</h1>
             </div>
         </section>
 
-        <footer>
-            <div class="footer-content">
-                <span>© 2026 Jay Vakil</span>
-                <span id="sys-time" class="monospace"></span>
+        <section class="container">
+            <div class="reels">
+                <button class="reel reveal" type="button" data-src="media/IMG_2186_AdobeExpress (1) (1).mp4" aria-label="Play reel 1 with sound">
+                    <video muted loop playsinline preload="none" poster="media/web/boulder-1.webp" data-autoplay><source src="media/web/boulder-1.mp4" type="video/mp4"></video>
+                    <span class="reel-index">01</span>
+                </button>
+                <button class="reel reveal" type="button" data-src="media/v0.mp4" aria-label="Play reel 2 with sound">
+                    <video muted loop playsinline preload="none" poster="media/web/boulder-2.webp" data-autoplay><source src="media/web/boulder-2.mp4" type="video/mp4"></video>
+                    <span class="reel-index">02</span>
+                </button>
+                <button class="reel reveal" type="button" data-src="media/IMG_2168_AdobeExpress (1) (1) (1).mp4" aria-label="Play reel 3 with sound">
+                    <video muted loop playsinline preload="none" poster="media/web/boulder-3.webp" data-autoplay><source src="media/web/boulder-3.mp4" type="video/mp4"></video>
+                    <span class="reel-index">03</span>
+                </button>
+                <button class="reel reveal" type="button" data-src="media/IMG_2166_AdobeExpress (1) (1) (1).mp4" aria-label="Play reel 4 with sound">
+                    <video muted loop playsinline preload="none" poster="media/web/boulder-4.webp" data-autoplay><source src="media/web/boulder-4.mp4" type="video/mp4"></video>
+                    <span class="reel-index">04</span>
+                </button>
             </div>
-        </footer>
+        </section>
+    </main>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-note" style="margin-top:0;border-top:0;padding-top:0">
+                <p><a href="index.html">← Back to research</a></p>
+                <p>© 2026 Jay Vakil</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="lightbox" role="dialog" aria-modal="true" aria-label="Reel">
+        <button class="icon-btn" type="button" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-close" /></svg></button>
+        <video controls playsinline></video>
     </div>
 
-    <script src="animations.js?v=20260224a"></script>
-
+    <script type="module" src="assets/js/site.js?v=2"></script>
     <script>
         (function () {
-            const bgInner = document.querySelector('.bouldering-bg3d-inner');
-            if (!bgInner) return;
+            var box = document.querySelector('.lightbox');
+            var player = box.querySelector('video');
+            var closeBtn = box.querySelector('button');
+            var opener = null;
 
-            let targetX = 0;
-            let targetY = 0;
-            let currentX = 0;
-            let currentY = 0;
-
-            window.addEventListener('mousemove', function (e) {
-                targetX = (e.clientX / window.innerWidth - 0.5) * 6;
-                targetY = (e.clientY / window.innerHeight - 0.5) * 4;
-            }, { passive: true });
-
-            function animateBackground() {
-                currentX += (targetX - currentX) * 0.045;
-                currentY += (targetY - currentY) * 0.045;
-                bgInner.style.transform = 'translate3d(' + currentX.toFixed(2) + 'px,' + currentY.toFixed(2) + 'px,0) scale(1)';
-                requestAnimationFrame(animateBackground);
-            }
-
-            animateBackground();
-        })();
-
-        (function () {
-            const cards = document.querySelectorAll('.collage-grid .bento-card');
-            if (!cards.length) return;
-
-            const lightbox = document.createElement('div');
-            lightbox.className = 'reel-lightbox';
-            lightbox.innerHTML = '<button class="reel-lightbox-close" aria-label="Close expanded reel">×</button><video controls playsinline></video>';
-            document.body.appendChild(lightbox);
-
-            const closeBtn = lightbox.querySelector('.reel-lightbox-close');
-            const player = lightbox.querySelector('video');
-
-            function closeLightbox() {
-                lightbox.classList.remove('open');
+            function close() {
+                box.classList.remove('is-open');
                 player.pause();
                 player.removeAttribute('src');
                 player.load();
                 document.body.style.overflow = '';
+                if (opener) opener.focus();
             }
 
-            cards.forEach((card) => {
-                card.setAttribute('role', 'button');
-                card.setAttribute('tabindex', '0');
-
-                const source = card.querySelector('video source');
-                if (!source) return;
-
-                function openLightbox() {
-                    player.src = source.getAttribute('src') || '';
+            document.querySelectorAll('.reel').forEach(function (reel) {
+                reel.addEventListener('click', function () {
+                    opener = reel;
+                    player.src = reel.dataset.src;
                     player.muted = false;
                     player.loop = true;
-                    player.play().catch(() => {});
-                    lightbox.classList.add('open');
+                    box.classList.add('is-open');
                     document.body.style.overflow = 'hidden';
-                }
-
-                card.addEventListener('click', openLightbox);
-                card.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        openLightbox();
-                    }
+                    player.play().catch(function () { });
+                    closeBtn.focus();
                 });
             });
-
-            closeBtn.addEventListener('click', closeLightbox);
-            lightbox.addEventListener('click', (e) => {
-                if (e.target === lightbox) closeLightbox();
-            });
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
-            });
+            closeBtn.addEventListener('click', close);
+            box.addEventListener('click', function (e) { if (e.target === box) close(); });
+            window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && box.classList.contains('is-open')) close(); });
         })();
     </script>
 </body>

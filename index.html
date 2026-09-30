@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <!-- PRESERVED ANALYTICS -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QV88VT9E0V"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -11,627 +11,561 @@
         gtag('config', 'G-QV88VT9E0V');
     </script>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSP: only this site, jsDelivr (three.js + MuJoCo), Google Fonts and Google Analytics may load.
+         'unsafe-eval' is required by the official MuJoCo WebAssembly build (Emscripten embind builds
+         its function wrappers with new Function); integrity hashes above still pin what runs. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://*.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Jay Vakil — Robot Learning &amp; Embodied AI</title>
+    <meta name="description"
+        content="Jay Vakil is a Computer Science PhD student at the University of Colorado Boulder working on robot learning, mobile manipulation, and embodied AI. Previously a Robotics Research Engineer at Meta AI (FAIR).">
+    <meta name="keywords" content="Jay Vakil, robotics, robot learning, mobile manipulation, embodied AI, CU Boulder, Meta AI, FAIR">
+    <meta name="theme-color" content="#0a0a0b">
+    <link rel="canonical" href="https://jdvakil.github.io/">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="media/icons8-robot-ios-17-outlined-32.png" sizes="32x32" type="image/png">
 
-    <title>Jay Vakil</title>
+    <meta property="og:title" content="Jay Vakil — Robot Learning & Embodied AI">
+    <meta property="og:description" content="PhD student at CU Boulder working on robot learning, mobile manipulation, and embodied AI.">
+    <meta property="og:image" content="https://jdvakil.github.io/media/web/og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://jdvakil.github.io/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jay Vakil — Robot Learning & Embodied AI">
+    <meta name="twitter:description" content="PhD student at CU Boulder working on robot learning, mobile manipulation, and embodied AI.">
+    <meta name="twitter:image" content="https://jdvakil.github.io/media/web/og.jpg">
 
-    <link rel="icon" type="image/x-icon" href="media/icons8-robot-ios-17-outlined-32.png" />
+    <script>
+        // Apply the saved theme before first paint to avoid a flash.
+        (function () {
+            var d = document.documentElement, t = null;
+            d.classList.add('js');
+            try { t = localStorage.getItem('jdv-theme'); } catch (e) { }
+            if (t === 'light' || t === 'dark') d.setAttribute('data-theme', t);
+            d.setAttribute('data-theme-resolved', t || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+        })();
+    </script>
 
-    <!-- PRESERVED META TAGS -->
-    <meta name="description" content="Jay Vakil">
-    <meta name="image" content="https://jdvakil.github.io/media/jay_6.jpeg">
-    <meta name="keywords" content="Jay Vakil">
-    <meta name="keywords" content="Jay Vakil robotics meta ai">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap">
+    <link rel="stylesheet" href="assets/css/site.css?v=2">
 
-    <meta property="og:title" content="Jay Vakil" />
-    <meta property="og:description"
-        content="Researcher active in the areas of Robotics and Embodied Artificial Intelligence" />
-    <meta property="og:image" content="https://jdvakil.github.io/media/jay_6.jpeg" />
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:url" content="https://jdvakil.github.io/index.html" />
-    <meta property="og:type" content="website" />
+    <!-- Third-party modules are pinned to exact versions and verified by hash (SRI). If a CDN
+         ever served a modified file, the browser refuses to run it. -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+        },
+        "integrity": {
+            "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js": "sha384-m8JoFX52V6NGv2usipnlLJKnJfL7IE8dbniPDDCSGSQv3Hm4n6PjfV6syVwfuoRc",
+            "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.core.js": "sha384-mdKeCwPEcbDvzaxwhm+MVuLoMou+E7jQqrs4tmu/n8HBYPGI1kZt0MkJxlMR4zFM",
+            "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/loaders/GLTFLoader.js": "sha384-jmhN0si8z6E7+h0t9KiwQ71oyrC3PhTpols1FXeN/vODuFa/L4bPIe9sLbOlhjq7",
+            "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/utils/BufferGeometryUtils.js": "sha384-Rm97j4mcjlLkGsYC2LX3nZG9VU2R8lgK0QE+DmBr4thue+H7J+SHm+68If2ZLBVg",
+            "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/libs/meshopt_decoder.module.js": "sha384-YKlVxw0Ht6uxCaezkIewhHjoClZrdlnGlSNqpPmMueyfs69BYllzxpCFMLSR7ox8",
+            "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/environments/RoomEnvironment.js": "sha384-/H49oz0ZtMgJNgMZ+OhhuMuKBOsaiC3kY0/PZSvgJJXAOJJwmSBJjzlV5lJul3MB",
+            "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/geometries/RoundedBoxGeometry.js": "sha384-gHmgcgYfabbVCqiNiLLSop7dMvxAqZsQsjokoDYKyrHmCD5jCPvDvFaXaAkHtTfM",
+            "https://cdn.jsdelivr.net/npm/@mujoco/mujoco@3.14.0/mujoco.js": "sha384-+/KhYaFxzADs81HzfRWM7YQOBLsKkVt2Goz2h001JTOBLXb70l2dBM6+qdq7YRkH",
+            "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/utils/SkeletonUtils.js": "sha384-Pozn8j5+YFr3ak8Pm90ayqDrGYn/DV7vVs/YIIqzJhzeJT0LQksoS1fZQ5lfsYlw"
+        }
+    }
+    </script>
 
-    <meta name="twitter:title" content="Jay Vakil" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://jdvakil.github.io/media/jay_6.jpeg">
-    <meta name="twitter:description"
-        content="Researcher active in the areas of Robotics and Embodied Artificial Intelligence" />
-
-    <!-- ASSETS -->
-    <link rel="stylesheet" href="index.css?v=20260223v">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Jay Vakil",
+        "url": "https://jdvakil.github.io/",
+        "image": "https://jdvakil.github.io/media/jay_6.jpeg",
+        "jobTitle": "PhD Student, Computer Science",
+        "affiliation": { "@type": "CollegeOrUniversity", "name": "University of Colorado Boulder" },
+        "alumniOf": [{ "@type": "CollegeOrUniversity", "name": "University of Washington" }],
+        "knowsAbout": ["Robot learning", "Mobile manipulation", "Embodied AI"],
+        "sameAs": [
+            "https://scholar.google.com/citations?user=CuCLJkUAAAAJ",
+            "https://github.com/jdvakil",
+            "https://www.linkedin.com/in/jdvakil/",
+            "https://twitter.com/jdvakil"
+        ]
+    }
+    </script>
 </head>
 
 <body>
+    <a class="skip" href="#main">Skip to content</a>
 
-    <!-- SCROLL PROGRESS BAR -->
-    <div id="scroll-progress">
-        <div id="scroll-progress-fill"></div>
-    </div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5" cy="18.5" r="2.2" />
+            <path d="M6.3 16.7 10.9 9.9" />
+            <circle cx="12.2" cy="8.1" r="2.2" />
+            <path d="M14.4 8.6 18.6 10.3" />
+            <path d="M18.6 8.3v4.2M18.6 8.3h2.6M18.6 12.5h2.6" />
+        </symbol>
+        <symbol id="i-scholar" viewBox="0 0 24 24"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z" /></symbol>
+        <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></symbol>
+        <symbol id="i-linkedin" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" /></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" /></symbol>
+        <symbol id="i-mail" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" /></symbol>
+        <symbol id="i-doc" viewBox="0 0 16 16"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" /><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" /></symbol>
+        <symbol id="i-arrow" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0z" /></symbol>
+        <symbol id="i-sun" viewBox="0 0 16 16"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" /></symbol>
+        <symbol id="i-moon" viewBox="0 0 16 16"><path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286" /></symbol>
+        <symbol id="i-menu" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" /></symbol>
+        <symbol id="i-close" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" /></symbol>
+        <symbol id="i-reset" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" /><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" /></symbol>
+    </svg>
 
-    <!-- FLOATING NAVIGATION BAR -->
-    <nav class="apple-nav" role="navigation" aria-label="Site navigation">
-        <div class="nav-inner">
-            <a href="#hero" class="nav-brand" aria-label="Jay Vakil — Home">JV</a>
-            <div class="nav-links" role="list">
-                <a href="#about" class="nav-link" role="listitem" aria-label="About section">About</a>
-                <a href="#experience" class="nav-link" role="listitem" aria-label="Experience section">Experience</a>
-                <a href="#research" class="nav-link" role="listitem" aria-label="Research section">Research</a>
-                <a href="#press" class="nav-link" role="listitem" aria-label="Press section">Press</a>
-                <a href="#teaching" class="nav-link" role="listitem" aria-label="Teaching section">Teaching</a>
-                <a href="bouldering.html" target="_blank" rel="noopener noreferrer" class="nav-link" role="listitem"
-                    aria-label="Bouldering page">Bouldering</a>
+    <header class="nav" data-nav>
+        <div class="container nav-inner">
+            <a class="brand" href="#top" aria-label="Jay Vakil, back to top">
+                <svg aria-hidden="true"><use href="#i-mark" /></svg>
+                <span>Jay Vakil</span>
+            </a>
+            <nav class="nav-links" id="nav-links" aria-label="Primary">
+                <a class="nav-link" href="#research">Publications</a>
+                <a class="nav-link" href="#experience">Experience</a>
+                <a class="nav-link" href="#press">News</a>
+                <a class="nav-link" href="#teaching">Teaching</a>
+                <a class="nav-link" href="bouldering.html">Bouldering</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn theme-toggle" type="button" aria-label="Switch to light theme">
+                    <svg class="icon i-moon" aria-hidden="true"><use href="#i-moon" /></svg>
+                    <svg class="icon i-sun" aria-hidden="true"><use href="#i-sun" /></svg>
+                </button>
+                <button class="icon-btn menu-toggle" type="button" aria-label="Open menu" aria-controls="nav-links" aria-expanded="false">
+                    <svg class="icon i-menu" aria-hidden="true"><use href="#i-menu" /></svg>
+                    <svg class="icon i-close" aria-hidden="true"><use href="#i-close" /></svg>
+                </button>
             </div>
-            <button class="theme-toggle" type="button" aria-label="Toggle light mode" aria-pressed="false">
-                <span class="theme-toggle-icon" aria-hidden="true">☀︎</span>
-                <span class="theme-toggle-label">Light</span>
-            </button>
         </div>
-    </nav>
+    </header>
 
-    <div id="hero" aria-hidden="true"></div>
+    <main id="main">
+        <!-- Hero: bio + live MuJoCo simulation of a Franka FR3 -->
+        <section class="hero" id="top" data-robot-hero>
+            <div class="stage" data-robot-stage data-state="idle">
+                <canvas tabindex="0" aria-label="Interactive simulation of a Franka Research 3 robot arm. Hover to steer the gripper, click a block to pick it up, drag to throw blocks or move the arm."></canvas>
+                <div class="stage-loader" role="status" aria-live="polite">
+                    <span class="label">Booting MuJoCo · WebAssembly</span>
+                    <span class="loader-bar"><i></i></span>
+                    <span class="label" data-hud="progress">0%</span>
+                </div>
+                <div class="stage-fallback">
+                    <span class="label">Simulation unavailable</span>
+                    <p>This browser couldn't start the live MuJoCo simulation (it needs WebGL and WebAssembly).</p>
+                </div>
+                <div class="hud">
+                    <div class="hud-inner">
+                        <p class="hud-chip"><span class="live-dot"></span><span>Live · MuJoCo 3.14 · WebAssembly</span></p>
+                        <div class="hud-panel">
+                            <div class="hud-head">
+                                <span class="hud-mode" data-hud="mode">Autopilot</span>
+                                <span class="hud-status" data-hud="status">Starting</span>
+                                <span class="hud-rate" data-hud="rate" aria-hidden="true"></span>
+                                <button class="hud-btn" type="button" data-action="reset" aria-label="Reset the simulation">
+                                    <svg class="icon" aria-hidden="true"><use href="#i-reset" /></svg>Reset
+                                </button>
+                            </div>
+                            <div class="hud-telemetry" aria-hidden="true">
+                                <ol class="hud-joints" data-hud="joints"></ol>
+                                <span class="hud-grip">Grip <span data-hud="grip">—</span></span>
+                            </div>
+                            <p class="hud-hint"><span class="hint-pointer">Hover to steer · click a block to grasp it · drag blocks to throw · drag the arm to move it</span><span class="hint-auto">Autonomous demo · interactive on desktop</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="bento-container">
+            <div class="container">
+                <div class="hero-copy">
+                    <div class="identity">
+                        <button class="portrait" type="button" data-portrait aria-label="Show another photo of Jay">
+                            <img src="media/web/portrait-5.webp" alt="Jay Vakil" width="480" height="600" fetchpriority="high">
+                            <span class="portrait-hint" aria-hidden="true">↻</span>
+                        </button>
+                        <script>
+                            // A different photo on every visit (the poolside one twice as often).
+                            (function () {
+                                var pick = [1, 2, 3, 4, 5, 5][Math.floor(Math.random() * 6)];
+                                var btn = document.querySelector('[data-portrait]');
+                                btn.dataset.index = pick;
+                                btn.querySelector('img').src = 'media/web/portrait-' + pick + '.webp';
+                            })();
+                        </script>
+                        <div>
+                            <p class="label identity-role">PhD Student · CU Boulder</p>
+                            <h1 class="hero-title">Jay Vakil</h1>
+                        </div>
+                    </div>
+                    <p class="hero-lead">I work on robot learning, mobile manipulation, and embodied&nbsp;AI, building intelligent agents that interact robustly with the physical world.</p>
+                    <p class="hero-bio">
+                        I'm a Computer Science PhD student at the
+                        <a class="link" href="https://www.colorado.edu/cs/">University of Colorado Boulder</a>, advised by
+                        <a class="link" href="https://alessandro.ronc.one">Alessandro Roncone</a>. Before my PhD, I was a
+                        Robotics Research Engineer at <a class="link" href="https://ai.meta.com/research/">Meta AI (FAIR)</a>,
+                        where I contributed to large-scale initiatives such as
+                        <a class="link" href="https://robotics-transformer-x.github.io">RT-X</a>,
+                        <a class="link" href="https://robopen.github.io">RoboAgent</a>, and
+                        <a class="link" href="https://ok-robot.github.io">OK-Robot</a>.
+                    </p>
+                    <p class="hero-links">
+                        <a href="media/JayDV_CV.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-doc" /></svg>CV</a>
+                        <a href="https://scholar.google.com/citations?hl=en&amp;user=CuCLJkUAAAAJ" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-scholar" /></svg>Google Scholar</a>
+                        <a href="https://github.com/jdvakil" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-github" /></svg>GitHub</a>
+                        <a href="https://www.linkedin.com/in/jdvakil/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-linkedin" /></svg>LinkedIn</a>
+                        <a href="https://twitter.com/jdvakil" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-x" /></svg>X / Twitter</a>
+                    </p>
+                </div>
+            </div>
+        </section>
 
-        <!-- BLOCK 1: HERO (Bio + Social) -->
-        <section class="hero-block" id="about">
-            <div class="bio-card">
-                <h1 data-text="Jay Vakil">Jay Vakil</h1>
-                <p class="bio-narrative">
-                    I am a Computer Science PhD student at the <a href="https://www.colorado.edu/cs/">University of
-                        Colorado Boulder</a>, advised by <a href="https://alessandro.ronc.one">Alessandro
-                        Roncone</a>. My research focuses on <strong>Robot Learning, Mobile Manipulation, and Embodied
-                        AI</strong>, building intelligent agents that can interact robustly with the physical world.
+        <!-- Publications -->
+        <section class="section" id="research">
+            <div class="container">
+                <div class="section-head">
+                    <h2 class="section-title">Publications</h2>
+                    <a class="section-aside" href="https://scholar.google.com/citations?hl=en&amp;user=CuCLJkUAAAAJ" target="_blank" rel="noopener">Google Scholar <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a>
+                </div>
+                <p class="section-note">* equal contribution · † equal advising</p>
+                <div class="pubs">
+                    <article class="pub">
+                        <div class="pub-media" aria-hidden="true">
+                            <svg class="traj" viewBox="0 0 320 200" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M70 176 L70 150 L140 72 L222 96 L252 142" stroke-width="54" stroke-opacity="0.05"/><path d="M70 176 L70 150 L140 72 L222 96 L252 142" stroke-width="36" stroke-opacity="0.07"/><path d="M70 176 L70 150 L140 72 L222 96 L252 142" stroke-width="20" stroke-opacity="0.1"/><path d="M186 44 L180 86" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="187" cy="34" r="11" fill="var(--accent)" stroke="none"/><path d="M70 176 L70 150 L140 72 L222 96 L252 142" stroke-width="3"/><path d="M52 178 H88" stroke-width="3"/><circle cx="70" cy="150" r="5" fill="var(--media-bg)" stroke-width="2"/><circle cx="140" cy="72" r="5" fill="var(--media-bg)" stroke-width="2"/><circle cx="222" cy="96" r="5" fill="var(--media-bg)" stroke-width="2"/><path d="M244 150 L252 142 L262 148" stroke-width="2.5"/></svg>
+                        </div>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">ICLR 2027</span><span class="pending">Under review</span></div>
+                            <h3>Beyond the End-Effector: Learning Whole-Body Peripersonal Representations for Collision-Aware Manipulation</h3>
+                            <p class="authors"><span class="me">Jay Vakil</span>, Amine Boubrit, Artemis Shaw, Ekshan Raj Verma, Caleb Escobedo, Anuj Pasricha, Carson Kohlbrenner, Qinzhengfang Li, Alessandro Roncone</p>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <div class="pub-media" aria-hidden="true">
+                            <svg class="traj" viewBox="0 0 320 200" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><path d="M18.0 124.0 L25.1 121.5 L32.2 117.6 L39.3 112.5 L46.4 106.8 L53.5 101.2 L60.6 96.1 L67.7 91.7 L74.8 87.6 L81.9 83.3 L89.0 78.0 L96.1 70.9 L103.2 61.8 L110.3 50.8 L117.4 38.6 L124.5 26.6 L131.6 16.5 L138.7 9.9 L145.8 8.1 L152.9 11.8 L160.0 20.8 L167.1 34.1 L174.2 49.9 L181.3 66.2 L188.4 81.0 L195.5 92.6 L202.6 99.9 L209.7 102.9 L216.8 102.2 L223.9 99.0 L231.0 94.9 L238.1 91.3 L245.2 89.4 L252.3 89.8 L259.4 92.4 L266.5 97.0 L273.6 102.5 L280.7 108.4 L287.8 114.0 L294.9 119.2 L302.0 124.0" stroke-opacity="0.12"/><path d="M18.0 124.0 L25.1 122.7 L32.2 121.5 L39.3 119.2 L46.4 115.4 L53.5 109.8 L60.6 102.7 L67.7 94.8 L74.8 87.0 L81.9 79.9 L89.0 74.0 L96.1 69.4 L103.2 65.7 L110.3 62.2 L117.4 58.0 L124.5 52.5 L131.6 45.4 L138.7 37.0 L145.8 28.1 L152.9 19.9 L160.0 14.0 L167.1 11.6 L174.2 13.7 L181.3 20.5 L188.4 31.6 L195.5 45.8 L202.6 61.5 L209.7 76.9 L216.8 90.3 L223.9 100.6 L231.0 107.1 L238.1 110.1 L245.2 110.4 L252.3 109.1 L259.4 107.4 L266.5 106.6 L273.6 107.3 L280.7 109.7 L287.8 113.7 L294.9 118.6 L302.0 124.0" stroke-opacity="0.17"/><path d="M18.0 124.0 L25.1 119.8 L32.2 115.7 L39.3 111.8 L46.4 107.7 L53.5 103.2 L60.6 97.5 L67.7 90.3 L74.8 81.3 L81.9 71.0 L89.0 59.9 L96.1 49.3 L103.2 40.4 L110.3 34.4 L117.4 32.2 L124.5 34.1 L131.6 39.8 L138.7 48.3 L145.8 58.2 L152.9 68.0 L160.0 76.0 L167.1 81.3 L174.2 83.3 L181.3 82.3 L188.4 78.9 L195.5 74.4 L202.6 70.1 L209.7 67.2 L216.8 66.4 L223.9 68.0 L231.0 71.8 L238.1 77.3 L245.2 83.5 L252.3 89.7 L259.4 95.5 L266.5 100.4 L273.6 104.7 L280.7 108.8 L287.8 113.2 L294.9 118.2 L302.0 124.0" stroke-opacity="0.22"/><path d="M18.0 124.0 L25.1 121.9 L32.2 119.2 L39.3 115.4 L46.4 110.3 L53.5 104.3 L60.6 97.9 L67.7 91.5 L74.8 85.7 L81.9 80.7 L89.0 76.2 L96.1 72.1 L103.2 67.6 L110.3 62.3 L117.4 55.7 L124.5 48.0 L131.6 39.6 L138.7 31.4 L145.8 24.3 L152.9 19.7 L160.0 18.5 L167.1 21.1 L174.2 27.7 L181.3 37.5 L188.4 49.6 L195.5 62.4 L202.6 74.7 L209.7 85.0 L216.8 92.7 L223.9 97.5 L231.0 99.7 L238.1 100.0 L245.2 99.5 L252.3 99.1 L259.4 99.6 L266.5 101.4 L273.6 104.5 L280.7 108.8 L287.8 113.8 L294.9 119.0 L302.0 124.0" stroke-opacity="0.27"/><path d="M18.0 124.0 L25.1 121.5 L32.2 119.4 L39.3 117.1 L46.4 113.9 L53.5 109.4 L60.6 103.6 L67.7 96.8 L74.8 89.4 L81.9 82.1 L89.0 75.4 L96.1 69.7 L103.2 65.1 L110.3 61.3 L117.4 57.8 L124.5 54.3 L131.6 50.1 L138.7 45.2 L145.8 39.7 L152.9 34.1 L160.0 29.2 L167.1 26.0 L174.2 25.3 L181.3 27.6 L188.4 33.2 L195.5 41.7 L202.6 52.4 L209.7 64.1 L216.8 75.6 L223.9 86.0 L231.0 94.3 L238.1 100.3 L245.2 104.1 L252.3 106.1 L259.4 107.1 L266.5 107.9 L273.6 109.3 L280.7 111.5 L287.8 114.9 L294.9 119.2 L302.0 124.0" stroke-opacity="0.32"/><path d="M18.0 124.0 L25.1 119.8 L32.2 115.6 L39.3 111.5 L46.4 107.3 L53.5 102.7 L60.6 97.2 L67.7 90.8 L74.8 83.2 L81.9 74.9 L89.0 66.1 L96.1 57.8 L103.2 50.7 L110.3 45.6 L117.4 43.0 L124.5 43.0 L131.6 45.5 L138.7 49.9 L145.8 55.2 L152.9 60.6 L160.0 65.1 L167.1 68.1 L174.2 69.4 L181.3 69.2 L188.4 67.9 L195.5 66.2 L202.6 65.1 L209.7 65.0 L216.8 66.4 L223.9 69.5 L231.0 73.9 L238.1 79.3 L245.2 85.1 L252.3 90.9 L259.4 96.2 L266.5 101.0 L273.6 105.4 L280.7 109.6 L287.8 114.0 L294.9 118.7 L302.0 124.0" stroke-opacity="0.37"/><path d="M18.0 124.0 L25.1 119.5 L32.2 115.8 L39.3 112.8 L46.4 110.2 L53.5 107.5 L60.6 104.2 L67.7 100.0 L74.8 94.8 L81.9 88.8 L89.0 82.1 L96.1 75.4 L103.2 69.1 L110.3 63.5 L117.4 59.0 L124.5 55.6 L131.6 53.1 L138.7 51.1 L145.8 49.2 L152.9 47.2 L160.0 45.0 L167.1 42.6 L174.2 40.4 L181.3 39.0 L188.4 38.8 L195.5 40.5 L202.6 44.2 L209.7 49.9 L216.8 57.4 L223.9 66.2 L231.0 75.4 L238.1 84.4 L245.2 92.5 L252.3 99.3 L259.4 104.7 L266.5 108.7 L273.6 111.9 L280.7 114.6 L287.8 117.3 L294.9 120.3 L302.0 124.0" stroke-opacity="0.42"/><path d="M18.0 124.0 L25.1 118.7 L32.2 113.7 L39.3 109.1 L46.4 105.1 L53.5 101.8 L60.6 98.9 L67.7 96.2 L74.8 93.3 L81.9 89.8 L89.0 85.5 L96.1 80.5 L103.2 74.7 L110.3 68.6 L117.4 62.5 L124.5 57.0 L131.6 52.4 L138.7 49.1 L145.8 47.0 L152.9 46.2 L160.0 46.3 L167.1 47.0 L174.2 48.0 L181.3 49.1 L188.4 50.3 L195.5 51.6 L202.6 53.3 L209.7 55.7 L216.8 59.0 L223.9 63.5 L231.0 69.2 L238.1 75.7 L245.2 82.9 L252.3 90.3 L259.4 97.3 L266.5 103.7 L273.6 109.2 L280.7 113.7 L287.8 117.5 L294.9 120.8 L302.0 124.0" stroke-opacity="0.47"/><path d="M18.0 124.0 L25.1 119.1 L32.2 114.2 L39.3 109.4 L46.4 104.9 L53.5 100.8 L60.6 97.0 L67.7 93.6 L74.8 90.1 L81.9 86.5 L89.0 82.6 L96.1 78.1 L103.2 73.2 L110.3 68.0 L117.4 62.7 L124.5 57.7 L131.6 53.2 L138.7 49.7 L145.8 47.2 L152.9 45.9 L160.0 45.7 L167.1 46.4 L174.2 47.8 L181.3 49.6 L188.4 51.8 L195.5 54.1 L202.6 56.8 L209.7 59.7 L216.8 63.2 L223.9 67.3 L231.0 72.1 L238.1 77.6 L245.2 83.6 L252.3 89.8 L259.4 96.0 L266.5 102.0 L273.6 107.5 L280.7 112.3 L287.8 116.6 L294.9 120.4 L302.0 124.0" stroke-opacity="0.52"/><path d="M18.0 124.0 L25.1 119.8 L32.2 115.5 L39.3 111.1 L46.4 106.6 L53.5 102.0 L60.6 97.2 L67.7 92.4 L74.8 87.4 L81.9 82.4 L89.0 77.3 L96.1 72.4 L103.2 67.6 L110.3 63.1 L117.4 58.9 L124.5 55.2 L131.6 52.0 L138.7 49.4 L145.8 47.5 L152.9 46.4 L160.0 46.0 L167.1 46.4 L174.2 47.5 L181.3 49.4 L188.4 52.0 L195.5 55.2 L202.6 58.9 L209.7 63.1 L216.8 67.6 L223.9 72.4 L231.0 77.3 L238.1 82.4 L245.2 87.4 L252.3 92.4 L259.4 97.2 L266.5 102.0 L273.6 106.6 L280.7 111.1 L287.8 115.5 L294.9 119.8 L302.0 124.0" stroke="var(--accent)" stroke-width="2"/><circle cx="18" cy="124.0" r="3.5" fill="currentColor" stroke="none"/><circle cx="302" cy="124.0" r="3.5" fill="var(--accent)" stroke="none"/></svg>
+                        </div>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">CoRL 2025</span></div>
+                            <h3>Dynamics-Compliant Trajectory Diffusion</h3>
+                            <p class="pub-summary">Payload-conditioned diffusion model for generating dynamic motions for robots handling up to 3× nominal payloads.</p>
+                            <p class="authors">Anuj Pasricha, Joewie J. Koh, <span class="me">Jay Vakil</span>, Alessandro Roncone</p>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <a class="pub-media" href="https://robotics-transformer-x.github.io" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-bg="white">
+                            <video muted loop playsinline preload="none" poster="media/web/rtx.webp" data-autoplay><source src="media/web/rtx.mp4" type="video/mp4"></video>
+                        </a>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">ICRA 2024</span><span class="award">Best Conference Paper</span><span class="award">Best Student Paper Finalist</span></div>
+                            <h3><a href="https://robotics-transformer-x.github.io" target="_blank" rel="noopener">Open X-Embodiment: Robotic Learning Datasets and RT-X Models</a></h3>
+                            <p class="pub-summary">Scaling robotic learning via the RT-X model and a massive cross-platform dataset of 60+ robots. The ‘ImageNet’ moment for robotics.</p>
+                            <p class="authors">Open X-Embodiment Collaboration, including <span class="me">Jay Vakil</span></p>
+                            <div class="pub-links"><a class="chip" href="https://robotics-transformer-x.github.io" target="_blank" rel="noopener">Project page <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a></div>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <a class="pub-media" href="https://robopen.github.io" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+                            <video muted loop playsinline preload="none" poster="media/web/roboagent.webp" data-autoplay><source src="media/web/roboagent.mp4" type="video/mp4"></video>
+                        </a>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">ICRA 2024</span><span class="award">NeurIPS 2023 Outstanding Presentation</span></div>
+                            <h3><a href="https://robopen.github.io" target="_blank" rel="noopener">RoboAgent: Generalization and Efficiency in Robot Manipulation via Semantic Augmentations and Action Chunking</a></h3>
+                            <p class="pub-summary">Universal robot learning with semantic augmentations. Teaching robots broadly generalizable skills through action chunking across 38+ tasks.</p>
+                            <p class="authors">Homanga Bharadhwaj*, <span class="me">Jay Vakil</span>*, Mohit Sharma*, Abhinav Gupta, Shubham Tulsiani, Vikash Kumar</p>
+                            <div class="pub-links"><a class="chip" href="https://robopen.github.io" target="_blank" rel="noopener">Project page <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a></div>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <a class="pub-media" href="https://ok-robot.github.io/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+                            <video muted loop playsinline preload="none" poster="media/web/okrobot.webp" data-autoplay><source src="media/web/okrobot.mp4" type="video/mp4"></video>
+                        </a>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">RSS 2024</span></div>
+                            <h3><a href="https://ok-robot.github.io/" target="_blank" rel="noopener">OK-Robot: What Really Matters in Integrating Open-Knowledge Models for Robotics</a></h3>
+                            <p class="pub-summary">A zero-shot system for open-vocabulary mobile manipulation. Integrating vision-language models with classical navigation primitives to handle messy environments.</p>
+                            <p class="authors">Peiqi Liu*, Yaswanth Orru*, <span class="me">Jay Vakil</span>, Chris Paxton, Nur Muhammad “Mahi” Shafiullah†, Lerrel Pinto†</p>
+                            <div class="pub-links"><a class="chip" href="https://ok-robot.github.io/" target="_blank" rel="noopener">Project page <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a></div>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <a class="pub-media" href="https://pvrs-sim2real.github.io/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-fit="contain" data-bg="white">
+                            <img src="media/web/pvrs.webp" alt="" loading="lazy" decoding="async" width="1100" height="477">
+                        </a>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">ICRA 2024</span></div>
+                            <h3><a href="https://pvrs-sim2real.github.io/" target="_blank" rel="noopener">What do we learn from a large-scale study of pre-trained visual representations in sim and real environments?</a></h3>
+                            <p class="pub-summary">A large-scale study of pre-trained visual representations in sim and real environments to understand transfer efficacy.</p>
+                            <p class="authors">Sneha Silwal*, Karmesh Yadav*, Tingfan Wu*, <span class="me">Jay Vakil</span>*, Arjun Majumdar*, Sergio Arnaud*, Claire Chen, Vincent-Pierre Berges, Dhruv Batra, Aravind Rajeswaran, Mrinal Kalakrishnan, Franziska Meier, Oleksandr Maksymets</p>
+                            <div class="pub-links"><a class="chip" href="https://pvrs-sim2real.github.io/" target="_blank" rel="noopener">Project page <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a></div>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <a class="pub-media" href="https://homerobot.github.io/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-fit="contain" data-bg="white">
+                            <img src="media/web/homerobot.webp" alt="" loading="lazy" decoding="async" width="960" height="503">
+                        </a>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">arXiv 2024</span></div>
+                            <h3><a href="https://homerobot.github.io/" target="_blank" rel="noopener">Towards Open-World Mobile Manipulation in Homes: Lessons from the NeurIPS 2023 HomeRobot Open Vocabulary Mobile Manipulation Challenge</a></h3>
+                            <p class="pub-summary">Open-vocabulary mobile manipulation challenge. Benchmarking robot performance in novel home environments.</p>
+                            <p class="authors" data-clamp>Sriram Yenamandra*, Arun Ramachandran*, Mukul Khanna*, Karmesh Yadav*, <span class="me">Jay Vakil</span>*, Andrew Melnik, Michael Büttner, Leon Harz, Lyon Brown, Gora Chand Nandi, Arjun PS, Gaurav Kumar Yadav, Rahul Kala, Robert Haschke, Yang Luo, Jinxin Zhu, Yansen Han, Bingyi Lu, Xuan Gu, Qinyuan Liu, Yaping Zhao, Qiting Ye, Chenxiao Dou, Yansong Chua, Volodymyr Kuzma, Vladyslav Humennyy, Ruslan Partsey, Jonathan Francis, Devendra Singh Chaplot, Gunjan Chhablani, Alexander Clegg, Theophile Gervet, Vidhi Jain, Ram Ramrakhya, Andrew Szot, Austin Wang, Tsung-Yen Yang, Aaron Edsinger, Charlie Kemp, Binit Shah, Zsolt Kira, Dhruv Batra, Roozbeh Mottaghi, Yonatan Bisk, Chris Paxton</p>
+                            <div class="pub-links"><a class="chip" href="https://homerobot.github.io/" target="_blank" rel="noopener">Project page <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a></div>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <a class="pub-media" href="https://eai-vc.github.io/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-fit="contain" data-bg="black">
+                            <img src="media/web/vc1.webp" alt="" loading="lazy" decoding="async" width="720" height="720">
+                        </a>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">NeurIPS 2023</span></div>
+                            <h3><a href="https://eai-vc.github.io/" target="_blank" rel="noopener">Where are we in the search for an Artificial Visual Cortex for Embodied Intelligence?</a></h3>
+                            <p class="pub-summary">Evaluating mid-level visual representations for robotic control tasks. Are we closer to an artificial visual cortex?</p>
+                            <p class="authors" data-clamp>Arjun Majumdar, Karmesh Yadav, Sergio Arnaud, Yecheng Jason Ma, Claire Chen, Sneha Silwal, Aryan Jain, Vincent-Pierre Berges, Tingfan Wu, <span class="me">Jay Vakil</span>, Pieter Abbeel, Jitendra Malik, Dhruv Batra, Yixin Lin, Oleksandr Maksymets, Aravind Rajeswaran, Franziska Meier</p>
+                            <div class="pub-links"><a class="chip" href="https://eai-vc.github.io/" target="_blank" rel="noopener">Project page <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a></div>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <a class="pub-media" href="https://sites.google.com/view/robohive/home" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-fit="contain" data-bg="white">
+                            <img src="media/web/robohive.webp" alt="" loading="lazy" decoding="async" width="720" height="641">
+                        </a>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">NeurIPS 2023</span></div>
+                            <h3><a href="https://sites.google.com/view/robohive/home" target="_blank" rel="noopener">RoboHive: A Unified Framework for Robot Learning</a></h3>
+                            <p class="pub-summary">A unified framework for robot learning and embodied AI research, offering diverse simulation environments.</p>
+                            <p class="authors">Vikash Kumar, Rutav Shah, Gaoyue Zhou, Vincent Moens, Vittorio Caggiano, <span class="me">Jay Vakil</span>, Abhishek Gupta, Aravind Rajeswaran</p>
+                            <div class="pub-links"><a class="chip" href="https://sites.google.com/view/robohive/home" target="_blank" rel="noopener">Project page <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a></div>
+                        </div>
+                    </article>
+                    <article class="pub">
+                        <a class="pub-media" href="https://roboslap.github.io" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-fit="contain" data-bg="white">
+                            <img src="media/web/slap.webp" alt="" loading="lazy" decoding="async" width="726" height="508">
+                        </a>
+                        <div class="pub-body">
+                            <div class="pub-meta"><span class="venue">CoRL 2023</span></div>
+                            <h3><a href="https://roboslap.github.io" target="_blank" rel="noopener">Spatial-Language Attention Policies for Efficient Robot Learning</a></h3>
+                            <p class="pub-summary">Efficient robot learning using spatial-language attention mechanisms for manipulation tasks.</p>
+                            <p class="authors">Priyam Parashar, Vidhi Jain, Xiaohan Zhang, <span class="me">Jay Vakil</span>, Sam Powers, Chris Paxton</p>
+                            <div class="pub-links"><a class="chip" href="https://roboslap.github.io" target="_blank" rel="noopener">Project page <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></a></div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section class="section" id="experience">
+            <div class="container">
+                <div class="section-head">
+                    <h2 class="section-title">Education &amp; experience</h2>
+                </div>
+                <ol class="roles">
+                    <li class="role">
+                        <div class="logo-tile"><img src="media/web/logos/myolab.webp" alt="MyoLab.AI" loading="lazy" decoding="async"></div>
+                        <div>
+                            <div class="role-top"><h3>MyoLab.AI</h3><span class="role-when">Feb 2025 – May 2025</span></div>
+                            <p class="role-title">Research Scientist Intern</p>
+                            <p class="role-desc">Multimodal LLM-agent planning, diffusion-based human-motion synthesis, and generative modeling on human-motion manifolds.</p>
+                        </div>
+                    </li>
+                    <li class="role">
+                        <div class="logo-tile"><img src="media/web/logos/cu.webp" alt="University of Colorado Boulder" loading="lazy" decoding="async"></div>
+                        <div>
+                            <div class="role-top"><h3>University of Colorado Boulder</h3><span class="role-when">Aug 2024 – Present</span></div>
+                            <p class="role-title">PhD in Computer Science</p>
+                            <p class="role-desc">Researching robot learning, mobile manipulation, and embodied AI. Advised by Alessandro Roncone, Nikolaus Correll, and Christoffer Heckman.</p>
+                        </div>
+                    </li>
+                    <li class="role">
+                        <div class="logo-tile"><img src="media/web/logos/meta.webp" alt="Meta" loading="lazy" decoding="async"></div>
+                        <div>
+                            <div class="role-top"><h3>Meta AI (FAIR)</h3><span class="role-when">Apr 2022 – Jul 2024</span></div>
+                            <p class="role-title">Robotics Research Engineer</p>
+                            <p class="role-desc">Designed a distributed robotic arm cluster for large-scale experimentation. Developed universal agents for complex manipulation tasks (RoboAgent).</p>
+                        </div>
+                    </li>
+                    <li class="role">
+                        <div class="logo-tile"><img src="media/web/logos/uw.webp" alt="University of Washington" loading="lazy" decoding="async"></div>
+                        <div>
+                            <div class="role-top"><h3>University of Washington</h3><span class="role-when">Sep 2018 – Mar 2022</span></div>
+                            <p class="role-title">BS in Electrical Engineering</p>
+                            <p class="role-desc">Minor in Mathematics and Computer Science. Dean's List recipient. Focus on signal processing, robotics, and embedded systems.</p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- News -->
+        <section class="section" id="press">
+            <div class="container">
+                <div class="section-head">
+                    <h2 class="section-title">In the news</h2>
+                </div>
+                <div class="news-grid">
+                    <a class="news-card" href="https://techcrunch.com/2023/08/08/human-toddlers-are-inspiring-new-approaches-to-robot-learning/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/techcrunch.webp" alt="TechCrunch" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">TechCrunch</span><span class="news-title">Human toddlers are inspiring new approaches to robot learning</span></span>
+                    </a>
+                    <a class="news-card" href="https://www.technologyreview.com/2024/02/01/1087445/this-robot-can-tidy-a-room-without-any-help/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/mit-tr.webp" alt="MIT Technology Review" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">MIT Technology Review</span><span class="news-title">This robot can tidy a room without any help</span></span>
+                    </a>
+                    <a class="news-card" href="https://spectrum.ieee.org/global-robotic-brain" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/ieee-spectrum.webp" alt="IEEE Spectrum" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">IEEE Spectrum</span><span class="news-title">The global project to make a general robotic brain</span></span>
+                    </a>
+                    <a class="news-card" href="https://www.technologyreview.com/2024/04/11/1090718/household-robots-ai-data-robotics/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/mit-tr.webp" alt="MIT Technology Review" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">MIT Technology Review</span><span class="news-title">Is robotics about to have its own ChatGPT moment?</span></span>
+                    </a>
+                    <a class="news-card" href="https://www.foxnews.com/tech/stop-loading-the-dishwasher-this-robot-aims-to-do-all-the-cleanup-for-you" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/foxnews.webp" alt="Fox News" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">Fox News</span><span class="news-title">Stop loading the dishwasher: this robot aims to do all the cleanup for you</span></span>
+                    </a>
+                    <a class="news-card" href="https://venturebeat.com/ai/metas-ok-robot-performs-zero-shot-pick-and-drop-in-unseen-environments/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><span class="logo-text">VentureBeat</span></span>
+                        <span class="news-body"><span class="news-outlet">VentureBeat</span><span class="news-title">Meta's OK-Robot performs zero-shot pick-and-drop in unseen environments</span></span>
+                    </a>
+                    <a class="news-card" href="https://spectrum.ieee.org/video-friday-toddler-robot" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/ieee-spectrum.webp" alt="IEEE Spectrum" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">IEEE Spectrum</span><span class="news-title">Featured in Video Friday</span></span>
+                    </a>
+                    <a class="news-card" href="https://www.cmu.edu/news/stories/archives/2023/august/parenting-a-3-year-old-robot" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/cmu.webp" alt="Carnegie Mellon University" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">Carnegie Mellon University</span><span class="news-title">Parenting a 3-year-old robot</span></span>
+                    </a>
+                    <a class="news-card" href="https://www.ri.cmu.edu/parenting-a-3-year-old-robot/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/cmu-ri.webp" alt="CMU Robotics Institute" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">CMU Robotics Institute</span><span class="news-title">Parenting a 3-year-old robot</span></span>
+                    </a>
+                    <a class="news-card" href="https://hackaday.com/2023/08/20/roboagent-gets-its-mt-act-together/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/hackaday.webp" alt="Hackaday" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">Hackaday</span><span class="news-title">RoboAgent gets its MT-ACT together</span></span>
+                    </a>
+                    <a class="news-card" href="https://cacm.acm.org/news/275459-parenting-a-three-year-old-robot" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/acm.webp" alt="Communications of the ACM" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">Communications of the ACM</span><span class="news-title">Parenting a three-year-old robot</span></span>
+                    </a>
+                    <a class="news-card" href="https://ai.meta.com/blog/robots-learn-videos-human-activities-simulated-interactions/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/meta.webp" alt="Meta AI Blog" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">Meta AI Blog</span><span class="news-title">Robots that learn from videos of human activities and simulated interactions</span></span>
+                    </a>
+                    <a class="news-card" href="https://ai.meta.com/research/publications/where-are-we-in-the-search-for-an-artificial-visual-cortex-for-embodied-intelligence/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/meta.webp" alt="Meta AI" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">Meta AI</span><span class="news-title">Where are we in the search for an artificial visual cortex for embodied intelligence?</span></span>
+                    </a>
+                    <a class="news-card" href="https://www.rockingrobots.com/roboagent-modeled-after-human-infants-learning-techniques/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/rockingrobots.webp" alt="Rocking Robots" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">Rocking Robots</span><span class="news-title">RoboAgent, modeled after human infants' learning techniques</span></span>
+                    </a>
+                    <a class="news-card" href="https://studyfinds.org/meta-ai-training-robots-babies/" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/studyfinds.webp" alt="StudyFinds" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">StudyFinds</span><span class="news-title">Meta AI training robots like babies</span></span>
+                    </a>
+                    <a class="news-card" href="https://www.techbriefs.com/component/content/article/49121-meet-roboagent-enabling-robots-to-acquire-manipulation-abilities" target="_blank" rel="noopener">
+                        <span class="logo-tile"><img src="media/web/logos/techbriefs.webp" alt="Tech Briefs" loading="lazy" decoding="async"></span>
+                        <span class="news-body"><span class="news-outlet">Tech Briefs</span><span class="news-title">Meet RoboAgent: enabling robots to acquire manipulation abilities</span></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Teaching & service -->
+        <section class="section" id="teaching">
+            <div class="container">
+                <div class="section-head">
+                    <h2 class="section-title">Teaching &amp; service</h2>
+                </div>
+                <div class="split">
+                    <div>
+                        <h3 class="panel-title">Teaching Assistant</h3>
+                        <ul class="course-list">
+                            <li><span class="course-code">CSCI 3302</span><span class="course-name">Introduction to Robotics</span></li>
+                            <li><span class="course-code">CSCI 3202</span><span class="course-name">Introduction to Artificial Intelligence</span></li>
+                            <li><span class="course-code">CSCI 2400</span><span class="course-name">Computer Systems</span></li>
+                        </ul>
+                        <p class="panel-note">University of Colorado Boulder · 2024 – Present</p>
+                    </div>
+                    <div>
+                        <h3 class="panel-title">Reviewer</h3>
+                        <ul class="review-list">
+                            <li><span class="review-year">2026</span><span class="tags"><span>NeurIPS</span><span>IROS</span><span>RSS</span><span>ICLR</span></span></li>
+                            <li><span class="review-year">2025</span><span class="tags"><span>RSS</span><span>ICML</span><span>ICRA</span></span></li>
+                            <li><span class="review-year">2024</span><span class="tags"><span>ICRA</span><span>CoRL</span></span></li>
+                            <li><span class="review-year">Journal</span><span class="tags"><span>RA-L</span></span></li>
+                            <li><span class="review-year">Workshops</span><span class="tags"><span>IROS '26 ReS AI</span><span>IROS '26 S2RCC</span></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Affiliations -->
+        <section class="section" id="affiliations">
+            <div class="container">
+                <div class="section-head">
+                    <h2 class="section-title">Affiliations</h2>
+                </div>
+                <div class="affil-grid">
+                    <figure class="affil">
+                        <span class="logo-tile"><img src="media/web/logos/cu.webp" alt="University of Colorado Boulder" loading="lazy" decoding="async"></span>
+                        <figcaption>University of Colorado Boulder</figcaption>
+                    </figure>
+                    <figure class="affil">
+                        <span class="logo-tile"><img src="media/web/logos/meta.webp" alt="Meta AI (FAIR)" loading="lazy" decoding="async"></span>
+                        <figcaption>Meta AI (FAIR)</figcaption>
+                    </figure>
+                    <figure class="affil">
+                        <span class="logo-tile"><img src="media/web/logos/myolab.webp" alt="MyoLab.AI" loading="lazy" decoding="async"></span>
+                        <figcaption>MyoLab.AI</figcaption>
+                    </figure>
+                    <figure class="affil">
+                        <span class="logo-tile"><img src="media/web/logos/uw.webp" alt="University of Washington" loading="lazy" decoding="async"></span>
+                        <figcaption>University of Washington</figcaption>
+                    </figure>
+                    <figure class="affil">
+                        <span class="logo-tile"><img src="media/web/logos/nsc.webp" alt="North Seattle College" loading="lazy" decoding="async"></span>
+                        <figcaption>North Seattle College</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-top">
+                <div>
+                    <p class="footer-name">Jay Vakil</p>
+                    <p class="footer-tag">jay.vakil [at] colorado.edu</p>
+                    <p class="footer-tag">Off the clock: <a class="link" href="bouldering.html">bouldering</a>, photography, and cars.</p>
+                </div>
+                <p class="footer-links">
+                    <a href="media/JayDV_CV.pdf" target="_blank" rel="noopener">CV</a>
+                    <a href="https://scholar.google.com/citations?hl=en&amp;user=CuCLJkUAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+                    <a href="https://github.com/jdvakil" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://www.linkedin.com/in/jdvakil/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://twitter.com/jdvakil" target="_blank" rel="noopener">X / Twitter</a>
                 </p>
-
-                <p class="bio-details">
-                    Before starting my PhD, I was a Robotics Research Engineer at <a
-                        href="https://ai.facebook.com/">Meta AI (FAIR)</a>, where I contributed to large-scale
-                    initiatives such as <a href="https://robotics-transformer-x.github.io" class="highlight-link"
-                        target="_blank">RT-X</a>, <a href="https://robopen.github.io" class="highlight-link"
-                        target="_blank">RoboAgent</a>, and <a href="https://ok-robot.github.io" class="highlight-link"
-                        target="_blank">OK-Robot</a>.
-                </p>
-
-                <p class="bio-contact">
-                    <span class="contact-item">
-                        <i class="fa-solid fa-envelope"></i> jay.vakil <span class="at-symbol">[at]</span> colorado.edu
-                    </span>
-                    <span class="contact-item">
-                        <i class="fa-solid fa-graduation-cap"></i> BS Electrical Engineering, University of Washington
-                    </span>
-                    <span class="contact-item">
-                        <i class="fa-solid fa-mountain-sun"></i> <a href="bouldering.html"
-                            class="highlight-link">Boulderer</a>, Photographer, and Car Enthusiast
-                    </span>
-                </p>
-
-                <div class="social-grid">
-                    <a href="https://scholar.google.com/citations?hl=en&user=CuCLJkUAAAAJ" target="_blank"
-                        class="social-btn">
-                        <i class="ai ai-google-scholar"></i> Scholar
-                    </a>
-                    <a href="https://github.com/jdvakil" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-github"></i> GitHub
-                    </a>
-                    <a href="https://www.linkedin.com/in/jdvakil/" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-linkedin"></i> LinkedIn
-                    </a>
-                    <a href="https://twitter.com/jdvakil" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-twitter"></i> Twitter
-                    </a>
-                    <a href="media/JayDV_CV.pdf" target="_blank" class="social-btn">
-                        <i class="fa-solid fa-file-pdf"></i> CV
-                    </a>
-                </div>
             </div>
-
-            <div class="profile-container">
-                <div class="profile-3d-wrap">
-                    <img id="profile-img" src="media/jay_6.jpg" alt="Jay Vakil" class="profile-img">
-                </div>
-                <p class="refresh-hint">Refresh to see different me</p>
-                <script>
-                    const images = [
-                        'media/jay_1.jpeg',
-                        'media/jay_3.jpg',
-                        'media/jay_4.jpeg',
-                        'media/jay_5.jpg',
-                        'media/jay_6.jpeg',
-                        'media/jay_6.jpeg',
-                        'media/jay_6.jpeg'
-                    ];
-                    const randomImage = images[Math.floor(Math.random() * images.length)];
-                    document.getElementById('profile-img').src = randomImage;
-                </script>
+            <div class="footer-note">
+                <p>The robot up top is a Franka Research 3 with a Franka Hand, simulated live in your browser by
+                    <a href="https://mujoco.org" target="_blank" rel="noopener">MuJoCo</a> 3.14 compiled to WebAssembly and rendered with
+                    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a>. Robot models from
+                    <a href="https://github.com/google-deepmind/mujoco_menagerie" target="_blank" rel="noopener">MuJoCo Menagerie</a> (Apache-2.0).</p>
+                <p>© 2026 Jay Vakil</p>
             </div>
-        </section>
+        </div>
+    </footer>
 
-        <!-- BLOCK 1.5: EDUCATION & EXPERIENCE -->
-        <section class="reveal" id="experience">
-            <h2>Education & Experience</h2>
-            <div class="experience-grid">
-                <!-- MyoLab -->
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <img src="media/Myolab_logo_def.png" class="exp-logo">
-                        <div class="exp-meta">
-                            <h3>MyoLab.AI</h3>
-                            <p>Research Scientist Intern • Feb 2025 — May 2025</p>
-                        </div>
-                    </div>
-                    <p>Working on Multimodal agent LLM based planning, Diffusion-based human-motion synthesis, and
-                        generative modeling on human-motion manifolds.</p>
-                </div>
-
-                <!-- PhD CU Boulder -->
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <img src="media/boulder-fl-centered-2.png" class="exp-logo">
-                        <div class="exp-meta">
-                            <h3>University of Colorado Boulder</h3>
-                            <p>PhD in Computer Science • Aug 2024 — Present</p>
-                        </div>
-                    </div>
-                    <p>Researching Robot Learning, Mobile Manipulation, and Embodied AI. Advised by Alessandro Roncone,
-                        Nikolaus Correll, and Christoffer Heckman.</p>
-                </div>
-
-                <!-- FAIR -->
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <img src="media/Meta_lockup_positive primary_RGB.svg" class="exp-logo">
-                        <div class="exp-meta">
-                            <h3>Facebook AI Research (FAIR)</h3>
-                            <p>Robotics Research Engineer • Apr 2022 — July 2024</p>
-                        </div>
-                    </div>
-                    <p>Designed a distributed robotic arm cluster for large-scale experimentation. Developed universal
-                        agents for complex manipulation tasks (RoboAgent).</p>
-                </div>
-
-                <!-- UW -->
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <img src="media/uw.png" class="exp-logo">
-                        <div class="exp-meta">
-                            <h3>University of Washington</h3>
-                            <p>BS in Electrical Engineering • Sept 2018 — Mar 2022</p>
-                        </div>
-                    </div>
-                    <p>Minor in Mathematics and Computer Science. Dean's List recipient. Focus on signal processing,
-                        robotics, and embedded systems.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- BLOCK 2: PROJECT GRID (EXPANDED w/ AWARDS) -->
-        <section class="reveal" id="research">
-            <h2>Research</h2>
-            <div class="project-grid">
-
-                <!-- Card 1 -->
-                <a href="https://robotics-transformer-x.github.io" target="_blank" class="bento-card" data-id="RT-X">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
-                            <source src="media/teaser_compressed.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">ICRA 2024</span>
-                            <span class="badge award">★ Best Conference Paper</span>
-                            <span class="badge award">★ Best Student Paper Finalist</span>
-                        </div>
-                        <h3>Open X-Embodiment</h3>
-                        <p>Scaling robotic learning via the RT-X model and a massive cross-platform dataset of 60+
-                            robots. The 'ImageNet' moment for robotics.</p>
-                        <p class="card-authors">Open-X X-Embodiment Collaboration</p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                            <span class="link-mute">arXiv</span>
-                            <span class="link-mute">Code</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card 2 -->
-                <a href="https://robopen.github.io" target="_blank" class="bento-card" data-id="R-AGENT">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
-                            <source src="media/big_banner.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">ICRA 2024</span>
-                            <span class="badge award">★ NeurIPS 2023 Outstanding Presentation</span>
-                        </div>
-                        <h3>RoboAgent</h3>
-                        <p>Universal robot learning with semantic augmentations. Teaching robots broadly generalizable
-                            skills through action chunking across 38+ tasks.</p>
-                        <p class="card-authors">Homanga Bharadhwaj*, <span class="me">Jay Vakil</span>*, Mohit Sharma*,
-                            Abhinav Gupta, Shubham Tulsiani, Vikash Kumar</p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                            <span class="link-mute">arXiv</span>
-                            <span class="link-mute">Code</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card 3 -->
-                <a href="https://ok-robot.github.io/" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <video muted autoplay loop playsinline class="card-media">
-                            <source src="media/optimized_mosaic.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">RSS 2024</span>
-                        </div>
-                        <h3>OK-Robot</h3>
-                        <p>A zero-shot system for open-vocabulary mobile manipulation. Integrating Vision-Language
-                            Models with classical navigation primitives to handle messy environments.</p>
-                        <p class="card-authors">Peiqi Liu*, Yaswanth Orru*, <span class="me">Jay Vakil</span>, Chris
-                            Paxton, Nur Muhammad "Mahi" Shafiullah†, Lerrel Pinto†</p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                            <span class="link-mute">arXiv</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- New Card: Dynamics -->
-                <a href="#" class="bento-card">
-                    <div class="card-media-wrapper"
-                        style="background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-robot" style="font-size: 3rem; color: rgba(255,255,255,0.1);"></i>
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">CoRL 2025</span>
-                        </div>
-                        <h3>Dynamics-Compliant Trajectory Diffusion</h3>
-                        <p>Payload-conditioned diffusion model for generating dynamic motions for robots handling
-                            up to 3x nominal payloads.</p>
-                        <p class="card-authors">Anuj Pasricha, Joewie J. Koh, <span class="me">Jay Vakil</span>,
-                            Alessandro Roncone</p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card 4 -->
-                <a href="https://pvrs-sim2real.github.io/" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/pvrs_sim2real_teaser.png" class="card-media" style="object-position: top;">
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">ICRA 2024</span>
-                        </div>
-                        <h3>Sim-to-Real Visual Representations</h3>
-                        <p>A large-scale study of pre-trained visual representations in sim and real environments to
-                            understand transfer efficacy.</p>
-                        <p class="card-authors">Sneha Silwal*, Karmesh Yadav*, Tingfan Wu*, <span class="me">Jay
-                                Vakil</span>*, Arjun Majumdar*, Sergio Arnaud*, Claire Chen, Vincent-Pierre Berges,
-                            Dhruv Batra, Aravind Rajeswaran, Mrinal Kalakrishnan, Franziska Meier, Oleksandr Maksymets
-                        </p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card 5 -->
-                <a href="https://eai-vc.github.io/" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/VC1_teaser_7.png" class="card-media">
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">NeurIPS 2023</span>
-                        </div>
-                        <h3>Visual Cortex for Embodied Intelligence</h3>
-                        <p>Evaluating mid-level visual representations for robotic control tasks. Are we closer to an
-                            artificial visual cortex?</p>
-                        <p class="card-authors">Arjun Majumdar, Karmesh Yadav, Sergio Arnaud, Yecheng Jason Ma, Claire
-                            Chen, Sneha Silwal, Aryan Jain, Vincent-Pierre Berges, Tingfan Wu, <span class="me">Jay
-                                Vakil</span>, Pieter Abbeel, Jitendra Malik, Dhruv Batra, Yixin Lin, Oleksandr
-                            Maksymets, Aravind Rajeswaran, Franziska Meier</p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card 6 -->
-                <a href="https://roboslap.github.io" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/slap.png" class="card-media">
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">CoRL 2023</span>
-                        </div>
-                        <h3>Spatial-Language Attention Policies</h3>
-                        <p>Efficient robot learning using spatial-language attention mechanisms for manipulation tasks.
-                        </p>
-                        <p class="card-authors">Priyam Parashar, Vidhi Jain, Xiaohan Zhang, <span class="me">Jay
-                                Vakil</span>, Sam Powers, Chris Paxton</p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card: HomeRobot -->
-                <a href="https://homerobot.github.io/" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/Screenshot 2024-08-26 at 11.54.58 AM.png" class="card-media">
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">Arxiv</span>
-                        </div>
-                        <h3>Towards Open‑World Mobile Manipulation in Homes: Lessons from the Neurips 2023HomeRobot Open
-                            Vocabulary Mobile Manipulation Challenge</h3>
-                        <p>Open-vocabulary mobile manipulation challenge. Benchmarking robot performance in novel home
-                            environments.</p>
-                        <p class="card-authors">Sriram Yenamandra*, Arun Ramachandran*, Mukul Khanna*, Karmesh Yadav*,
-                            <span class="me">Jay Vakil</span>*, Andrew Melnik, Michael Büttner, Leon Harz, Lyon Brown,
-                            Gora Chand Nandi, Arjun PS, Gaurav Kumar Yadav, Rahul Kala, Robert Haschke, Yang Luo, Jinxin
-                            Zhu, Yansen Han, Bingyi Lu, Xuan Gu, Qinyuan Liu, Yaping Zhao, Qiting Ye, Chenxiao Dou,
-                            Yansong Chua, Volodymyr Kuzma, Vladyslav Humennyy, Ruslan Partsey, Jonathan Francis,
-                            Devendra Singh Chaplot, Gunjan Chhablani, Alexander Clegg, Theophile Gervet, Vidhi Jain, Ram
-                            Ramrakhya, Andrew Szot, Austin Wang, Tsung-Yen Yang, Aaron Edsinger, Charlie Kemp, Binit
-                            Shah, Zsolt Kira, Dhruv Batra, Roozbeh Mottaghi, Yonatan Bisk, Chris Paxton
-                        </p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card: RoboHive -->
-                <a href="https://sites.google.com/view/robohive/home" target="_blank" class="bento-card">
-                    <div class="card-media-wrapper">
-                        <img src="media/Screenshot 2023-10-13 at 11.56.40.png" class="card-media">
-                    </div>
-                    <!-- <div class="card-media-wrapper"
-                        style="background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-hive" style="font-size: 3rem; color: rgba(255,255,255,0.1);"></i>
-                    </div> -->
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">NeurIPS 2023</span>
-                        </div>
-                        <h3>RoboHive</h3>
-                        <p>A unified framework for Robot Learning and Embodied AI research, offering diverse simulation
-                            environments.</p>
-                        <p class="card-authors">Vikash Kumar, Rutav Shah, Gaoyue Zhou, Vincent Moens, Vittorio Caggiano,
-                            <span class="me">Jay Vakil</span>, Abhishek Gupta, Aravind Rajeswaran
-                        </p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- New Card: RoboSet -->
-                <!-- <a href="#" class="bento-card">
-                    <div class="card-media-wrapper"
-                        style="background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-database" style="font-size: 3rem; color: rgba(255,255,255,0.1);"></i>
-                    </div>
-                    <div class="card-content">
-                        <div class="badge-container">
-                            <span class="badge venue">NeurIPS 2023</span>
-                        </div>
-                        <h3>RoboSet</h3>
-                        <p>A scalable multi-task real-world robotic dataset designed for generalized offline learning
-                            outcomes.</p>
-                        <div class="card-links">
-                            <span class="link-mute">View Project →</span>
-                        </div>
-                    </div>
-                </a> -->
-
-            </div>
-        </section>
-
-        <!-- BLOCK 3: IMPACT & PRESS (ALL OUTLETS) -->
-        <section class="reveal" id="press">
-            <h2>Impact & Press</h2>
-            <div class="impact-grid">
-
-                <a href="https://techcrunch.com/2023/08/08/human-toddlers-are-inspiring-new-approaches-to-robot-learning/"
-                    target="_blank" class="impact-card">
-                    <img src="media/techcrunch.png" class="impact-logo">
-                    <div class="impact-text">"Human toddlers inspiring new approaches to robot learning"</div>
-                </a>
-
-                <a href="https://www.foxnews.com/tech/stop-loading-the-dishwasher-this-robot-aims-to-do-all-the-cleanup-for-you"
-                    target="_blank" class="impact-card">
-                    <img src="media/foxnews.png" class="impact-logo">
-                    <div class="impact-text">"Stop loading the dishwasher: This robot aims to do all cleanup"</div>
-                </a>
-
-                <a href="https://spectrum.ieee.org/video-friday-toddler-robot" target="_blank" class="impact-card">
-                    <img src="media/IEEE-Spectrum-Logo.jpg" class="impact-logo">
-                    <div class="impact-text">Featured in IEEE Spectrum Video Friday</div>
-                </a>
-
-                <a href="https://spectrum.ieee.org/global-robotic-brain" target="_blank" class="impact-card">
-                    <img src="media/IEEE-Spectrum-Logo.jpg" class="impact-logo">
-                    <div class="impact-text">The Global Project to Make a General Robotic Brain</div>
-                </a>
-
-                <a href="https://venturebeat.com/ai/metas-ok-robot-performs-zero-shot-pick-and-drop-in-unseen-environments/"
-                    target="_blank" class="impact-card">
-                    <div class="impact-logo-text"
-                        style="background:#fff; color:#000; font-weight:800; padding:4px 8px; border-radius:4px; margin-bottom:16px;">
-                        VentureBeat</div>
-                    <div class="impact-text">"Meta's OK-Robot performs zero-shot pick-and-drop"</div>
-                </a>
-
-                <a href="https://www.technologyreview.com/2024/02/01/1087445/this-robot-can-tidy-a-room-without-any-help/"
-                    target="_blank" class="impact-card">
-                    <img src="media/mittech.png" class="impact-logo">
-                    <div class="impact-text">"This robot can tidy a room without any help"</div>
-                </a>
-                <a href="https://www.technologyreview.com/2024/04/11/1090718/household-robots-ai-data-robotics/"
-                    target="_blank" class="impact-card">
-                    <img src="media/mittech.png" class="impact-logo">
-                    <div class="impact-text">Is robotics about to have its own ChatGPT moment?</div>
-                </a>
-
-                <a href="https://www.cmu.edu/news/stories/archives/2023/august/parenting-a-3-year-old-robot"
-                    target="_blank" class="impact-card">
-                    <img src="media/cmu-wordmark-horizontal-r.jpg" class="impact-logo">
-                    <div class="impact-text">"Parenting a 3-year-old robot"</div>
-                </a>
-
-                <a href="https://www.ri.cmu.edu/parenting-a-3-year-old-robot/" target="_blank" class="impact-card">
-                    <img src="media/cmu-ri-may2023-medium.png" class="impact-logo">
-                    <div class="impact-text">CMU Robotics Institute Feature</div>
-                </a>
-
-                <a href="https://hackaday.com/2023/08/20/roboagent-gets-its-mt-act-together/" target="_blank"
-                    class="impact-card">
-                    <img src="media/hackaday.png" class="impact-logo">
-                    <div class="impact-text">"RoboAgent gets its act together"</div>
-                </a>
-
-                <a href="https://cacm.acm.org/news/275459-parenting-a-three-year-old-robot" target="_blank"
-                    class="impact-card">
-                    <img src="media/acm.png" class="impact-logo">
-                    <div class="impact-text">ACM News Feature</div>
-                </a>
-
-                <a href="https://ai.meta.com/blog/robots-learn-videos-human-activities-simulated-interactions/"
-                    target="_blank" class="impact-card">
-                    <img src="media/Meta_lockup_positive primary_RGB.svg" class="impact-logo">
-                    <div class="impact-text">"Robots that learn from videos of human activities"</div>
-                </a>
-
-                <a href="https://ai.meta.com/research/publications/where-are-we-in-the-search-for-an-artificial-visual-cortex-for-embodied-intelligence/"
-                    target="_blank" class="impact-card">
-                    <img src="media/Meta_lockup_positive primary_RGB.svg" class="impact-logo">
-                    <div class="impact-text">"Where are we in the search for an artificial visual cortex for embodied
-                        intelligence?"</div>
-                </a>
-
-                <a href="https://www.rockingrobots.com/roboagent-modeled-after-human-infants-learning-techniques/"
-                    target="_blank" class="impact-card">
-                    <img src="media/rockingrobots.png" class="impact-logo">
-                    <div class="impact-text">"Modeled after human infants learning techniques"</div>
-                </a>
-
-                <a href="https://studyfinds.org/meta-ai-training-robots-babies/" target="_blank" class="impact-card">
-                    <img src="media/studyFind.png" class="impact-logo">
-                    <div class="impact-text">"Meta AI Training Robots Like Babies"</div>
-                </a>
-
-                <a href="https://www.techbriefs.com/component/content/article/49121-meet-roboagent-enabling-robots-to-acquire-manipulation-abilities"
-                    target="_blank" class="impact-card">
-                    <img src="media/techBriefs.png" class="impact-logo">
-                    <div class="impact-text">"Enabling robots to acquire manipulation abilities"</div>
-                </a>
-
-
-            </div>
-        </section>
-
-        <!-- BLOCK 4: TEACHING & SERVICE -->
-        <section class="reveal" id="teaching">
-            <div class="dual-column">
-                <div class="column">
-                    <h2>Teaching</h2>
-                    <div class="bento-card status-card" data-id="TEACH-01">
-                        <div class="card-content">
-                            <i class="fa-solid fa-chalkboard-user card-icon"></i>
-                            <ul class="service-list">
-                                <li>
-                                    <strong>University of Colorado</strong>
-                                    <span>Teaching Assistant (2024 — Present)</span>
-                                    <small>CSCI 3302: Introduction to Robotics</small>
-                                    <small>CSCI 3202: Introduction to AI</small>
-                                    <small>CSCI 2400: Computer Systems</small>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <h2>Service</h2>
-                    <div class="bento-card status-card" data-id="SERV-99">
-                        <div class="card-content">
-                            <i class="fa-solid fa-microscope card-icon"></i>
-                            <ul class="service-list">
-                                <li>
-                                    <strong>Reviewer:</strong>
-                                    <p class="service-tags">
-                                        <span>RSS '26</span>
-                                        <span>IROS '26</span> <span>ICLR '26</span>
-                                        <span>RA-L</span> <span>RSS '25</span> <span>ICML '25</span>
-                                        <span>ICRA '25</span> <span>ICRA '24</span> <span>CoRL '24</span>
-                                    </p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- BLOCK 5: AFFILIATIONS -->
-        <section class="reveal" id="affiliations">
-            <h2>Affiliations</h2>
-            <div class="bento-card" data-id="AFFIL-SYS">
-                <div class="card-content">
-                    <div class="affiliation-row">
-                        <div class="affil-tile">
-                            <img src="media/boulder-fl-centered-2.png" class="affil-logo affil-cu"
-                                alt="University of Colorado Boulder">
-                        </div>
-                        <div class="affil-tile">
-                            <img src="media/Meta_lockup_positive primary_RGB.svg" class="affil-logo affil-meta"
-                                alt="Meta">
-                        </div>
-                        <div class="affil-tile">
-                            <img src="media/uw.png" class="affil-logo affil-uw" alt="University of Washington">
-                        </div>
-                        <div class="affil-tile">
-                            <img src="media/Myolab_logo_def.png" class="affil-logo affil-myo" alt="MyoLab">
-                        </div>
-                        <div class="affil-tile">
-                            <img src="media/nsc.png" class="affil-logo affil-nsc" alt="North Seattle College">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="footer-content">
-                <span>© 2026 Jay Vakil</span>
-            </div>
-        </footer>
-
-    </div>
-
-    <script src="background.js?v=20260223m"></script>
-    <script src="animations.js?v=20260224a"></script>
+    <script type="module" src="assets/js/site.js?v=2"></script>
 </body>
 
 </html>
